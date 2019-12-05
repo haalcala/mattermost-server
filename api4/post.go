@@ -180,6 +180,16 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 		list, err = c.App.GetPostsPage(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
 	}
 
+	returnReadStatus := false
+
+	if r.URL.Query().Get("returnReadStatus") == "true" {
+		returnReadStatus = true
+	}
+
+	if returnReadStatus {
+		userReadTimes, err := c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
+	}
+
 	if err != nil {
 		c.Err = err
 		return
