@@ -484,16 +484,19 @@ func (s *SqlPostStore) GetPosts(options model.GetPostsOptions, _ bool) (*model.P
 	return list, err
 }
 
-func (s SqlPostStore) GetUserReadTimes(channelId string, allowFromCache bool) ([]*model.ChannelUnreadAt, *model.AppError) {
-	var data []*model.ChannelUnreadAt
+func (s *SqlPostStore) GetUserReadTimes(channelId string, allowFromCache bool) ([]*model.ChannelUserUnread, *model.AppError) {
+	var data []*model.ChannelUserUnread
+
 	_, err := s.GetReplica().Select(&data,
 		`SELECT
-			ChannelMembers.UserId, ChannelMembers.LastViewedAt
+			UserId, LastViewedAt
 		FROM
 			ChannelMembers
 		WHERE
-			AND ChannelId = :ChannelId`,
+			ChannelId = :ChannelId`,
 		map[string]interface{}{"ChannelId": channelId})
+
+	fmt.Println("data:", data, "err:", err, "channelId:", channelId)
 
 	if err != nil {
 		return nil, model.NewAppError("SqlTeamStore.GetChannelUserReadTimes", "store.sql_team.get_unread.app_error", nil, "channelId="+channelId+" "+err.Error(), http.StatusInternalServerError)

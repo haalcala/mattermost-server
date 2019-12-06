@@ -5,6 +5,7 @@ package app
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"io"
 	"net/http"
@@ -38,12 +39,23 @@ func (a *App) InitPostMetadata() {
 	})
 }
 
-func (a *App) PreparePostListForClient(originalList *model.PostList) *model.PostList {
+func (a *App) PreparePostListForClient(originalList *model.PostList, optional ...interface{}) *model.PostList {
+	fmt.Println("func (a *App) PreparePostListForClient(originalList *model.PostList, optional ...interface{}) *model.PostList {")
+
+	var channelUserReadTimes []*model.ChannelUserUnread
+
+	if len(optional) > 0 {
+		channelUserReadTimes = optional[0].([]*model.ChannelUserUnread)
+	}
+
+	fmt.Println("channelUserReadTimes:", channelUserReadTimes, "len(channelUserReadTimes):", len(channelUserReadTimes))
+
 	list := &model.PostList{
-		Posts:      make(map[string]*model.Post, len(originalList.Posts)),
-		Order:      originalList.Order,
-		NextPostId: originalList.NextPostId,
-		PrevPostId: originalList.PrevPostId,
+		Posts:        make(map[string]*model.Post, len(originalList.Posts)),
+		Order:        originalList.Order,
+		NextPostId:   originalList.NextPostId,
+		PrevPostId:   originalList.PrevPostId,
+		ReadStatuses: channelUserReadTimes,
 	}
 
 	for id, originalPost := range originalList.Posts {

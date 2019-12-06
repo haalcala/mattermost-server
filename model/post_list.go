@@ -10,10 +10,11 @@ import (
 )
 
 type PostList struct {
-	Order      []string         `json:"order"`
-	Posts      map[string]*Post `json:"posts"`
-	NextPostId string           `json:"next_post_id"`
-	PrevPostId string           `json:"prev_post_id"`
+	ReadStatuses []*ChannelUserUnread `json:"read_status"`
+	Order        []string             `json:"order"`
+	Posts        map[string]*Post     `json:"posts"`
+	NextPostId   string               `json:"next_post_id"`
+	PrevPostId   string               `json:"prev_post_id"`
 }
 
 func NewPostList() *PostList {

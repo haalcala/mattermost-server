@@ -5,7 +5,9 @@ package api4
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"reflect"
 	"strconv"
 	"time"
 
@@ -188,8 +190,19 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 		returnReadStatus = true
 	}
 
+	var list2 []*model.ChannelUserUnread
+
 	if returnReadStatus {
-		c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
+		list2, err = c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
+
+		fmt.Println("list2:", list2, reflect.TypeOf(list2), "err:", err, err == nil)
+
+		if err == nil {
+			for val, x := range list2 {
+				fmt.Println("x:", x, "val:", val)
+			}
+
+		}
 	}
 
 	if err != nil {
@@ -202,7 +215,7 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	c.App.AddCursorIdsForPostList(list, afterPost, beforePost, since, page, perPage)
-	clientPostList := c.App.PreparePostListForClient(list)
+	clientPostList := c.App.PreparePostListForClient(list, list2)
 
 	w.Write([]byte(clientPostList.ToJson()))
 }
