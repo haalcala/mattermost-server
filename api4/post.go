@@ -125,6 +125,7 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	sinceString := r.URL.Query().Get("since")
+
 	var since int64
 	var parseError error
 	if len(sinceString) > 0 {
@@ -134,6 +135,7 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	skipFetchThreads := false
 	if r.URL.Query().Get("fetchThreads") == "false" {
 		skipFetchThreads = true
@@ -187,7 +189,7 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	if returnReadStatus {
-		userReadTimes, err := c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
+		c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
 	}
 
 	if err != nil {

@@ -618,6 +618,12 @@ func (a *App) GetPostsPage(options model.GetPostsOptions) (*model.PostList, *mod
 	return a.Srv.Store.Post().GetPosts(options, false)
 }
 
+func (a *App) GetUserReadTimes(options model.GetPostsOptions) ([]*model.ChannelUnreadAt, *model.AppError) {
+	fmt.Println("func (a *App) GetUserReadTimes(options model.GetPostsOptions) (*model.PostList, *model.AppError) {")
+
+	return a.Srv.Store.Post().GetUserReadTimes(options.ChannelId, false)
+}
+
 func (a *App) GetPosts(channelId string, offset int, limit int) (*model.PostList, *model.AppError) {
 	return a.Srv.Store.Post().GetPosts(model.GetPostsOptions{ChannelId: channelId, Page: offset, PerPage: limit}, true)
 }

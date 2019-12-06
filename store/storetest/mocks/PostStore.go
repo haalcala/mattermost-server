@@ -407,6 +407,10 @@ func (_m *PostStore) GetPosts(options model.GetPostsOptions, allowFromCache bool
 	return r0, r1
 }
 
+func (_m *PostStore) GetUserReadTimes(channelId string, allowFromCache bool) ([]*model.ChannelUnreadAt, *model.AppError) {
+	return nil, nil
+}
+
 // GetPostsAfter provides a mock function with given fields: options
 func (_m *PostStore) GetPostsAfter(options model.GetPostsOptions) (*model.PostList, *model.AppError) {
 	ret := _m.Called(options)
