@@ -123,7 +123,7 @@ func (a *App) ExportVersion(writer io.Writer) *model.AppError {
 func (a *App) ExportAllTeams(writer io.Writer) *model.AppError {
 	afterId := strings.Repeat("0", 26)
 	for {
-		teams, err := a.Srv.Store.Team().GetAllForExportAfter(1000, afterId)
+		teams, err := a.Srv().Store.Team().GetAllForExportAfter(1000, afterId)
 
 		if err != nil {
 			return err
@@ -154,7 +154,7 @@ func (a *App) ExportAllTeams(writer io.Writer) *model.AppError {
 func (a *App) ExportAllChannels(writer io.Writer) *model.AppError {
 	afterId := strings.Repeat("0", 26)
 	for {
-		channels, err := a.Srv.Store.Channel().GetAllChannelsForExportAfter(1000, afterId)
+		channels, err := a.Srv().Store.Channel().GetAllChannelsForExportAfter(1000, afterId)
 
 		if err != nil {
 			return err
@@ -185,7 +185,7 @@ func (a *App) ExportAllChannels(writer io.Writer) *model.AppError {
 func (a *App) ExportAllUsers(writer io.Writer) *model.AppError {
 	afterId := strings.Repeat("0", 26)
 	for {
-		users, err := a.Srv.Store.User().GetAllAfter(1000, afterId)
+		users, err := a.Srv().Store.User().GetAllAfter(1000, afterId)
 
 		if err != nil {
 			return err
@@ -260,7 +260,7 @@ func (a *App) ExportAllUsers(writer io.Writer) *model.AppError {
 func (a *App) buildUserTeamAndChannelMemberships(userId string) (*[]UserTeamImportData, *model.AppError) {
 	var memberships []UserTeamImportData
 
-	members, err := a.Srv.Store.Team().GetTeamMembersForExport(userId)
+	members, err := a.Srv().Store.Team().GetTeamMembersForExport(userId)
 
 	if err != nil {
 		return nil, err
@@ -281,7 +281,7 @@ func (a *App) buildUserTeamAndChannelMemberships(userId string) (*[]UserTeamImpo
 		}
 
 		// Get the user theme
-		themePreference, err := a.Srv.Store.Preference().Get(member.UserId, model.PREFERENCE_CATEGORY_THEME, member.TeamId)
+		themePreference, err := a.Srv().Store.Preference().Get(member.UserId, model.PREFERENCE_CATEGORY_THEME, member.TeamId)
 		if err == nil {
 			memberData.Theme = &themePreference.Value
 		}
@@ -297,7 +297,7 @@ func (a *App) buildUserTeamAndChannelMemberships(userId string) (*[]UserTeamImpo
 func (a *App) buildUserChannelMemberships(userId string, teamId string) (*[]UserChannelImportData, *model.AppError) {
 	var memberships []UserChannelImportData
 
-	members, err := a.Srv.Store.Channel().GetChannelMembersForExport(userId, teamId)
+	members, err := a.Srv().Store.Channel().GetChannelMembersForExport(userId, teamId)
 	if err != nil {
 		return nil, err
 	}
@@ -339,7 +339,7 @@ func (a *App) ExportAllPosts(writer io.Writer) *model.AppError {
 	afterId := strings.Repeat("0", 26)
 
 	for {
-		posts, err := a.Srv.Store.Post().GetParentsForExportAfter(1000, afterId)
+		posts, err := a.Srv().Store.Post().GetParentsForExportAfter(1000, afterId)
 		if err != nil {
 			return err
 		}
@@ -381,7 +381,7 @@ func (a *App) ExportAllPosts(writer io.Writer) *model.AppError {
 func (a *App) buildPostReplies(postId string) (*[]ReplyImportData, *model.AppError) {
 	var replies []ReplyImportData
 
-	replyPosts, err := a.Srv.Store.Post().GetRepliesForExport(postId)
+	replyPosts, err := a.Srv().Store.Post().GetRepliesForExport(postId)
 	if err != nil {
 		return nil, err
 	}
@@ -403,14 +403,14 @@ func (a *App) buildPostReplies(postId string) (*[]ReplyImportData, *model.AppErr
 func (a *App) BuildPostReactions(postId string) (*[]ReactionImportData, *model.AppError) {
 	var reactionsOfPost []ReactionImportData
 
-	reactions, err := a.Srv.Store.Reaction().GetForPost(postId, true)
+	reactions, err := a.Srv().Store.Reaction().GetForPost(postId, true)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, reaction := range reactions {
 		var user *model.User
-		user, err = a.Srv.Store.User().Get(reaction.UserId)
+		user, err = a.Srv().Store.User().Get(reaction.UserId)
 		if err != nil {
 			if err.Id == store.MISSING_ACCOUNT_ERROR { // this is a valid case, the user that reacted might've been deleted by now
 				mlog.Info("Skipping reactions by user since the entity doesn't exist anymore", mlog.String("user_id", reaction.UserId))
@@ -515,7 +515,7 @@ func (a *App) copyEmojiImages(emojiId string, emojiImagePath string, pathToDir s
 func (a *App) ExportAllDirectChannels(writer io.Writer) *model.AppError {
 	afterId := strings.Repeat("0", 26)
 	for {
-		channels, err := a.Srv.Store.Channel().GetAllDirectChannelsForExportAfter(1000, afterId)
+		channels, err := a.Srv().Store.Channel().GetAllDirectChannelsForExportAfter(1000, afterId)
 		if err != nil {
 			return err
 		}
@@ -532,12 +532,6 @@ func (a *App) ExportAllDirectChannels(writer io.Writer) *model.AppError {
 				continue
 			}
 
-			// There's no import support for single member channels yet.
-			if len(*channel.Members) == 1 {
-				mlog.Debug("Bulk export for direct channels containing a single member is not supported.")
-				continue
-			}
-
 			channelLine := ImportLineFromDirectChannel(channel)
 			if err := a.ExportWriteLine(writer, channelLine); err != nil {
 				return err
@@ -551,7 +545,7 @@ func (a *App) ExportAllDirectChannels(writer io.Writer) *model.AppError {
 func (a *App) ExportAllDirectPosts(writer io.Writer) *model.AppError {
 	afterId := strings.Repeat("0", 26)
 	for {
-		posts, err := a.Srv.Store.Post().GetDirectPostParentsForExportAfter(1000, afterId)
+		posts, err := a.Srv().Store.Post().GetDirectPostParentsForExportAfter(1000, afterId)
 		if err != nil {
 			return err
 		}
@@ -565,12 +559,6 @@ func (a *App) ExportAllDirectPosts(writer io.Writer) *model.AppError {
 
 			// Skip deleted.
 			if post.DeleteAt != 0 {
-				continue
-			}
-
-			// There's no import support for single member channels yet.
-			if len(*post.ChannelMembers) == 1 {
-				mlog.Debug("Bulk export for posts containing a single member is not supported.")
 				continue
 			}
 
