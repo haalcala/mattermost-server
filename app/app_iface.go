@@ -368,6 +368,7 @@ type AppIface interface {
 	GetPostsEtag(channelId string) string
 	GetPostsForChannelAroundLastUnread(channelId, userId string, limitBefore, limitAfter int, skipFetchThreads bool) (*model.PostList, *model.AppError)
 	GetPostsPage(options model.GetPostsOptions) (*model.PostList, *model.AppError)
+	GetUserReadTimes(options model.GetPostsOptions) ([]*model.ChannelUserUnread, *model.AppError)
 	GetPostsSince(options model.GetPostsSinceOptions) (*model.PostList, *model.AppError)
 	GetPreferenceByCategoryAndNameForUser(userId string, category string, preferenceName string) (*model.Preference, *model.AppError)
 	GetPreferenceByCategoryForUser(userId string, category string) (model.Preferences, *model.AppError)
