@@ -583,7 +583,7 @@ type AppIface interface {
 	PostWithProxyAddedToImageURLs(post *model.Post) *model.Post
 	PostWithProxyRemovedFromImageURLs(post *model.Post) *model.Post
 	PreparePostForClient(originalPost *model.Post, isNewPost bool, isEditPost bool) *model.Post
-	PreparePostListForClient(originalList *model.PostList) *model.PostList
+	PreparePostListForClient(originalList *model.PostList, optional ...interface{}) *model.PostList
 	ProcessSlackAttachments(attachments []*model.SlackAttachment) []*model.SlackAttachment
 	ProcessSlackText(text string) string
 	PromoteGuestToUser(user *model.User, requestorId string) *model.AppError
