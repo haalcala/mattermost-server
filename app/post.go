@@ -621,7 +621,7 @@ func (a *App) GetPostsPage(options model.GetPostsOptions) (*model.PostList, *mod
 func (a *App) GetUserReadTimes(options model.GetPostsOptions) ([]*model.ChannelUserUnread, *model.AppError) {
 	fmt.Println("func (a *App) GetUserReadTimes(options model.GetPostsOptions) (*model.ChannelUserUnread, *model.AppError) {")
 
-	return a.Srv.Store.Post().GetUserReadTimes(options.ChannelId, false)
+	return a.Srv().Store.Post().GetUserReadTimes(options.ChannelId, false)
 }
 
 func (a *App) GetPosts(channelId string, offset int, limit int) (*model.PostList, *model.AppError) {
