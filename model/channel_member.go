@@ -41,6 +41,12 @@ type ChannelUnreadAt struct {
 	NotifyProps  StringMap `json:"-"`
 }
 
+type ChannelUserUnread struct {
+	UserId       string `json:"user_id"`
+	ChannelId    string `json:"channel_id"`
+	LastViewedAt int64  `json:"last_viewed_at"`
+}
+
 type ChannelMember struct {
 	ChannelId     string    `json:"channel_id"`
 	UserId        string    `json:"user_id"`

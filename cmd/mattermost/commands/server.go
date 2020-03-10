@@ -4,6 +4,7 @@
 package commands
 
 import (
+	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -54,6 +55,8 @@ func serverCmdF(command *cobra.Command, args []string) error {
 }
 
 func runServer(configStore config.Store, disableConfigWatch bool, usedPlatform bool, interruptChan chan os.Signal) error {
+	fmt.Println("func runServer(configStore config.Store, disableConfigWatch bool, usedPlatform bool, interruptChan chan os.Signal) error {")
+
 	options := []app.Option{
 		app.ConfigStore(configStore),
 		app.RunJobs,

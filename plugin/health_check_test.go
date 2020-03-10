@@ -18,14 +18,14 @@ import (
 
 func TestPluginHealthCheck(t *testing.T) {
 	for name, f := range map[string]func(*testing.T){
-		"PluginHealthCheck_Success": testPluginHealthCheck_Success,
-		"PluginHealthCheck_Panic":   testPluginHealthCheck_Panic,
+		"PluginHealthCheck_Success": testPluginHealthCheckSuccess,
+		"PluginHealthCheck_Panic":   testPluginHealthCheckPanic,
 	} {
 		t.Run(name, f)
 	}
 }
 
-func testPluginHealthCheck_Success(t *testing.T) {
+func testPluginHealthCheckSuccess(t *testing.T) {
 	dir, err := ioutil.TempDir("", "")
 	require.NoError(t, err)
 	defer os.RemoveAll(dir)
@@ -58,7 +58,7 @@ func testPluginHealthCheck_Success(t *testing.T) {
 		EnableFile:    false,
 	})
 
-	supervisor, err := newSupervisor(bundle, log, nil)
+	supervisor, err := newSupervisor(bundle, nil, log, nil)
 	require.Nil(t, err)
 	require.NotNil(t, supervisor)
 
@@ -66,7 +66,7 @@ func testPluginHealthCheck_Success(t *testing.T) {
 	require.Nil(t, err)
 }
 
-func testPluginHealthCheck_Panic(t *testing.T) {
+func testPluginHealthCheckPanic(t *testing.T) {
 	dir, err := ioutil.TempDir("", "")
 	require.NoError(t, err)
 	defer os.RemoveAll(dir)
@@ -104,7 +104,7 @@ func testPluginHealthCheck_Panic(t *testing.T) {
 		EnableFile:    false,
 	})
 
-	supervisor, err := newSupervisor(bundle, log, nil)
+	supervisor, err := newSupervisor(bundle, nil, log, nil)
 	require.Nil(t, err)
 	require.NotNil(t, supervisor)
 

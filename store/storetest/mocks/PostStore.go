@@ -5,6 +5,8 @@
 package mocks
 
 import (
+	"fmt"
+
 	model "github.com/mattermost/mattermost-server/v5/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -405,6 +407,12 @@ func (_m *PostStore) GetPosts(options model.GetPostsOptions, allowFromCache bool
 	}
 
 	return r0, r1
+}
+
+func (_m *PostStore) GetUserReadTimes(channelId string, allowFromCache bool) ([]*model.ChannelUserUnread, *model.AppError) {
+	fmt.Println("21432143214 func (_m *PostStore) GetUserReadTimes(channelId string, allowFromCache bool) ([]*model.ChannelUserUnread, *model.AppError) {")
+
+	return nil, nil
 }
 
 // GetPostsAfter provides a mock function with given fields: options
