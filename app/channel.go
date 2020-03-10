@@ -1767,14 +1767,19 @@ func (a *App) SetActiveChannel(userId string, channelId string) *model.AppError 
 }
 
 func (a *App) UpdateChannelLastViewedAt(channelIds []string, userId string) *model.AppError {
+	fmt.Println("channel.go:: func (a *App) UpdateChannelLastViewedAt(channelIds []string, userId string) *model.AppError {")
+
 	if _, err := a.Srv.Store.Channel().UpdateLastViewedAt(channelIds, userId); err != nil {
 		return err
 	}
 
 	if *a.Config().ServiceSettings.EnableChannelViewedMessages {
+		fmt.Println("channel.go:: ----------------- UpdateChannelLastViewedAt")
+
 		for _, channelId := range channelIds {
-			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", "", userId, nil)
+			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", channelId, "", nil)
 			message.Add("channel_id", channelId)
+			message.Add("user_id", userId)
 			a.Publish(message)
 		}
 	}
@@ -1929,6 +1934,7 @@ func (a *App) SearchChannelsUserNotIn(teamId string, userId string, term string)
 }
 
 func (a *App) MarkChannelsAsViewed(channelIds []string, userId string, currentSessionId string) (map[string]int64, *model.AppError) {
+	fmt.Prinln("channel.go:: func (a *App) MarkChannelsAsViewed(channelIds []string, userId string, currentSessionId string) (map[string]int64, *model.AppError) {")
 	// I start looking for channels with notifications before I mark it as read, to clear the push notifications if needed
 	channelsToClearPushNotifications := []string{}
 	if *a.Config().EmailSettings.SendPushNotifications {
@@ -1971,9 +1977,11 @@ func (a *App) MarkChannelsAsViewed(channelIds []string, userId string, currentSe
 	}
 
 	if *a.Config().ServiceSettings.EnableChannelViewedMessages {
+		fmt.Println("-------------------- MarkChannelsAsViewed:: aaaa")
 		for _, channelId := range channelIds {
-			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", "", userId, nil)
+			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", channelId, "", nil)
 			message.Add("channel_id", channelId)
+			message.Add("user_id", userId)
 			a.Publish(message)
 		}
 	}
