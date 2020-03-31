@@ -842,6 +842,7 @@ func autocompleteUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updateUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("api4/user.go:: updateUser:: r:", r)
 	c.RequireUserId()
 	if c.Err != nil {
 		return

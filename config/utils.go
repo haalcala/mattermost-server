@@ -4,6 +4,7 @@
 package config
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/mattermost/mattermost-server/v5/mlog"
@@ -84,9 +85,13 @@ func fixConfig(cfg *model.Config) bool {
 // Ideally, this function would be completely internal, but it's currently exposed to allow the cli
 // to test the config change before allowing the save.
 func FixInvalidLocales(cfg *model.Config) bool {
+	fmt.Println("utils/config.go:: FixInvalidLocales:: cfg:", cfg)
 	var changed bool
 
 	locales := utils.GetSupportedLocales()
+
+	fmt.Println("locales:", locales)
+
 	if _, ok := locales[*cfg.LocalizationSettings.DefaultServerLocale]; !ok {
 		*cfg.LocalizationSettings.DefaultServerLocale = model.DEFAULT_LOCALE
 		mlog.Warn("DefaultServerLocale must be one of the supported locales. Setting DefaultServerLocale to en as default value.")
