@@ -262,7 +262,15 @@ func configMigrateCmdF(command *cobra.Command, args []string) error {
 	from := args[0]
 	to := args[1]
 
-	err := config.Migrate(from, to)
+	cwd, err := os.Getwd()
+
+	if err != nil {
+		return errors.Wrap(err, "failed to migrate config")
+	}
+
+	utils.InitTranslationsWithDir(path.Join(cwd, "i18n"))
+
+	err = config.Migrate(from, to)
 
 	if err != nil {
 		return errors.Wrap(err, "failed to migrate config")
