@@ -324,8 +324,11 @@ func (a *App) createUser(user *model.User) (*model.User, *model.AppError) {
 		}
 	}
 
-	pref := model.Preference{UserId: ruser.Id, Category: model.PREFERENCE_CATEGORY_TUTORIAL_STEPS, Name: ruser.Id, Value: "0"}
-	if err := a.Srv().Store.Preference().Save(&model.Preferences{pref}); err != nil {
+	tutorial_pref := model.Preference{UserId: ruser.Id, Category: model.PREFERENCE_CATEGORY_TUTORIAL_STEPS, Name: ruser.Id, Value: "0"}
+
+	time_format_pref := model.Preference{UserId: ruser.Id, Category: model.PREFERENCE_CATEGORY_DISPLAY_SETTINGS, Name: model.PREFERENCE_NAME_USE_MILITARY_TIME, Value: "true"}
+
+	if err := a.Srv().Store.Preference().Save(&model.Preferences{tutorial_pref, time_format_pref}); err != nil {
 		mlog.Error("Encountered error saving tutorial preference", mlog.Err(err))
 	}
 
