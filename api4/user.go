@@ -21,6 +21,7 @@ import (
 )
 
 func (api *API) InitUser() {
+	fmt.Println("------  api4/user.go:: func (api *API) InitUser() {")
 	api.BaseRoutes.Users.Handle("", api.ApiHandler(createUser)).Methods("POST")
 	api.BaseRoutes.Users.Handle("", api.ApiSessionRequired(getUsers)).Methods("GET")
 	api.BaseRoutes.Users.Handle("/ids", api.ApiSessionRequired(getUsersByIds)).Methods("POST")
@@ -81,6 +82,7 @@ func (api *API) InitUser() {
 }
 
 func createUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func createUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	user := model.UserFromJson(r.Body)
 	if user == nil {
 		c.SetInvalidParam("user")
@@ -133,6 +135,7 @@ func createUser(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -185,6 +188,7 @@ func getUser(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUserByUsername(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUserByUsername(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUsername()
 	if c.Err != nil {
 		return
@@ -245,6 +249,7 @@ func getUserByUsername(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUserByEmail(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUserByEmail(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.SanitizeEmail()
 	if c.Err != nil {
 		return
@@ -294,6 +299,7 @@ func getUserByEmail(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getDefaultProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getDefaultProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -328,6 +334,7 @@ func getDefaultProfileImage(c *Context, w http.ResponseWriter, r *http.Request) 
 }
 
 func getProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -373,6 +380,7 @@ func getProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func setProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func setProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {")
 	defer io.Copy(ioutil.Discard, r.Body)
 
 	c.RequireUserId()
@@ -423,6 +431,7 @@ func setProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func setDefaultProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func setDefaultProfileImage(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -454,6 +463,7 @@ func setDefaultProfileImage(c *Context, w http.ResponseWriter, r *http.Request) 
 }
 
 func getTotalUsersStats(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getTotalUsersStats(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if c.Err != nil {
 		return
 	}
@@ -474,6 +484,7 @@ func getTotalUsersStats(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUsersByGroupChannelIds(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUsersByGroupChannelIds(c *Context, w http.ResponseWriter, r *http.Request) {")
 	channelIds := model.ArrayFromJson(r.Body)
 
 	if len(channelIds) == 0 {
@@ -492,6 +503,7 @@ func getUsersByGroupChannelIds(c *Context, w http.ResponseWriter, r *http.Reques
 }
 
 func getUsers(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUsers(c *Context, w http.ResponseWriter, r *http.Request) {")
 	inTeamId := r.URL.Query().Get("in_team")
 	notInTeamId := r.URL.Query().Get("not_in_team")
 	inChannelId := r.URL.Query().Get("in_channel")
@@ -627,6 +639,7 @@ func getUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUsersByIds(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUsersByIds(c *Context, w http.ResponseWriter, r *http.Request) {")
 	userIds := model.ArrayFromJson(r.Body)
 
 	if len(userIds) == 0 {
@@ -666,6 +679,7 @@ func getUsersByIds(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUsersByNames(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUsersByNames(c *Context, w http.ResponseWriter, r *http.Request) {")
 	usernames := model.ArrayFromJson(r.Body)
 
 	if len(usernames) == 0 {
@@ -689,6 +703,7 @@ func getUsersByNames(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.UserSearchFromJson(r.Body)
 	if props == nil {
 		c.SetInvalidParam("")
@@ -762,6 +777,7 @@ func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func autocompleteUsers(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func autocompleteUsers(c *Context, w http.ResponseWriter, r *http.Request) {")
 	channelId := r.URL.Query().Get("in_channel")
 	teamId := r.URL.Query().Get("in_team")
 	name := r.URL.Query().Get("name")
@@ -842,6 +858,7 @@ func autocompleteUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updateUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func updateUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	fmt.Println("api4/user.go:: updateUser:: r:", r)
 	c.RequireUserId()
 	if c.Err != nil {
@@ -899,6 +916,7 @@ func updateUser(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func patchUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func patchUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -954,6 +972,7 @@ func patchUser(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func deleteUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -987,6 +1006,7 @@ func deleteUser(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updateUserRoles(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func updateUserRoles(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1015,6 +1035,7 @@ func updateUserRoles(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updateUserActive(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func updateUserActive(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1069,6 +1090,7 @@ func updateUserActive(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updateUserAuth(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func updateUserAuth(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !c.IsSystemAdmin() {
 		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
 		return
@@ -1098,6 +1120,7 @@ func updateUserAuth(c *Context, w http.ResponseWriter, r *http.Request) {
 // Deprecated: checkUserMfa is deprecated and should not be used anymore, starting with version 6.0 it will be disabled.
 //			   Clients should attempt a login without MFA and will receive a MFA error when it's required.
 func checkUserMfa(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func checkUserMfa(c *Context, w http.ResponseWriter, r *http.Request) {")
 
 	if *c.App.Config().ServiceSettings.DisableLegacyMFA {
 		http.NotFound(w, r)
@@ -1130,6 +1153,7 @@ func checkUserMfa(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updateUserMfa(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func updateUserMfa(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1174,6 +1198,7 @@ func updateUserMfa(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func generateMfaSecret(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func generateMfaSecret(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1203,6 +1228,7 @@ func generateMfaSecret(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updatePassword(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func updatePassword(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1239,6 +1265,7 @@ func updatePassword(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func resetPassword(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func resetPassword(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 
 	token := props["token"]
@@ -1263,6 +1290,7 @@ func resetPassword(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func sendPasswordReset(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func sendPasswordReset(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 
 	email := props["email"]
@@ -1290,6 +1318,7 @@ func sendPasswordReset(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func login(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func login(c *Context, w http.ResponseWriter, r *http.Request) {")
 	// Mask all sensitive errors, with the exception of the following
 	defer func() {
 		if c.Err == nil {
@@ -1426,10 +1455,12 @@ func login(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func logout(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func logout(c *Context, w http.ResponseWriter, r *http.Request) {")
 	Logout(c, w, r)
 }
 
 func Logout(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func Logout(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.LogAudit("")
 	c.RemoveSessionCookie(w, r)
 	if c.App.Session().Id != "" {
@@ -1443,6 +1474,7 @@ func Logout(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getSessions(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getSessions(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1467,6 +1499,7 @@ func getSessions(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func revokeSession(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func revokeSession(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1504,6 +1537,7 @@ func revokeSession(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func revokeAllSessionsForUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func revokeAllSessionsForUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1523,6 +1557,7 @@ func revokeAllSessionsForUser(c *Context, w http.ResponseWriter, r *http.Request
 }
 
 func revokeAllSessionsAllUsers(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func revokeAllSessionsAllUsers(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
 		return
@@ -1537,6 +1572,7 @@ func revokeAllSessionsAllUsers(c *Context, w http.ResponseWriter, r *http.Reques
 }
 
 func attachDeviceId(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func attachDeviceId(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 
 	deviceId := props["device_id"]
@@ -1587,6 +1623,7 @@ func attachDeviceId(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUserAudits(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUserAudits(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1607,6 +1644,7 @@ func getUserAudits(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func verifyUserEmail(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func verifyUserEmail(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 
 	token := props["token"]
@@ -1625,6 +1663,7 @@ func verifyUserEmail(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func sendVerificationEmail(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func sendVerificationEmail(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 
 	email := props["email"]
@@ -1652,6 +1691,7 @@ func sendVerificationEmail(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func switchAccountType(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func switchAccountType(c *Context, w http.ResponseWriter, r *http.Request) {")
 	switchRequest := model.SwitchRequestFromJson(r.Body)
 	if switchRequest == nil {
 		c.SetInvalidParam("switch_request")
@@ -1689,6 +1729,7 @@ func switchAccountType(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func createUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func createUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1737,6 +1778,7 @@ func createUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func searchUserAccessTokens(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func searchUserAccessTokens(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
 		return
@@ -1762,6 +1804,7 @@ func searchUserAccessTokens(c *Context, w http.ResponseWriter, r *http.Request) 
 }
 
 func getUserAccessTokens(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUserAccessTokens(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
 		return
@@ -1777,6 +1820,7 @@ func getUserAccessTokens(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getUserAccessTokensForUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUserAccessTokensForUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1802,6 +1846,7 @@ func getUserAccessTokensForUser(c *Context, w http.ResponseWriter, r *http.Reque
 }
 
 func getUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireTokenId()
 	if c.Err != nil {
 		return
@@ -1827,6 +1872,7 @@ func getUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func revokeUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func revokeUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 
 	tokenId := props["token_id"]
@@ -1862,6 +1908,7 @@ func revokeUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func disableUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func disableUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 	tokenId := props["token_id"]
 
@@ -1898,6 +1945,7 @@ func disableUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) 
 }
 
 func enableUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func enableUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.MapFromJson(r.Body)
 
 	tokenId := props["token_id"]
@@ -1934,6 +1982,7 @@ func enableUserAccessToken(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func saveUserTermsOfService(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func saveUserTermsOfService(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.StringInterfaceFromJson(r.Body)
 
 	userId := c.App.Session().UserId
@@ -1955,6 +2004,7 @@ func saveUserTermsOfService(c *Context, w http.ResponseWriter, r *http.Request) 
 }
 
 func getUserTermsOfService(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func getUserTermsOfService(c *Context, w http.ResponseWriter, r *http.Request) {")
 	userId := c.App.Session().UserId
 	result, err := c.App.GetUserTermsOfService(userId)
 	if err != nil {
@@ -1965,6 +2015,7 @@ func getUserTermsOfService(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func promoteGuestToUser(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func promoteGuestToUser(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -1995,6 +2046,7 @@ func promoteGuestToUser(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func demoteUserToGuest(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------  api4/user.go:: func demoteUserToGuest(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
