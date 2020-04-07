@@ -4,6 +4,7 @@
 package app
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/mattermost/mattermost-server/v5/model"
@@ -15,6 +16,7 @@ import (
 // NewLocalCacheLayer. Be careful to not have duplicated handlers here and
 // there.
 func (a *App) registerAllClusterMessageHandlers() {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) registerAllClusterMessageHandlers() {")
 	a.Cluster().RegisterClusterMessageHandler(model.CLUSTER_EVENT_PUBLISH, a.clusterPublishHandler)
 	a.Cluster().RegisterClusterMessageHandler(model.CLUSTER_EVENT_UPDATE_STATUS, a.clusterUpdateStatusHandler)
 	a.Cluster().RegisterClusterMessageHandler(model.CLUSTER_EVENT_INVALIDATE_ALL_CACHES, a.clusterInvalidateAllCachesHandler)
@@ -30,51 +32,63 @@ func (a *App) registerAllClusterMessageHandlers() {
 }
 
 func (a *App) clusterPublishHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterPublishHandler(msg *model.ClusterMessage) {")
 	event := model.WebSocketEventFromJson(strings.NewReader(msg.Data))
 	a.PublishSkipClusterSend(event)
 }
 
 func (a *App) clusterUpdateStatusHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterUpdateStatusHandler(msg *model.ClusterMessage) {")
 	status := model.StatusFromJson(strings.NewReader(msg.Data))
 	a.AddStatusCacheSkipClusterSend(status)
 }
 
 func (a *App) clusterInvalidateAllCachesHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateAllCachesHandler(msg *model.ClusterMessage) {")
 	a.InvalidateAllCachesSkipSend()
 }
 
 func (a *App) clusterInvalidateCacheForChannelMembersNotifyPropHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForChannelMembersNotifyPropHandler(msg *model.ClusterMessage) {")
 	a.InvalidateCacheForChannelMembersNotifyPropsSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMessage) {")
 	a.InvalidateCacheForChannelByNameSkipClusterSend(msg.Props["id"], msg.Props["name"])
 }
 
 func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) {")
 	a.InvalidateCacheForUserSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterInvalidateCacheForUserTeamsHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForUserTeamsHandler(msg *model.ClusterMessage) {")
 	a.InvalidateCacheForUserTeamsSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterClearSessionCacheForUserHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterClearSessionCacheForUserHandler(msg *model.ClusterMessage) {")
 	a.ClearSessionCacheForUserSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterClearSessionCacheForAllUsersHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterClearSessionCacheForAllUsersHandler(msg *model.ClusterMessage) {")
 	a.ClearSessionCacheForAllUsersSkipClusterSend()
 }
 
 func (a *App) clusterInstallPluginHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInstallPluginHandler(msg *model.ClusterMessage) {")
 	a.InstallPluginFromData(model.PluginEventDataFromJson(strings.NewReader(msg.Data)))
 }
 
 func (a *App) clusterRemovePluginHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterRemovePluginHandler(msg *model.ClusterMessage) {")
 	a.RemovePluginFromData(model.PluginEventDataFromJson(strings.NewReader(msg.Data)))
 }
 
 func (a *App) clusterBusyStateChgHandler(msg *model.ClusterMessage) {
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterBusyStateChgHandler(msg *model.ClusterMessage) {")
 	a.ServerBusyStateChanged(model.ServerBusyStateFromJson(strings.NewReader(msg.Data)))
 }

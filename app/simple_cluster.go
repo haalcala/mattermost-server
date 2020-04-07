@@ -24,6 +24,7 @@ func NewSimpleCluster() *SimpleCluster {
 }
 
 func (s *SimpleCluster) StartInterNodeCommunication() {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) StartInterNodeCommunication() {")
 
 	s.redisClient = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
@@ -38,10 +39,12 @@ func (s *SimpleCluster) StartInterNodeCommunication() {
 }
 
 func (s *SimpleCluster) StopInterNodeCommunication() {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) StopInterNodeCommunication() {")
 
 }
 
 func (s *SimpleCluster) RegisterClusterMessageHandler(event string, crm einterfaces.ClusterMessageHandler) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) RegisterClusterMessageHandler(event string, crm ClusterMessageHandler) {")
 
 	fmt.Printf("event: %v, crm: %v\n", event, crm)
 
@@ -49,41 +52,51 @@ func (s *SimpleCluster) RegisterClusterMessageHandler(event string, crm einterfa
 }
 
 func (s *SimpleCluster) GetClusterId() string {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetClusterId() string {")
 	return ""
 }
 
 func (s *SimpleCluster) IsLeader() bool {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) IsLeader() bool {")
 	return true
 }
 
 func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {")
 	return nil
 }
 
 func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {")
 	return []*model.ClusterInfo{}
 }
 
 func (s *SimpleCluster) SendClusterMessage(cluster *model.ClusterMessage) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) SendClusterMessage(cluster *model.ClusterMessage) {")
 
 }
 
 func (s *SimpleCluster) NotifyMsg(buf []byte) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) NotifyMsg(buf []byte) {")
 
 }
 
 func (s *SimpleCluster) GetClusterStats() ([]*model.ClusterStats, *model.AppError) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetClusterStats() ([]*model.ClusterStats, *model.AppError) {")
 	return nil, nil
 }
 
 func (s *SimpleCluster) GetLogs(page, perPage int) ([]string, *model.AppError) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetLogs(page, perPage int) ([]string, *model.AppError) {")
 	return []string{}, nil
 }
 
 func (s *SimpleCluster) GetPluginStatuses() (model.PluginStatuses, *model.AppError) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetPluginStatuses() (model.PluginStatuses, *model.AppError) {")
 	return model.PluginStatuses{}, nil
 }
 
 func (s *SimpleCluster) ConfigChanged(previousConfig *model.Config, newConfig *model.Config, sendToOtherServer bool) *model.AppError {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) ConfigChanged(previousConfig *model.Config, newConfig *model.Config, sendToOtherServer bool) *model.AppError {")
 	return nil
 }

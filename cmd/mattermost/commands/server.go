@@ -31,11 +31,13 @@ var serverCmd = &cobra.Command{
 }
 
 func init() {
+	fmt.Println("------- cmd/mattermost/commands/server.go:: func init() {")
 	RootCmd.AddCommand(serverCmd)
 	RootCmd.RunE = serverCmdF
 }
 
 func serverCmdF(command *cobra.Command, args []string) error {
+	fmt.Println("------- cmd/mattermost/commands/server.go:: func serverCmdF(command *cobra.Command, args []string) error {")
 	configDSN := viper.GetString("config")
 
 	disableConfigWatch, _ := command.Flags().GetBool("disableconfigwatch")
@@ -55,7 +57,7 @@ func serverCmdF(command *cobra.Command, args []string) error {
 }
 
 func runServer(configStore config.Store, disableConfigWatch bool, usedPlatform bool, interruptChan chan os.Signal) error {
-	fmt.Println("func runServer(configStore config.Store, disableConfigWatch bool, usedPlatform bool, interruptChan chan os.Signal) error {")
+	fmt.Println("------- cmd/mattermost/commands/server.go:: func runServer(configStore config.Store, disableConfigWatch bool, usedPlatform bool, interruptChan chan os.Signal) error {")
 
 	options := []app.Option{
 		app.ConfigStore(configStore),
@@ -101,6 +103,7 @@ func runServer(configStore config.Store, disableConfigWatch bool, usedPlatform b
 }
 
 func notifyReady() {
+	fmt.Println("------- cmd/mattermost/commands/server.go:: func notifyReady() {")
 	// If the environment vars provide a systemd notification socket,
 	// notify systemd that the server is ready.
 	systemdSocket := os.Getenv("NOTIFY_SOCKET")
@@ -115,6 +118,7 @@ func notifyReady() {
 }
 
 func sendSystemdReadyNotification(socketPath string) error {
+	fmt.Println("------- cmd/mattermost/commands/server.go:: func sendSystemdReadyNotification(socketPath string) error {")
 	msg := "READY=1"
 	addr := &net.UnixAddr{
 		Name: socketPath,

@@ -4,6 +4,8 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/mattermost/mattermost-server/v5/app"
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/utils"
@@ -12,6 +14,7 @@ import (
 )
 
 func InitDBCommandContextCobra(command *cobra.Command) (*app.App, error) {
+	fmt.Println("------  func InitDBCommandContextCobra(command *cobra.Command) (*app.App, error) {")
 	config := viper.GetString("config")
 
 	a, err := InitDBCommandContext(config)
@@ -28,6 +31,7 @@ func InitDBCommandContextCobra(command *cobra.Command) (*app.App, error) {
 }
 
 func InitDBCommandContext(configDSN string) (*app.App, error) {
+	fmt.Println("------  func InitDBCommandContext(configDSN string) (*app.App, error) {")
 	if err := utils.TranslationsPreInit(); err != nil {
 		return nil, err
 	}
