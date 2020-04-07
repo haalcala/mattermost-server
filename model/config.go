@@ -805,6 +805,7 @@ type ExperimentalSettings struct {
 	LinkMetadataTimeoutMilliseconds *int64 `restricted:"true"`
 	RestrictSystemAdmin             *bool  `restricted:"true"`
 	UseNewSAMLLibrary               *bool
+	UseUserDefaultMilitaryTime      *bool
 }
 
 func (s *ExperimentalSettings) SetDefaults() {
@@ -829,6 +830,9 @@ func (s *ExperimentalSettings) SetDefaults() {
 	}
 	if s.UseNewSAMLLibrary == nil {
 		s.UseNewSAMLLibrary = NewBool(false)
+	}
+	if s.UseUserDefaultMilitaryTime == nil {
+		s.UseUserDefaultMilitaryTime = NewBool(true)
 	}
 }
 
