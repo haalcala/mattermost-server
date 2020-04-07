@@ -69,6 +69,8 @@ func RunJobs(s *Server) error {
 func JoinCluster(s *Server) error {
 	s.joinCluster = true
 
+	s.Cluster = NewSimpleCluster()
+
 	return nil
 }
 
