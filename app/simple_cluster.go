@@ -2,6 +2,10 @@ package app
 
 import (
 	"fmt"
+	"os"
+	"reflect"
+	"strings"
+	"time"
 
 	"github.com/mattermost/mattermost-server/v5/einterfaces"
 	"github.com/mattermost/mattermost-server/v5/model"
@@ -15,55 +19,121 @@ type SimpleCluster struct {
 	redisClient *redis.Client
 
 	server *Server
+
+	clusterDomain string
 }
 
-func NewSimpleCluster(s *Server) *SimpleCluster {
-	simpleCluster := &SimpleCluster{server: s, messageHandlers: map[string]*einterfaces.ClusterMessageHandler{}}
+func NewSimpleCluster(server *Server) *SimpleCluster {
+	fmt.Println("------ app/simple_cluster.go:: func NewSimpleCluster(s *Server) *SimpleCluster {")
 
-	return simpleCluster
-}
-
-func (s *SimpleCluster) Server() *Server {
-	return s.server
-}
-
-func (s *SimpleCluster) StartInterNodeCommunication() {
+	s := &SimpleCluster{server: server, messageHandlers: map[string]*einterfaces.ClusterMessageHandler{}}
 
 	c := s.Server().FakeApp().Config()
 
-	fmt.Println("c:", c)
+	fmt.Println("c:", c, "os.Environ():", os.Environ())
 
-	redisClient := s.redisClient
+	hostname, err := os.Hostname()
 
-	// just a comment
-	redisClient = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
+	if err != nil {
+		panic(err)
+	}
+
+	s.clusterDomain = hostname
+
+	// create a shared/generic redisClient
+	redisClient, err := s.newClient()
+
+	if err != nil {
+		panic(err)
+	}
+
+	s.redisClient = redisClient
+
+	// create a pubsub redisClient
+	redisClient, err = s.newClient()
+
+	if err != nil {
+		panic(err)
+	}
 
 	pong, err := redisClient.Ping().Result()
 
 	fmt.Println(pong, err)
 	// Output: PONG <nil>
 
-	if err == nil {
-		channels := []string{}
-
-		for messageHandler_key, _ := range s.messageHandlers {
-			channels = append(channels, messageHandler_key)
-		}
-
-		sub := redisClient.Subscribe(channels...)
-
-		iface, err := sub.Receive()
-
-		fmt.Println("iface:", iface, "err:", err)
-
-		if err == nil {
-
-		}
+	if err != nil {
+		panic(err)
 	}
+
+	pubsub := redisClient.Subscribe(s.clusterDomain)
+
+	_, err = pubsub.Receive()
+
+	if err != nil {
+		panic(err)
+	}
+
+	// Go channel which receives messages.
+	ch := pubsub.Channel()
+
+	s.server.Go(func() {
+		// Consume messages.
+		for msg := range ch {
+			fmt.Println(msg.Channel, msg.Payload)
+
+			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
+
+			handler := s.messageHandlers[payload.Event]
+
+			// *handler(payload)
+
+			fmt.Println("handler:", handler, "reflect.TypeOf(handler):", reflect.TypeOf(handler), "payload:", payload)
+
+			if handler != nil {
+				(*handler)(payload)
+			}
+		}
+	})
+
+	return s
+}
+
+func (s *SimpleCluster) Server() *Server {
+	return s.server
+}
+
+func (s *SimpleCluster) newClient() (*redis.Client, error) {
+	redisHost, redisPort, redisPass := "", "", ""
+
+	c := s.Server().FakeApp().Config()
+
+	if c.ClusterSettings.ClusterRedisHost != nil {
+		redisHost = *c.ClusterSettings.ClusterRedisHost
+	}
+	if c.ClusterSettings.ClusterRedisPort != nil {
+		redisPort = *c.ClusterSettings.ClusterRedisPort
+	}
+	if c.ClusterSettings.ClusterRedisPass != nil {
+		redisPass = *c.ClusterSettings.ClusterRedisPass
+	}
+
+	fmt.Printf("redisHost: %v, redisPort: %v, redisPass: %v\n", redisHost, redisPort, redisPass)
+
+	return redis.NewClient(&redis.Options{
+		Addr:     redisHost + ":" + redisPort,
+		Password: redisPass, // no password set
+		DB:       0,         // use default DB
+	}), nil
+}
+
+func (s *SimpleCluster) StartInterNodeCommunication() {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) StartInterNodeCommunication() {")
+
+	time.Sleep(time.Second * 5)
+
+	fmt.Println("StartInterNodeCommunication:: s.redisClient:", s.redisClient)
+
+	fmt.Println("-------------------******************************========================================== StartInterNodeCommunication. Exiting.")
 }
 
 func (s *SimpleCluster) StopInterNodeCommunication() {
@@ -93,8 +163,14 @@ func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
 	return []*model.ClusterInfo{}
 }
 
-func (s *SimpleCluster) SendClusterMessage(cluster *model.ClusterMessage) {
+func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) SendClusterMessage(cluster *model.ClusterMessage) {msg.Event:", msg.Event, "msg:", msg.ToJson())
 
+	fmt.Println("s.redisClient:", s.redisClient)
+
+	// debug.PrintStack()
+
+	s.redisClient.Publish(s.clusterDomain, msg.ToJson())
 }
 
 func (s *SimpleCluster) NotifyMsg(buf []byte) {
