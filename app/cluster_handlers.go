@@ -32,63 +32,63 @@ func (a *App) registerAllClusterMessageHandlers() {
 }
 
 func (a *App) clusterPublishHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterPublishHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterPublishHandler(msg *model.ClusterMessage) { msg:", msg)
 	event := model.WebSocketEventFromJson(strings.NewReader(msg.Data))
 	a.PublishSkipClusterSend(event)
 }
 
 func (a *App) clusterUpdateStatusHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterUpdateStatusHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterUpdateStatusHandler(msg *model.ClusterMessage) { msg:", msg)
 	status := model.StatusFromJson(strings.NewReader(msg.Data))
 	a.AddStatusCacheSkipClusterSend(status)
 }
 
 func (a *App) clusterInvalidateAllCachesHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateAllCachesHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateAllCachesHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.InvalidateAllCachesSkipSend()
 }
 
 func (a *App) clusterInvalidateCacheForChannelMembersNotifyPropHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForChannelMembersNotifyPropHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForChannelMembersNotifyPropHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.InvalidateCacheForChannelMembersNotifyPropsSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.InvalidateCacheForChannelByNameSkipClusterSend(msg.Props["id"], msg.Props["name"])
 }
 
 func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.InvalidateCacheForUserSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterInvalidateCacheForUserTeamsHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForUserTeamsHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForUserTeamsHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.InvalidateCacheForUserTeamsSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterClearSessionCacheForUserHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterClearSessionCacheForUserHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterClearSessionCacheForUserHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.ClearSessionCacheForUserSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterClearSessionCacheForAllUsersHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterClearSessionCacheForAllUsersHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterClearSessionCacheForAllUsersHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.ClearSessionCacheForAllUsersSkipClusterSend()
 }
 
 func (a *App) clusterInstallPluginHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInstallPluginHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInstallPluginHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.InstallPluginFromData(model.PluginEventDataFromJson(strings.NewReader(msg.Data)))
 }
 
 func (a *App) clusterRemovePluginHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterRemovePluginHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterRemovePluginHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.RemovePluginFromData(model.PluginEventDataFromJson(strings.NewReader(msg.Data)))
 }
 
 func (a *App) clusterBusyStateChgHandler(msg *model.ClusterMessage) {
-	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterBusyStateChgHandler(msg *model.ClusterMessage) {")
+	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterBusyStateChgHandler(msg *model.ClusterMessage) { msg:", msg)
 	a.ServerBusyStateChanged(model.ServerBusyStateFromJson(strings.NewReader(msg.Data)))
 }
