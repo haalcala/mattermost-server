@@ -4,6 +4,7 @@
 package app
 
 import (
+	"fmt"
 	"hash/fnv"
 	"net/http"
 	"strings"
@@ -53,6 +54,7 @@ func (hub *PushNotificationsHub) GetGoChannelFromUserId(userId string) chan Push
 
 func (a *App) sendPushNotificationSync(post *model.Post, user *model.User, channel *model.Channel, channelName string, senderName string,
 	explicitMention bool, channelWideMention bool, replyToThreadType string) *model.AppError {
+	fmt.Println("------ app/notification_push.go:: func (a *App) sendPushNotificationSync(post *model.Post, user *model.User, channel *model.Channel, channelName string, senderName string,")
 	cfg := a.Config()
 	msg, err := a.BuildPushNotificationMessage(
 		*cfg.EmailSettings.PushNotificationContents,
@@ -73,6 +75,7 @@ func (a *App) sendPushNotificationSync(post *model.Post, user *model.User, chann
 }
 
 func (a *App) sendPushNotificationToAllSessions(msg *model.PushNotification, userId string, skipSessionId string) *model.AppError {
+	fmt.Println("------ app/notification_push.go:: func (a *App) sendPushNotificationToAllSessions(msg *model.PushNotification, userId string, skipSessionId string) *model.AppError {")
 	sessions, err := a.getMobileAppSessions(userId)
 	if err != nil {
 		return err
@@ -144,6 +147,7 @@ func (a *App) sendPushNotificationToAllSessions(msg *model.PushNotification, use
 }
 
 func (a *App) sendPushNotification(notification *PostNotification, user *model.User, explicitMention, channelWideMention bool, replyToThreadType string) {
+	fmt.Println("------ app/notification_push.go:: func (a *App) sendPushNotification(notification *PostNotification, user *model.User, explicitMention, channelWideMention bool, replyToThreadType string) {")
 	cfg := a.Config()
 	channel := notification.Channel
 	post := notification.Post
@@ -169,6 +173,8 @@ func (a *App) sendPushNotification(notification *PostNotification, user *model.U
 
 func (a *App) getPushNotificationMessage(contentsConfig, postMessage string, explicitMention, channelWideMention, hasFiles bool,
 	senderName, channelName, channelType, replyToThreadType string, userLocale i18n.TranslateFunc) string {
+
+	fmt.Println("------ app/notification_push.go:: func (a *App) getPushNotificationMessage(contentsConfig, postMessage string, explicitMention, channelWideMention, hasFiles bool,")
 
 	// If the post only has images then push an appropriate message
 	if len(postMessage) == 0 && hasFiles {
@@ -209,6 +215,7 @@ func (a *App) getPushNotificationMessage(contentsConfig, postMessage string, exp
 }
 
 func (a *App) ClearPushNotificationSync(currentSessionId, userId, channelId string) *model.AppError {
+	fmt.Println("------ app/notification_push.go:: func (a *App) ClearPushNotificationSync(currentSessionId, userId, channelId string) *model.AppError {")
 	msg := &model.PushNotification{
 		Type:             model.PUSH_TYPE_CLEAR,
 		Version:          model.PUSH_MESSAGE_V2,
@@ -227,6 +234,7 @@ func (a *App) ClearPushNotificationSync(currentSessionId, userId, channelId stri
 }
 
 func (a *App) ClearPushNotification(currentSessionId, userId, channelId string) {
+	fmt.Println("------ app/notification_push.go:: func (a *App) ClearPushNotification(currentSessionId, userId, channelId string) {")
 	channel := a.Srv().PushNotificationsHub.GetGoChannelFromUserId(userId)
 	channel <- PushNotification{
 		notificationType: NOTIFICATION_TYPE_CLEAR,
@@ -237,6 +245,7 @@ func (a *App) ClearPushNotification(currentSessionId, userId, channelId string) 
 }
 
 func (a *App) UpdateMobileAppBadgeSync(userId string) *model.AppError {
+	fmt.Println("------ app/notification_push.go:: func (a *App) UpdateMobileAppBadgeSync(userId string) *model.AppError {")
 	msg := &model.PushNotification{
 		Type:             model.PUSH_TYPE_UPDATE_BADGE,
 		Version:          model.PUSH_MESSAGE_V2,
@@ -255,6 +264,7 @@ func (a *App) UpdateMobileAppBadgeSync(userId string) *model.AppError {
 }
 
 func (a *App) UpdateMobileAppBadge(userId string) {
+	fmt.Println("------ app/notification_push.go:: func (a *App) UpdateMobileAppBadge(userId string) {")
 	channel := a.Srv().PushNotificationsHub.GetGoChannelFromUserId(userId)
 	channel <- PushNotification{
 		notificationType: NOTIFICATION_TYPE_UPDATE_BADGE,
@@ -263,6 +273,7 @@ func (a *App) UpdateMobileAppBadge(userId string) {
 }
 
 func (a *App) CreatePushNotificationsHub() {
+	fmt.Println("------ app/notification_push.go:: func (a *App) CreatePushNotificationsHub() {")
 	hub := PushNotificationsHub{
 		Channels: []chan PushNotification{},
 	}
@@ -273,6 +284,7 @@ func (a *App) CreatePushNotificationsHub() {
 }
 
 func (a *App) pushNotificationWorker(notifications chan PushNotification) {
+	fmt.Println("------ app/notification_push.go:: func (a *App) pushNotificationWorker(notifications chan PushNotification) {")
 	for notification := range notifications {
 		var err *model.AppError
 
@@ -303,6 +315,7 @@ func (a *App) pushNotificationWorker(notifications chan PushNotification) {
 }
 
 func (a *App) StartPushNotificationsHubWorkers() {
+	fmt.Println("------ app/notification_push.go:: func (a *App) StartPushNotificationsHubWorkers() {")
 	for x := 0; x < PUSH_NOTIFICATION_HUB_WORKERS; x++ {
 		channel := a.Srv().PushNotificationsHub.Channels[x]
 		a.Srv().Go(func() { a.pushNotificationWorker(channel) })
@@ -310,12 +323,14 @@ func (a *App) StartPushNotificationsHubWorkers() {
 }
 
 func (a *App) StopPushNotificationsHubWorkers() {
+	fmt.Println("------ app/notification_push.go:: func (a *App) StopPushNotificationsHubWorkers() {")
 	for _, channel := range a.Srv().PushNotificationsHub.Channels {
 		close(channel)
 	}
 }
 
 func (a *App) sendToPushProxy(msg model.PushNotification, session *model.Session) error {
+	fmt.Println("------ app/notification_push.go:: func (a *App) sendToPushProxy(msg model.PushNotification, session *model.Session) error {")
 	msg.ServerId = a.DiagnosticId()
 
 	a.NotificationsLog().Info("Notification will be sent",
@@ -354,6 +369,7 @@ func (a *App) sendToPushProxy(msg model.PushNotification, session *model.Session
 }
 
 func (a *App) SendAckToPushProxy(ack *model.PushNotificationAck) error {
+	fmt.Println("------ app/notification_push.go:: func (a *App) SendAckToPushProxy(ack *model.PushNotificationAck) error {")
 	if ack == nil {
 		return nil
 	}
@@ -387,6 +403,7 @@ func (a *App) SendAckToPushProxy(ack *model.PushNotificationAck) error {
 }
 
 func (a *App) getMobileAppSessions(userId string) ([]*model.Session, *model.AppError) {
+	fmt.Println("------ app/notification_push.go:: func (a *App) getMobileAppSessions(userId string) ([]*model.Session, *model.AppError) {")
 	return a.Srv().Store.Session().GetSessionsWithActiveDeviceIds(userId)
 }
 
@@ -461,6 +478,7 @@ func DoesStatusAllowPushNotification(userNotifyProps model.StringMap, status *mo
 
 func (a *App) BuildPushNotificationMessage(contentsConfig string, post *model.Post, user *model.User, channel *model.Channel, channelName string, senderName string,
 	explicitMention bool, channelWideMention bool, replyToThreadType string) (*model.PushNotification, *model.AppError) {
+	fmt.Println("------ app/notification_push.go:: func (a *App) BuildPushNotificationMessage(contentsConfig string, post *model.Post, user *model.User, channel *model.Channel, channelName string, senderName string,")
 
 	var msg *model.PushNotification
 
@@ -485,6 +503,7 @@ func (a *App) BuildPushNotificationMessage(contentsConfig string, post *model.Po
 }
 
 func (a *App) buildIdLoadedPushNotificationMessage(post *model.Post, user *model.User) *model.PushNotification {
+	fmt.Println("------ app/notification_push.go:: func (a *App) buildIdLoadedPushNotificationMessage(post *model.Post, user *model.User) *model.PushNotification {")
 	userLocale := utils.GetUserTranslations(user.Locale)
 	msg := &model.PushNotification{
 		PostId:     post.Id,
@@ -502,6 +521,7 @@ func (a *App) buildIdLoadedPushNotificationMessage(post *model.Post, user *model
 
 func (a *App) buildFullPushNotificationMessage(contentsConfig string, post *model.Post, user *model.User, channel *model.Channel, channelName string, senderName string,
 	explicitMention bool, channelWideMention bool, replyToThreadType string) *model.PushNotification {
+	fmt.Println("------ app/notification_push.go:: func (a *App) buildFullPushNotificationMessage(contentsConfig string, post *model.Post, user *model.User, channel *model.Channel, channelName string, senderName string,")
 
 	msg := &model.PushNotification{
 		Category:   model.CATEGORY_CAN_REPLY,
