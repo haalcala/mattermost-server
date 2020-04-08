@@ -13,28 +13,56 @@ type SimpleCluster struct {
 	messageHandlers map[string]*einterfaces.ClusterMessageHandler
 
 	redisClient *redis.Client
+
+	server *Server
 }
 
-func NewSimpleCluster() *SimpleCluster {
-	simpleCluster := &SimpleCluster{}
-
-	simpleCluster.messageHandlers = map[string]*einterfaces.ClusterMessageHandler{}
+func NewSimpleCluster(s *Server) *SimpleCluster {
+	simpleCluster := &SimpleCluster{server: s, messageHandlers: map[string]*einterfaces.ClusterMessageHandler{}}
 
 	return simpleCluster
 }
 
+func (s *SimpleCluster) Server() *Server {
+	return s.server
+}
+
 func (s *SimpleCluster) StartInterNodeCommunication() {
 
-	s.redisClient = redis.NewClient(&redis.Options{
+	c := s.Server().FakeApp().Config()
+
+	fmt.Println("c:", c)
+
+	redisClient := s.redisClient
+
+	redisClient = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
 
-	pong, err := s.redisClient.Ping().Result()
+	pong, err := redisClient.Ping().Result()
 
 	fmt.Println(pong, err)
 	// Output: PONG <nil>
+
+	if err == nil {
+		channels := []string{}
+
+		for messageHandler_key, _ := range s.messageHandlers {
+			channels = append(channels, messageHandler_key)
+		}
+
+		sub := redisClient.Subscribe(channels...)
+
+		iface, err := sub.Receive()
+
+		fmt.Println("iface:", iface, "err:", err)
+
+		if err == nil {
+
+		}
+	}
 }
 
 func (s *SimpleCluster) StopInterNodeCommunication() {
