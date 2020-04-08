@@ -36,6 +36,7 @@ func (s *SimpleCluster) StartInterNodeCommunication() {
 
 	redisClient := s.redisClient
 
+	// just a comment
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
