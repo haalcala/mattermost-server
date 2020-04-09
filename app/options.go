@@ -69,7 +69,11 @@ func RunJobs(s *Server) error {
 func JoinCluster(s *Server) error {
 	s.joinCluster = true
 
-	s.Cluster = NewSimpleCluster(s)
+	c := s.FakeApp().Config()
+
+	if *c.ClusterSettings.ClusterDriver == "redis" {
+		s.Cluster = NewSimpleCluster(s)
+	}
 
 	return nil
 }

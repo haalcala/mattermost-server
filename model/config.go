@@ -718,6 +718,10 @@ type ClusterSettings struct {
 	MaxIdleConns                *int    `restricted:"true"`
 	MaxIdleConnsPerHost         *int    `restricted:"true"`
 	IdleConnTimeoutMilliseconds *int    `restricted:"true"`
+	ClusterDriver               *string `restricted:"true"`
+	ClusterRedisHost            *string `restricted:"true"`
+	ClusterRedisPort            *string `restricted:"true"`
+	ClusterRedisPass            *string `restricted:"true"`
 }
 
 func (s *ClusterSettings) SetDefaults() {
@@ -775,6 +779,19 @@ func (s *ClusterSettings) SetDefaults() {
 
 	if s.IdleConnTimeoutMilliseconds == nil {
 		s.IdleConnTimeoutMilliseconds = NewInt(90000)
+	}
+
+	if s.ClusterDriver == nil {
+		s.ClusterDriver = NewString("")
+	}
+	if s.ClusterRedisHost == nil {
+		s.ClusterRedisHost = NewString("localhost")
+	}
+	if s.ClusterRedisPort == nil {
+		s.ClusterRedisPort = NewString("6379")
+	}
+	if s.ClusterRedisPass == nil {
+		s.ClusterRedisPass = NewString("")
 	}
 }
 
