@@ -40,6 +40,10 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 	s.clusterDomain = hostname
 
+	if c.ClusterSettings.ClusterName != nil {
+		s.clusterDomain = *c.ClusterSettings.ClusterName
+	}
+
 	// create a shared/generic redisClient
 	redisClient, err := s.newClient()
 
