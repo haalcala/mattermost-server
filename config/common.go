@@ -120,6 +120,8 @@ func (cs *commonStore) load(f io.ReadCloser, needsSave bool, validate func(*mode
 	needsSave = needsSave || loadedCfg.SqlSettings.AtRestEncryptKey == nil || len(*loadedCfg.SqlSettings.AtRestEncryptKey) == 0
 	needsSave = needsSave || loadedCfg.FileSettings.PublicLinkSalt == nil || len(*loadedCfg.FileSettings.PublicLinkSalt) == 0
 
+	fmt.Println("loadedCfg:", loadedCfg)
+
 	loadedCfg.SetDefaults()
 	loadedCfgWithoutEnvOverrides.SetDefaults()
 
