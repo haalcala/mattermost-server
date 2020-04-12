@@ -3,7 +3,11 @@
 
 package config
 
-import "github.com/pkg/errors"
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
 
 // Migrate migrates SAML keys and certificates from one store to another given their data source names.
 func Migrate(from, to string) error {
@@ -18,6 +22,9 @@ func Migrate(from, to string) error {
 	}
 
 	sourceConfig := source.Get()
+
+	fmt.Println("sourceConfig:", sourceConfig)
+
 	if _, err = destination.Set(sourceConfig); err != nil {
 		return errors.Wrapf(err, "failed to set config")
 	}
