@@ -131,7 +131,7 @@ func (s *SimpleCluster) newClient() (*redis.Client, error) {
 }
 
 func (s *SimpleCluster) StartInterNodeCommunication() {
-	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) StartInterNodeCommunication() {")
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) StartInterNodeCommunication() { os.Getenv(\"MM_REDIS_CLUSTER_ROLE\"):", os.Getenv("MM_REDIS_CLUSTER_ROLE"))
 
 	time.Sleep(time.Second * 5)
 
@@ -174,12 +174,6 @@ func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
 }
 
 func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
-	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) SendClusterMessage(cluster *model.ClusterMessage) {msg.Event:", msg.Event, "msg:", msg.ToJson())
-
-	fmt.Println("s.redisClient:", s.redisClient)
-
-	// debug.PrintStack()
-
 	s.redisClient.Publish(s.clusterDomain, msg.ToJson())
 }
 
