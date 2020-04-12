@@ -152,11 +152,17 @@ func (s *SimpleCluster) RegisterClusterMessageHandler(event string, crm einterfa
 }
 
 func (s *SimpleCluster) GetClusterId() string {
-	return ""
+	hostname, err := os.Hostname()
+
+	if err != nil {
+		panic(err)
+	}
+
+	return hostname
 }
 
 func (s *SimpleCluster) IsLeader() bool {
-	return true
+	return os.Getenv("MM_REDIS_CLUSTER_ROLE") == "master"
 }
 
 func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {
