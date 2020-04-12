@@ -4,6 +4,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/mattermost/mattermost-server/v5/mlog"
 	"github.com/pkg/errors"
 
@@ -70,6 +72,8 @@ func JoinCluster(s *Server) error {
 	s.joinCluster = true
 
 	c := s.FakeApp().Config()
+
+	fmt.Println("*c.ClusterSettings.ClusterDriver:", *c.ClusterSettings.ClusterDriver)
 
 	if *c.ClusterSettings.ClusterDriver == "redis" {
 		s.Cluster = NewSimpleCluster(s)
