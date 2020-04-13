@@ -31,22 +31,29 @@ const (
 )
 
 func (s *Server) Config() *model.Config {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	return s.configStore.Get()
 }
 
 func (a *App) Config() *model.Config {
+	fmt.Println("------ app/config.go:: func (a *App) Config() *model.Config {")
+
 	return a.Srv().Config()
 }
 
 func (s *Server) EnvironmentConfig() map[string]interface{} {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	return s.configStore.GetEnvironmentOverrides()
 }
 
 func (a *App) EnvironmentConfig() map[string]interface{} {
+	fmt.Println("------ app/config.go:: func (a *App) EnvironmentConfig() map[string]interface{} {")
+
 	return a.Srv().EnvironmentConfig()
 }
 
 func (s *Server) UpdateConfig(f func(*model.Config)) {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	old := s.Config()
 	updated := old.Clone()
 	f(updated)
@@ -56,10 +63,13 @@ func (s *Server) UpdateConfig(f func(*model.Config)) {
 }
 
 func (a *App) UpdateConfig(f func(*model.Config)) {
+	fmt.Println("------ app/config.go:: func (a *App) UpdateConfig(f func(*model.Config)) {")
+
 	a.Srv().UpdateConfig(f)
 }
 
 func (s *Server) ReloadConfig() error {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	debug.FreeOSMemory()
 	if err := s.configStore.Load(); err != nil {
 		return err
@@ -68,18 +78,26 @@ func (s *Server) ReloadConfig() error {
 }
 
 func (a *App) ReloadConfig() error {
+	fmt.Println("------ app/config.go:: func (a *App) ReloadConfig() error {")
+
 	return a.Srv().ReloadConfig()
 }
 
 func (a *App) ClientConfig() map[string]string {
+	fmt.Println("------ app/config.go:: func (a *App) ClientConfig() map[string]string {")
+
 	return a.Srv().clientConfig
 }
 
 func (a *App) ClientConfigHash() string {
+	fmt.Println("------ app/config.go:: func (a *App) ClientConfigHash() string {")
+
 	return a.Srv().clientConfigHash
 }
 
 func (a *App) LimitedClientConfig() map[string]string {
+	fmt.Println("------ app/config.go:: func (a *App) LimitedClientConfig() map[string]string {")
+
 	return a.Srv().limitedClientConfig
 }
 
@@ -87,19 +105,25 @@ func (a *App) LimitedClientConfig() map[string]string {
 // will be called with two arguments: the old config and the new config. AddConfigListener returns a unique ID
 // for the listener that can later be used to remove it.
 func (s *Server) AddConfigListener(listener func(*model.Config, *model.Config)) string {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	return s.configStore.AddListener(listener)
 }
 
 func (a *App) AddConfigListener(listener func(*model.Config, *model.Config)) string {
+	fmt.Println("------ app/config.go:: func (a *App) AddConfigListener(listener func(*model.Config, *model.Config)) string {")
+
 	return a.Srv().AddConfigListener(listener)
 }
 
 // Removes a listener function by the unique ID returned when AddConfigListener was called
 func (s *Server) RemoveConfigListener(id string) {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	s.configStore.RemoveListener(id)
 }
 
 func (a *App) RemoveConfigListener(id string) {
+	fmt.Println("------ app/config.go:: func (a *App) RemoveConfigListener(id string) {")
+
 	a.Srv().RemoveConfigListener(id)
 }
 
@@ -107,6 +131,8 @@ func (a *App) RemoveConfigListener(id string) {
 // and future calls to PostActionCookieSecret will always return a valid key, same on all
 // servers in the cluster
 func (a *App) ensurePostActionCookieSecret() error {
+	fmt.Println("------ app/config.go:: func (a *App) ensurePostActionCookieSecret() error {")
+
 	if a.Srv().postActionCookieSecret != nil {
 		return nil
 	}
@@ -166,6 +192,8 @@ func (a *App) ensurePostActionCookieSecret() error {
 // EnsureAsymmetricSigningKey ensures that an asymmetric signing key exists and future calls to
 // AsymmetricSigningKey will always return a valid signing key.
 func (a *App) ensureAsymmetricSigningKey() error {
+	fmt.Println("------ app/config.go:: func (a *App) ensureAsymmetricSigningKey() error {")
+
 	if a.Srv().asymmetricSigningKey != nil {
 		return nil
 	}
@@ -242,6 +270,8 @@ func (a *App) ensureAsymmetricSigningKey() error {
 }
 
 func (a *App) ensureInstallationDate() error {
+	fmt.Println("------ app/config.go:: func (a *App) ensureInstallationDate() error {")
+
 	_, err := a.getSystemInstallDate()
 	if err == nil {
 		return nil
@@ -267,22 +297,30 @@ func (a *App) ensureInstallationDate() error {
 
 // AsymmetricSigningKey will return a private key that can be used for asymmetric signing.
 func (s *Server) AsymmetricSigningKey() *ecdsa.PrivateKey {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	return s.asymmetricSigningKey
 }
 
 func (a *App) AsymmetricSigningKey() *ecdsa.PrivateKey {
+	fmt.Println("------ app/config.go:: func (a *App) AsymmetricSigningKey() *ecdsa.PrivateKey {")
+
 	return a.Srv().AsymmetricSigningKey()
 }
 
 func (s *Server) PostActionCookieSecret() []byte {
+	fmt.Println("------ app/config.go:: func (s *Server) ")
 	return s.postActionCookieSecret
 }
 
 func (a *App) PostActionCookieSecret() []byte {
+	fmt.Println("------ app/config.go:: func (a *App) PostActionCookieSecret() []byte {")
+
 	return a.Srv().PostActionCookieSecret()
 }
 
 func (a *App) regenerateClientConfig() {
+	fmt.Println("------ app/config.go:: func (a *App) regenerateClientConfig() {")
+
 	clientConfig := config.GenerateClientConfig(a.Config(), a.DiagnosticId(), a.License())
 	limitedClientConfig := config.GenerateLimitedClientConfig(a.Config(), a.DiagnosticId(), a.License())
 
@@ -309,6 +347,8 @@ func (a *App) regenerateClientConfig() {
 }
 
 func (a *App) GetCookieDomain() string {
+	fmt.Println("------ app/config.go:: func (a *App) GetCookieDomain() string {")
+
 	if *a.Config().ServiceSettings.AllowCookiesForSubdomains {
 		if siteURL, err := url.Parse(*a.Config().ServiceSettings.SiteURL); err == nil {
 			return siteURL.Hostname()
@@ -318,11 +358,15 @@ func (a *App) GetCookieDomain() string {
 }
 
 func (a *App) GetSiteURL() string {
+	fmt.Println("------ app/config.go:: func (a *App) GetSiteURL() string {")
+
 	return *a.Config().ServiceSettings.SiteURL
 }
 
 // ClientConfigWithComputed gets the configuration in a format suitable for sending to the client.
 func (a *App) ClientConfigWithComputed() map[string]string {
+	fmt.Println("------ app/config.go:: func (a *App) ClientConfigWithComputed() map[string]string {")
+
 	respCfg := map[string]string{}
 	for k, v := range a.ClientConfig() {
 		respCfg[k] = v
@@ -342,6 +386,8 @@ func (a *App) ClientConfigWithComputed() map[string]string {
 
 // LimitedClientConfigWithComputed gets the configuration in a format suitable for sending to the client.
 func (a *App) LimitedClientConfigWithComputed() map[string]string {
+	fmt.Println("------ app/config.go:: func (a *App) LimitedClientConfigWithComputed() map[string]string {")
+
 	respCfg := map[string]string{}
 	for k, v := range a.LimitedClientConfig() {
 		respCfg[k] = v
@@ -356,6 +402,8 @@ func (a *App) LimitedClientConfigWithComputed() map[string]string {
 
 // GetConfigFile proxies access to the given configuration file to the underlying config store.
 func (a *App) GetConfigFile(name string) ([]byte, error) {
+	fmt.Println("------ app/config.go:: func (a *App) GetConfigFile(name string) ([]byte, error) {")
+
 	data, err := a.Srv().configStore.GetFile(name)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to get config file %s", name)
@@ -366,6 +414,8 @@ func (a *App) GetConfigFile(name string) ([]byte, error) {
 
 // GetSanitizedConfig gets the configuration for a system admin without any secrets.
 func (a *App) GetSanitizedConfig() *model.Config {
+	fmt.Println("------ app/config.go:: func (a *App) GetSanitizedConfig() *model.Config {")
+
 	cfg := a.Config().Clone()
 	cfg.Sanitize()
 
@@ -374,11 +424,15 @@ func (a *App) GetSanitizedConfig() *model.Config {
 
 // GetEnvironmentConfig returns a map of configuration keys whose values have been overridden by an environment variable.
 func (a *App) GetEnvironmentConfig() map[string]interface{} {
+	fmt.Println("------ app/config.go:: func (a *App) GetEnvironmentConfig() map[string]interface{} {")
+
 	return a.EnvironmentConfig()
 }
 
 // SaveConfig replaces the active configuration, optionally notifying cluster peers.
 func (a *App) SaveConfig(newCfg *model.Config, sendConfigChangeClusterMessage bool) *model.AppError {
+	fmt.Println("------ app/config.go:: func (a *App) SaveConfig(newCfg *model.Config, sendConfigChangeClusterMessage bool) *model.AppError {")
+
 	oldCfg, err := a.Srv().configStore.Set(newCfg)
 	if errors.Cause(err) == config.ErrReadOnlyConfiguration {
 		return model.NewAppError("saveConfig", "ent.cluster.save_config.error", nil, err.Error(), http.StatusForbidden)
@@ -407,22 +461,30 @@ func (a *App) SaveConfig(newCfg *model.Config, sendConfigChangeClusterMessage bo
 }
 
 func (a *App) IsESIndexingEnabled() bool {
+	fmt.Println("------ app/config.go:: func (a *App) IsESIndexingEnabled() bool {")
+
 	return a.Elasticsearch() != nil && *a.Config().ElasticsearchSettings.EnableIndexing
 }
 
 func (a *App) IsESSearchEnabled() bool {
+	fmt.Println("------ app/config.go:: func (a *App) IsESSearchEnabled() bool {")
+
 	esInterface := a.Elasticsearch()
 	license := a.License()
 	return esInterface != nil && *a.Config().ElasticsearchSettings.EnableSearching && license != nil && *license.Features.Elasticsearch
 }
 
 func (a *App) IsESAutocompletionEnabled() bool {
+	fmt.Println("------ app/config.go:: func (a *App) IsESAutocompletionEnabled() bool {")
+
 	esInterface := a.Elasticsearch()
 	license := a.License()
 	return esInterface != nil && *a.Config().ElasticsearchSettings.EnableAutocomplete && license != nil && *license.Features.Elasticsearch
 }
 
 func (a *App) HandleMessageExportConfig(cfg *model.Config, appCfg *model.Config) {
+	fmt.Println("------ app/config.go:: func (a *App) HandleMessageExportConfig(cfg *model.Config, appCfg *model.Config) {")
+
 	// If the Message Export feature has been toggled in the System Console, rewrite the ExportFromTimestamp field to an
 	// appropriate value. The rewriting occurs here to ensure it doesn't affect values written to the config file
 	// directly and not through the System Console UI.
