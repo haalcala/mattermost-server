@@ -87,6 +87,17 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
 
+			fmt.Println("payload.Data:", payload.Data)
+			fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
+
+			data_as_json := model.ClusterMessageFromJson(strings.NewReader(payload.Data))
+
+			fmt.Println("**** data_as_json:", data_as_json)
+
+			if data_as_json != nil && data_as_json.Event == "config_changed" && os.Getenv("MM_REDIS_CLUSTER_ROLE") != "master" {
+				server.FakeApp().regenerateClientConfig()
+			}
+
 			handler := s.messageHandlers[payload.Event]
 
 			// *handler(payload)
