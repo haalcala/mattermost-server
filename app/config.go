@@ -31,7 +31,7 @@ const (
 )
 
 func (s *Server) Config() *model.Config {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) Config() *model.Config {")
 	return s.configStore.Get()
 }
 
