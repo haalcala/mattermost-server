@@ -83,9 +83,12 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 	s.server.Go(func() {
 		// Consume messages.
 		for msg := range ch {
-			fmt.Println(msg.Channel, msg.Payload)
+			fmt.Println("------>>> app/simple_cluster.go:: msg.Channel:", msg.Channel, "msg.Payload:", msg.Payload)
 
 			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
+
+			fmt.Println("payload.Data:", payload.Data)
+			fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
 
 			handler := s.messageHandlers[payload.Event]
 
@@ -182,6 +185,7 @@ func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
 }
 
 func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) { msg:", msg.ToJson())
 	s.redisClient.Publish(s.clusterDomain, msg.ToJson())
 }
 
