@@ -98,7 +98,7 @@ func (cs *commonStore) set(newCfg *model.Config, allowEnvironmentOverrides bool,
 // This function assumes no lock has been acquired, as it acquires a write lock itself.
 func (cs *commonStore) load(f io.ReadCloser, needsSave bool, validate func(*model.Config) error, persist func(*model.Config) error) error {
 	// Duplicate f so that we can read a configuration without applying environment overrides
-	fmt.Println("--------------- config/common.go:: load:: ")
+	fmt.Println("------ config/common.go:: load:: ")
 
 	f2 := new(bytes.Buffer)
 	tee := io.TeeReader(f, f2)
@@ -119,6 +119,8 @@ func (cs *commonStore) load(f io.ReadCloser, needsSave bool, validate func(*mode
 	// such a change will be made before invoking.
 	needsSave = needsSave || loadedCfg.SqlSettings.AtRestEncryptKey == nil || len(*loadedCfg.SqlSettings.AtRestEncryptKey) == 0
 	needsSave = needsSave || loadedCfg.FileSettings.PublicLinkSalt == nil || len(*loadedCfg.FileSettings.PublicLinkSalt) == 0
+
+	fmt.Println("loadedCfg:", loadedCfg)
 
 	loadedCfg.SetDefaults()
 	loadedCfgWithoutEnvOverrides.SetDefaults()

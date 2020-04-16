@@ -269,6 +269,8 @@ func configMigrateCmdF(command *cobra.Command, args []string) error {
 		return errors.Wrap(err, "failed to migrate config")
 	}
 
+	fmt.Println("path.Join(cwd, \"i18n\":)", path.Join(cwd, "i18n"))
+
 	utils.InitTranslationsWithDir(path.Join(cwd, "i18n"))
 
 	err = config.Migrate(from, to)
