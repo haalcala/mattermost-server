@@ -94,7 +94,7 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 			fmt.Println("**** data_as_json:", data_as_json)
 
-			if data_as_json != nil && data_as_json.Event == "config_changed" && os.Getenv("MM_REDIS_CLUSTER_ROLE") != "master" {
+			if data_as_json != nil && data_as_json.Event == "config_changed" {
 				server.FakeApp().regenerateClientConfig()
 			}
 
