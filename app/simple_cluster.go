@@ -87,12 +87,12 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
 
-			if payload.Origin == s.server.serverNodeId {
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				continue
-			}
+			// if payload.Origin == s.server.serverNodeId {
+			// 	fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			// 	fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			// 	fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			// 	continue
+			// }
 
 			// fmt.Println("payload.Data:", payload.Data)
 			fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
