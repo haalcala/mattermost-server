@@ -135,6 +135,8 @@ func (cs *commonStore) load(f io.ReadCloser, needsSave bool, validate func(*mode
 		needsSave = true
 	}
 
+	fmt.Println("********************************************************** config/common.go:: needsSave:", needsSave)
+
 	cs.configLock.Lock()
 	var unlockOnce sync.Once
 	defer unlockOnce.Do(cs.configLock.Unlock)

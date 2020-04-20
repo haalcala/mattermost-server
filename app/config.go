@@ -36,13 +36,13 @@ func (s *Server) Config() *model.Config {
 }
 
 func (a *App) Config() *model.Config {
-	fmt.Println("------ app/config.go:: func (a *App) Config() *model.Config {")
+	// fmt.Println("------ app/config.go:: func (a *App) Config() *model.Config {")
 
 	return a.Srv().Config()
 }
 
 func (s *Server) EnvironmentConfig() map[string]interface{} {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) EnvironmentConfig() map[string]interface{} {")
 	return s.configStore.GetEnvironmentOverrides()
 }
 
@@ -53,7 +53,7 @@ func (a *App) EnvironmentConfig() map[string]interface{} {
 }
 
 func (s *Server) UpdateConfig(f func(*model.Config)) {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) UpdateConfig(f func(*model.Config)) { ")
 	old := s.Config()
 	updated := old.Clone()
 	f(updated)
@@ -69,7 +69,7 @@ func (a *App) UpdateConfig(f func(*model.Config)) {
 }
 
 func (s *Server) ReloadConfig() error {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) ReloadConfig() error {")
 	debug.FreeOSMemory()
 	if err := s.configStore.Load(); err != nil {
 		return err
@@ -105,7 +105,7 @@ func (a *App) LimitedClientConfig() map[string]string {
 // will be called with two arguments: the old config and the new config. AddConfigListener returns a unique ID
 // for the listener that can later be used to remove it.
 func (s *Server) AddConfigListener(listener func(*model.Config, *model.Config)) string {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) AddConfigListener(listener func(*model.Config, *model.Config)) string {")
 	return s.configStore.AddListener(listener)
 }
 
@@ -117,7 +117,7 @@ func (a *App) AddConfigListener(listener func(*model.Config, *model.Config)) str
 
 // Removes a listener function by the unique ID returned when AddConfigListener was called
 func (s *Server) RemoveConfigListener(id string) {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) RemoveConfigListener(id string) {")
 	s.configStore.RemoveListener(id)
 }
 
@@ -297,7 +297,7 @@ func (a *App) ensureInstallationDate() error {
 
 // AsymmetricSigningKey will return a private key that can be used for asymmetric signing.
 func (s *Server) AsymmetricSigningKey() *ecdsa.PrivateKey {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) AsymmetricSigningKey() *ecdsa.PrivateKey {")
 	return s.asymmetricSigningKey
 }
 
@@ -308,7 +308,7 @@ func (a *App) AsymmetricSigningKey() *ecdsa.PrivateKey {
 }
 
 func (s *Server) PostActionCookieSecret() []byte {
-	fmt.Println("------ app/config.go:: func (s *Server) ")
+	fmt.Println("------ app/config.go:: func (s *Server) PostActionCookieSecret() []byte {")
 	return s.postActionCookieSecret
 }
 
