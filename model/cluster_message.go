@@ -52,6 +52,7 @@ type ClusterMessage struct {
 	WaitForAllToSend bool              `json:"-"`
 	Data             string            `json:"data,omitempty"`
 	Props            map[string]string `json:"props,omitempty"`
+	Origin           string            `json:"origin"`
 }
 
 func (o *ClusterMessage) ToJson() string {
