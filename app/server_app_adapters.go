@@ -35,9 +35,9 @@ func (s *Server) RunOldAppInitialization() error {
 		message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CONFIG_CHANGED, "", "", "", nil)
 
 		message.Add("config", s.FakeApp().ClientConfigWithComputed())
-		s.Go(func() {
-			s.FakeApp().Publish(message)
-		})
+		// s.Go(func() {
+		// 	s.FakeApp().Publish(message)
+		// })
 	})
 	s.FakeApp().Srv().licenseListenerId = s.FakeApp().AddLicenseListener(func() {
 		s.FakeApp().configOrLicenseListener()
