@@ -182,6 +182,7 @@ func (a *App) Publish(message *model.WebSocketEvent) {
 			Event:    model.CLUSTER_EVENT_PUBLISH,
 			SendType: model.CLUSTER_SEND_BEST_EFFORT,
 			Data:     message.ToJson(),
+			Origin:   a.Srv().serverNodeId,
 		}
 
 		if message.EventType() == model.WEBSOCKET_EVENT_POSTED ||

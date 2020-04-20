@@ -87,7 +87,14 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
 
-			fmt.Println("payload.Data:", payload.Data)
+			if payload.Origin == s.server.serverNodeId {
+				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				continue
+			}
+
+			// fmt.Println("payload.Data:", payload.Data)
 			fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
 
 			data_as_json := model.ClusterMessageFromJson(strings.NewReader(payload.Data))
@@ -95,7 +102,10 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 			fmt.Println("**** data_as_json:", data_as_json)
 
 			if data_as_json != nil && data_as_json.Event == "config_changed" {
-				server.FakeApp().regenerateClientConfig()
+				// server.FakeApp().regenerateClientConfig()
+				// server.FakeApp().SaveConfig()
+
+				server.FakeApp().ReloadConfig()
 			}
 
 			handler := s.messageHandlers[payload.Event]
@@ -222,5 +232,14 @@ func (s *SimpleCluster) GetPluginStatuses() (model.PluginStatuses, *model.AppErr
 
 func (s *SimpleCluster) ConfigChanged(previousConfig *model.Config, newConfig *model.Config, sendToOtherServer bool) *model.AppError {
 	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) ConfigChanged(previousConfig *model.Config, newConfig *model.Config, sendToOtherServer bool) *model.AppError {")
+
+	message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CONFIG_CHANGED, "", "", "", nil)
+
+	message.Add("config", s.Server().FakeApp().ClientConfigWithComputed())
+
+	s.Server().Go(func() {
+		s.Server().FakeApp().Publish(message)
+	})
+
 	return nil
 }

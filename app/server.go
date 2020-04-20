@@ -134,16 +134,25 @@ type Server struct {
 	Saml             einterfaces.SamlInterface
 
 	CacheProvider cache.Provider
+
+	serverNodeId string
 }
 
 func NewServer(options ...Option) (*Server, error) {
 	rootRouter := mux.NewRouter()
+
+	hostname, err := os.Hostname()
+
+	if err != nil {
+		panic(err)
+	}
 
 	s := &Server{
 		goroutineExitSignal: make(chan struct{}, 1),
 		RootRouter:          rootRouter,
 		licenseListeners:    map[string]func(){},
 		clientConfig:        make(map[string]string),
+		serverNodeId:        hostname,
 	}
 
 	for _, option := range options {
@@ -202,7 +211,7 @@ func NewServer(options ...Option) (*Server, error) {
 	s.seenPendingPostIdsCache = s.CacheProvider.NewCache(PENDING_POST_IDS_CACHE_SIZE)
 	s.statusCache = s.CacheProvider.NewCache(model.STATUS_CACHE_SIZE)
 
-	err := s.RunOldAppInitialization()
+	err = s.RunOldAppInitialization()
 	if err != nil {
 		return nil, err
 	}
