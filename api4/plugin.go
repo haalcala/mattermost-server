@@ -8,6 +8,7 @@ package api4
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -22,6 +23,7 @@ const (
 )
 
 func (api *API) InitPlugin() {
+	fmt.Println("------ api4/plugin.go:: func (api *API) InitPlugin() {")
 	mlog.Debug("EXPERIMENTAL: Initializing plugin api")
 
 	api.BaseRoutes.Plugins.Handle("", api.ApiSessionRequired(uploadPlugin)).Methods("POST")
@@ -40,6 +42,7 @@ func (api *API) InitPlugin() {
 }
 
 func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	config := c.App.Config()
 	if !*config.PluginSettings.Enable || !*config.PluginSettings.EnableUploads || *config.PluginSettings.RequirePluginSignature {
 		c.Err = model.NewAppError("uploadPlugin", "app.plugin.upload_disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -85,6 +88,7 @@ func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func installPluginFromUrl(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func installPluginFromUrl(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable ||
 		*c.App.Config().PluginSettings.RequirePluginSignature ||
 		!*c.App.Config().PluginSettings.EnableUploads {
@@ -110,6 +114,7 @@ func installPluginFromUrl(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("installMarketplacePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -142,6 +147,7 @@ func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request
 }
 
 func getPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getPlugins(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getPlugins", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -162,6 +168,7 @@ func getPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getPluginStatuses(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getPluginStatuses(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getPluginStatuses", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -182,6 +189,7 @@ func getPluginStatuses(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func removePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func removePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequirePluginId()
 	if c.Err != nil {
 		return
@@ -207,6 +215,7 @@ func removePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getWebappPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getWebappPlugins(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getWebappPlugins", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -233,6 +242,7 @@ func getWebappPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getMarketplacePlugins(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getMarketplacePlugins(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getMarketplacePlugins", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -270,6 +280,7 @@ func getMarketplacePlugins(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func enablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func enablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequirePluginId()
 	if c.Err != nil {
 		return
@@ -294,6 +305,7 @@ func enablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func disablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func disablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequirePluginId()
 	if c.Err != nil {
 		return
@@ -318,6 +330,7 @@ func disablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func parseMarketplacePluginFilter(u *url.URL) (*model.MarketplacePluginFilter, error) {
+	fmt.Println("------ api4/plugin.go:: func parseMarketplacePluginFilter(u *url.URL) (*model.MarketplacePluginFilter, error) {")
 	page, err := parseInt(u, "page", 0)
 	if err != nil {
 		return nil, err
@@ -345,6 +358,7 @@ func parseMarketplacePluginFilter(u *url.URL) (*model.MarketplacePluginFilter, e
 }
 
 func installPlugin(c *Context, w http.ResponseWriter, plugin io.ReadSeeker, force bool) {
+	fmt.Println("------ api4/plugin.go:: func installPlugin(c *Context, w http.ResponseWriter, plugin io.ReadSeeker, force bool) {")
 	manifest, appErr := c.App.InstallPlugin(plugin, force)
 	if appErr != nil {
 		c.Err = appErr

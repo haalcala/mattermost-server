@@ -62,6 +62,7 @@ const managedPluginFileName = ".filestore"
 const fileStorePluginFolder = "plugins"
 
 func (a *App) InstallPluginFromData(data model.PluginEventData) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) InstallPluginFromData(data model.PluginEventData) {")
 	mlog.Debug("Installing plugin as per cluster message", mlog.String("plugin_id", data.Id))
 
 	pluginSignaturePathMap, appErr := a.getPluginsFromFolder()
@@ -108,6 +109,7 @@ func (a *App) InstallPluginFromData(data model.PluginEventData) {
 }
 
 func (a *App) RemovePluginFromData(data model.PluginEventData) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) RemovePluginFromData(data model.PluginEventData) {")
 	mlog.Debug("Removing plugin as per cluster message", mlog.String("plugin_id", data.Id))
 
 	if err := a.removePluginLocally(data.Id); err != nil {
@@ -121,11 +123,13 @@ func (a *App) RemovePluginFromData(data model.PluginEventData) {
 
 // InstallPluginWithSignature verifies and installs plugin.
 func (a *App) InstallPluginWithSignature(pluginFile, signature io.ReadSeeker) (*model.Manifest, *model.AppError) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) InstallPluginWithSignature(pluginFile, signature io.ReadSeeker) (*model.Manifest, *model.AppError) {")
 	return a.installPlugin(pluginFile, signature, installPluginLocallyAlways)
 }
 
 // InstallPlugin unpacks and installs a plugin but does not enable or activate it.
 func (a *App) InstallPlugin(pluginFile io.ReadSeeker, replace bool) (*model.Manifest, *model.AppError) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) InstallPlugin(pluginFile io.ReadSeeker, replace bool) (*model.Manifest, *model.AppError) {")
 	installationStrategy := installPluginLocallyOnlyIfNew
 	if replace {
 		installationStrategy = installPluginLocallyAlways
@@ -135,6 +139,7 @@ func (a *App) InstallPlugin(pluginFile io.ReadSeeker, replace bool) (*model.Mani
 }
 
 func (a *App) installPlugin(pluginFile, signature io.ReadSeeker, installationStrategy pluginInstallationStrategy) (*model.Manifest, *model.AppError) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) installPlugin(pluginFile, signature io.ReadSeeker, installationStrategy pluginInstallationStrategy) (*model.Manifest, *model.AppError) {")
 	manifest, appErr := a.installPluginLocally(pluginFile, signature, installationStrategy)
 	if appErr != nil {
 		return nil, appErr
@@ -174,6 +179,7 @@ func (a *App) installPlugin(pluginFile, signature io.ReadSeeker, installationStr
 // InstallMarketplacePlugin installs a plugin listed in the marketplace server. It will get the plugin bundle
 // from the prepackaged folder, if available, or remotely if EnableRemoteMarketplace is true.
 func (a *App) InstallMarketplacePlugin(request *model.InstallMarketplacePluginRequest) (*model.Manifest, *model.AppError) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) InstallMarketplacePlugin(request *model.InstallMarketplacePluginRequest) (*model.Manifest, *model.AppError) {")
 	var pluginFile, signatureFile io.ReadSeeker
 
 	prepackagedPlugin, appErr := a.getPrepackagedPlugin(request.Id, request.Version)
@@ -238,6 +244,7 @@ const (
 )
 
 func (a *App) installPluginLocally(pluginFile, signature io.ReadSeeker, installationStrategy pluginInstallationStrategy) (*model.Manifest, *model.AppError) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) installPluginLocally(pluginFile, signature io.ReadSeeker, installationStrategy pluginInstallationStrategy) (*model.Manifest, *model.AppError) {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return nil, model.NewAppError("installPluginLocally", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -270,6 +277,7 @@ func (a *App) installPluginLocally(pluginFile, signature io.ReadSeeker, installa
 }
 
 func extractPlugin(pluginFile io.ReadSeeker, extractDir string) (*model.Manifest, string, *model.AppError) {
+	fmt.Println("------ app/plugin_install.go:: func extractPlugin(pluginFile io.ReadSeeker, extractDir string) (*model.Manifest, string, *model.AppError) {")
 	pluginFile.Seek(0, 0)
 	if err := extractTarGz(pluginFile, extractDir); err != nil {
 		return nil, "", model.NewAppError("extractPlugin", "app.plugin.extract.app_error", nil, err.Error(), http.StatusBadRequest)
@@ -297,6 +305,7 @@ func extractPlugin(pluginFile io.ReadSeeker, extractDir string) (*model.Manifest
 }
 
 func (a *App) installExtractedPlugin(manifest *model.Manifest, fromPluginDir string, installationStrategy pluginInstallationStrategy) (*model.Manifest, *model.AppError) {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) installExtractedPlugin(manifest *model.Manifest, fromPluginDir string, installationStrategy pluginInstallationStrategy) (*model.Manifest, *model.AppError) {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return nil, model.NewAppError("installExtractedPlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -384,10 +393,12 @@ func (a *App) installExtractedPlugin(manifest *model.Manifest, fromPluginDir str
 }
 
 func (a *App) RemovePlugin(id string) *model.AppError {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) RemovePlugin(id string) *model.AppError {")
 	return a.removePlugin(id)
 }
 
 func (a *App) removePlugin(id string) *model.AppError {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) removePlugin(id string) *model.AppError {")
 	// Disable plugin before removal to make sure this
 	// plugin remains disabled on re-install.
 	if err := a.DisablePlugin(id); err != nil {
@@ -429,6 +440,7 @@ func (a *App) removePlugin(id string) *model.AppError {
 }
 
 func (a *App) removePluginLocally(id string) *model.AppError {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) removePluginLocally(id string) *model.AppError {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return model.NewAppError("removePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -465,6 +477,7 @@ func (a *App) removePluginLocally(id string) *model.AppError {
 }
 
 func (a *App) removeSignature(pluginId string) *model.AppError {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) removeSignature(pluginId string) *model.AppError {")
 	filePath := a.getSignatureStorePath(pluginId)
 	exists, err := a.FileExists(filePath)
 	if err != nil {
@@ -481,9 +494,11 @@ func (a *App) removeSignature(pluginId string) *model.AppError {
 }
 
 func (a *App) getBundleStorePath(id string) string {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) getBundleStorePath(id string) string {")
 	return filepath.Join(fileStorePluginFolder, fmt.Sprintf("%s.tar.gz", id))
 }
 
 func (a *App) getSignatureStorePath(id string) string {
+	fmt.Println("------ app/plugin_install.go:: func (a *App) getSignatureStorePath(id string) string {")
 	return filepath.Join(fileStorePluginFolder, fmt.Sprintf("%s.tar.gz.sig", id))
 }
