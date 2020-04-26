@@ -72,6 +72,8 @@ func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("------ api4/plugin.go:: uploadPlugin:: pluginArray:", pluginArray)
+
 	file, err := pluginArray[0].Open()
 	if err != nil {
 		c.Err = model.NewAppError("uploadPlugin", "api.plugin.upload.file.app_error", nil, "", http.StatusBadRequest)
