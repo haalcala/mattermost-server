@@ -21,6 +21,35 @@ type SimpleCluster struct {
 	server *Server
 
 	clusterDomain string
+
+	clusterInfo *model.ClusterInfo
+
+	clusterInfos map[string]*model.ClusterInfo
+}
+
+func (s *SimpleCluster) handleClusterMessage(msg *model.ClusterMessage) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) handleClusterMessage(msg *model.ClusterMessage) {")
+
+	fmt.Println("Handle Cluster Message!!!!")
+
+	if msg.Data == "" {
+		return
+	}
+
+	data_as_json := model.ClusterMessageFromJson(strings.NewReader(msg.Data))
+
+	fmt.Println("data_as_json:", data_as_json)
+
+	switch data_as_json.Event {
+	case model.CLUSTER_EVENT_CLUSTER_INFO:
+		fmt.Println("Processing ClusterInfo!!!! data_as_json.Data:", data_as_json.Data)
+
+		cluster_info := model.ClusterInfoFromJson(strings.NewReader(data_as_json.Data))
+
+		s.clusterInfos[cluster_info.Id] = cluster_info
+
+		fmt.Println("s.clusterInfos:", s.clusterInfos)
+	}
 }
 
 func NewSimpleCluster(server *Server) *SimpleCluster {
@@ -39,6 +68,16 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 	}
 
 	s.clusterDomain = hostname
+
+	clusterInfo := &model.ClusterInfo{
+		Hostname:  hostname,
+		Id:        hostname,
+		IpAddress: s.Server().FakeApp().IpAddress(),
+		Version:   model.CurrentVersion,
+	}
+
+	s.clusterInfo = clusterInfo
+	s.clusterInfos = map[string]*model.ClusterInfo{}
 
 	if c.ClusterSettings.ClusterName != nil {
 		s.clusterDomain = *c.ClusterSettings.ClusterName
@@ -79,6 +118,8 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 	// Go channel which receives messages.
 	ch := pubsub.Channel()
+
+	s.RegisterClusterMessageHandler(model.CLUSTER_EVENT_CLUSTER_MESSAGE, s.handleClusterMessage)
 
 	s.server.Go(func() {
 		// Consume messages.
@@ -158,6 +199,9 @@ func (s *SimpleCluster) StartInterNodeCommunication() {
 
 	fmt.Println("StartInterNodeCommunication:: s.redisClient:", s.redisClient)
 
+	// Notify cluster about this node
+	s.Server().FakeApp().notifyClusterEvent(model.CLUSTER_EVENT_CLUSTER_INFO, s.clusterInfo)
+
 	fmt.Println("-------------------******************************========================================== StartInterNodeCommunication. Exiting.")
 }
 
@@ -187,14 +231,26 @@ func (s *SimpleCluster) IsLeader() bool {
 }
 
 func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {
-	return nil
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {")
+
+	return s.clusterInfo
 }
 
 func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
-	return []*model.ClusterInfo{}
+	clusterInfos := []*model.ClusterInfo{}
+
+	for key := range s.clusterInfos {
+		clusterInfos = append(clusterInfos, s.clusterInfos[key])
+	}
+
+	return clusterInfos
 }
 
 func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
+	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {")
+
+	fmt.Println("<<<<<<======------ msg:", msg.ToJson())
+
 	s.redisClient.Publish(s.clusterDomain, msg.ToJson())
 }
 
@@ -226,4 +282,20 @@ func (s *SimpleCluster) ConfigChanged(previousConfig *model.Config, newConfig *m
 	})
 
 	return nil
+}
+
+// notifyClusterEvent publishes `event` to other clusters.
+func (a *App) notifyClusterEvent(event string, data *model.ClusterInfo) {
+	if a.Cluster() != nil {
+		_event := &model.ClusterMessage{
+			Event: event,
+			Data:  data.ToJson(),
+		}
+		a.Cluster().SendClusterMessage(&model.ClusterMessage{
+			Event:            model.CLUSTER_EVENT_CLUSTER_MESSAGE,
+			SendType:         model.CLUSTER_SEND_RELIABLE,
+			WaitForAllToSend: true,
+			Data:             _event.ToJson(),
+		})
+	}
 }
