@@ -232,11 +232,18 @@ func (s *SimpleCluster) IsLeader() bool {
 
 func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {
 	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {")
+
 	return s.clusterInfo
 }
 
 func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
-	return []*model.ClusterInfo{}
+	clusterInfos := []*model.ClusterInfo{}
+
+	for key := range s.clusterInfos {
+		clusterInfos = append(clusterInfos, s.clusterInfos[key])
+	}
+
+	return clusterInfos
 }
 
 func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
