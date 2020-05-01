@@ -37,6 +37,8 @@ const (
 	CLUSTER_EVENT_INVALIDATE_CACHE_FOR_TEAMS                        = "inv_teams"
 	CLUSTER_EVENT_CLEAR_SESSION_CACHE_FOR_ALL_USERS                 = "inv_all_user_sessions"
 	CLUSTER_EVENT_INSTALL_PLUGIN                                    = "install_plugin"
+	CLUSTER_EVENT_CLUSTER_INFO                                      = "cluster_info"
+	CLUSTER_EVENT_CLUSTER_MESSAGE                                   = "cluster_message"
 	CLUSTER_EVENT_REMOVE_PLUGIN                                     = "remove_plugin"
 	CLUSTER_EVENT_INVALIDATE_CACHE_FOR_TERMS_OF_SERVICE             = "inv_terms_of_service"
 	CLUSTER_EVENT_BUSY_STATE_CHANGED                                = "busy_state_change"
