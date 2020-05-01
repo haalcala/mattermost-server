@@ -4,6 +4,7 @@
 package filesstore
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 
@@ -31,6 +32,10 @@ type FileBackend interface {
 }
 
 func NewFileBackend(settings *model.FileSettings, enableComplianceFeatures bool) (FileBackend, *model.AppError) {
+	fmt.Println("------ services/filesstore/filesstore.go:: func NewFileBackend(settings *model.FileSettings, enableComplianceFeatures bool) (FileBackend, *model.AppError) {")
+
+	fmt.Println("*settings.DriverName:", *settings.DriverName)
+
 	switch *settings.DriverName {
 	case model.IMAGE_DRIVER_S3:
 		return &S3FileBackend{
