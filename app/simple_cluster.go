@@ -124,16 +124,16 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 	s.server.Go(func() {
 		// Consume messages.
 		for msg := range ch {
-			fmt.Println(msg.Channel, msg.Payload)
+			fmt.Println("<<<<<<======------ app/simple_cluster.go:: msg.Channel:", msg.Channel, "msg.Payload:", msg.Payload)
 
 			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
 
-			// if payload.Origin == s.server.serverNodeId {
-			// 	fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			// 	fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			// 	fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			// 	continue
-			// }
+			if payload.Origin == s.server.serverNodeId {
+				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				continue
+			}
 
 			// fmt.Println("payload.Data:", payload.Data)
 			fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
@@ -249,7 +249,9 @@ func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
 func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
 	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {")
 
-	fmt.Println("<<<<<<======------ msg:", msg.ToJson())
+	msg.Origin = s.clusterInfo.Id
+
+	fmt.Println("------======>>>>>> msg:", msg.ToJson())
 
 	s.redisClient.Publish(s.clusterDomain, msg.ToJson())
 }
