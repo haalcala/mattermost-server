@@ -1319,6 +1319,9 @@ func sendPasswordReset(c *Context, w http.ResponseWriter, r *http.Request) {
 
 func login(c *Context, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("------  api4/user.go:: func login(c *Context, w http.ResponseWriter, r *http.Request) {")
+
+	fmt.Println("r:", r)
+
 	// Mask all sensitive errors, with the exception of the following
 	defer func() {
 		if c.Err == nil {
@@ -1384,6 +1387,8 @@ func login(c *Context, w http.ResponseWriter, r *http.Request) {
 	mfaToken := props["token"]
 	deviceId := props["device_id"]
 	ldapOnly := props["ldap_only"] == "true"
+
+	fmt.Println("props:", props)
 
 	if *c.App.Config().ExperimentalSettings.ClientSideCertEnable {
 		if license := c.App.License(); license == nil || !*license.Features.SAML {

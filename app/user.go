@@ -290,9 +290,12 @@ func (a *App) createUserOrGuest(user *model.User, guest bool) (*model.User, *mod
 	if err != nil {
 		return nil, err
 	}
+
 	// This message goes to everyone, so the teamId, channelId and userId are irrelevant
 	message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_NEW_USER, "", "", "", nil)
+
 	message.Add("user_id", ruser.Id)
+
 	a.Publish(message)
 
 	if pluginsEnvironment := a.GetPluginsEnvironment(); pluginsEnvironment != nil {

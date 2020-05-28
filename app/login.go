@@ -17,6 +17,8 @@ import (
 )
 
 func (a *App) CheckForClientSideCert(r *http.Request) (string, string, string) {
+	fmt.Println("---- app/login.go:: func (a *App) CheckForClientSideCert(r *http.Request) (string, string, string) {")
+
 	pem := r.Header.Get("X-SSL-Client-Cert")                // mapped to $ssl_client_cert from nginx
 	subject := r.Header.Get("X-SSL-Client-Cert-Subject-DN") // mapped to $ssl_client_s_dn from nginx
 	email := ""
@@ -34,6 +36,8 @@ func (a *App) CheckForClientSideCert(r *http.Request) (string, string, string) {
 }
 
 func (a *App) AuthenticateUserForLogin(id, loginId, password, mfaToken string, ldapOnly bool) (user *model.User, err *model.AppError) {
+	fmt.Println("---- app/login.go:: func (a *App) AuthenticateUserForLogin(id, loginId, password, mfaToken string, ldapOnly bool) (user *model.User, err *model.AppError) {")
+
 	// Do statistics
 	defer func() {
 		if a.Metrics() != nil {
@@ -75,6 +79,8 @@ func (a *App) AuthenticateUserForLogin(id, loginId, password, mfaToken string, l
 }
 
 func (a *App) GetUserForLogin(id, loginId string) (*model.User, *model.AppError) {
+	fmt.Println("---- app/login.go:: func (a *App) GetUserForLogin(id, loginId string) (*model.User, *model.AppError) {")
+
 	enableUsername := *a.Config().EmailSettings.EnableSignInWithUsername
 	enableEmail := *a.Config().EmailSettings.EnableSignInWithEmail
 
@@ -111,6 +117,8 @@ func (a *App) GetUserForLogin(id, loginId string) (*model.User, *model.AppError)
 }
 
 func (a *App) DoLogin(w http.ResponseWriter, r *http.Request, user *model.User, deviceId string) *model.AppError {
+	fmt.Println("---- app/login.go:: func (a *App) DoLogin(w http.ResponseWriter, r *http.Request, user *model.User, deviceId string) *model.AppError {")
+
 	if pluginsEnvironment := a.GetPluginsEnvironment(); pluginsEnvironment != nil {
 		var rejectionReason string
 		pluginContext := a.PluginContext()
@@ -179,6 +187,8 @@ func (a *App) DoLogin(w http.ResponseWriter, r *http.Request, user *model.User, 
 }
 
 func (a *App) AttachSessionCookies(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("---- app/login.go:: func (a *App) AttachSessionCookies(w http.ResponseWriter, r *http.Request) {")
+
 	secure := false
 	if GetProtocol(r) == "https" {
 		secure = true
