@@ -66,6 +66,31 @@ func TestConfigEmptySiteName(t *testing.T) {
 	require.Equal(t, *c1.TeamSettings.SiteName, TEAM_SETTINGS_DEFAULT_SITE_NAME)
 }
 
+func TestConfigEnableDeveloper(t *testing.T) {
+	testCases := []struct {
+		Description     string
+		EnableDeveloper *bool
+		ExpectedSiteURL string
+	}{
+		{"enable developer is true", NewBool(true), SERVICE_SETTINGS_DEFAULT_SITE_URL},
+		{"enable developer is false", NewBool(false), ""},
+		{"enable developer is nil", nil, ""},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.Description, func(t *testing.T) {
+			c1 := Config{
+				ServiceSettings: ServiceSettings{
+					EnableDeveloper: testCase.EnableDeveloper,
+				},
+			}
+			c1.SetDefaults()
+
+			require.Equal(t, testCase.ExpectedSiteURL, *c1.ServiceSettings.SiteURL)
+		})
+	}
+}
+
 func TestConfigDefaultFileSettingsDirectory(t *testing.T) {
 	c1 := Config{}
 	c1.SetDefaults()
@@ -121,8 +146,30 @@ func TestConfigIsValidDefaultAlgorithms(t *testing.T) {
 	*c1.SamlSettings.IdpUrl = "http://test.url.com"
 	*c1.SamlSettings.IdpDescriptorUrl = "http://test.url.com"
 	*c1.SamlSettings.IdpCertificateFile = "certificatefile"
+	*c1.SamlSettings.ServiceProviderIdentifier = "http://test.url.com"
 	*c1.SamlSettings.EmailAttribute = "Email"
 	*c1.SamlSettings.UsernameAttribute = "Username"
+
+	err := c1.SamlSettings.isValid()
+	require.Nil(t, err)
+}
+
+func TestConfigServiceProviderDefault(t *testing.T) {
+	c1 := &Config{
+		SamlSettings: *&SamlSettings{
+			Enable:             NewBool(true),
+			Verify:             NewBool(false),
+			Encrypt:            NewBool(false),
+			IdpUrl:             NewString("http://test.url.com"),
+			IdpDescriptorUrl:   NewString("http://test2.url.com"),
+			IdpCertificateFile: NewString("certificatefile"),
+			EmailAttribute:     NewString("Email"),
+			UsernameAttribute:  NewString("Username"),
+		},
+	}
+
+	c1.SetDefaults()
+	assert.Equal(t, *c1.SamlSettings.ServiceProviderIdentifier, *c1.SamlSettings.IdpDescriptorUrl)
 
 	err := c1.SamlSettings.isValid()
 	require.Nil(t, err)
@@ -140,6 +187,7 @@ func TestConfigIsValidFakeAlgorithm(t *testing.T) {
 	*c1.SamlSettings.IdpDescriptorUrl = "http://test.url.com"
 	*c1.SamlSettings.IdpMetadataUrl = "http://test.url.com"
 	*c1.SamlSettings.IdpCertificateFile = "certificatefile"
+	*c1.SamlSettings.ServiceProviderIdentifier = "http://test.url.com"
 	*c1.SamlSettings.EmailAttribute = "Email"
 	*c1.SamlSettings.UsernameAttribute = "Username"
 

@@ -15,11 +15,13 @@ func Migrate(from, to string) error {
 	if err != nil {
 		return errors.Wrapf(err, "failed to access source config %s", from)
 	}
+	defer source.Close()
 
 	destination, err := NewStore(to, false)
 	if err != nil {
 		return errors.Wrapf(err, "failed to access destination config %s", to)
 	}
+	defer destination.Close()
 
 	sourceConfig := source.Get()
 
@@ -29,18 +31,20 @@ func Migrate(from, to string) error {
 		return errors.Wrapf(err, "failed to set config")
 	}
 
-	files := []string{*sourceConfig.SamlSettings.IdpCertificateFile, *sourceConfig.SamlSettings.PublicCertificateFile,
-		*sourceConfig.SamlSettings.PrivateKeyFile}
+	files := []string{
+		*sourceConfig.SamlSettings.IdpCertificateFile,
+		*sourceConfig.SamlSettings.PublicCertificateFile,
+		*sourceConfig.SamlSettings.PrivateKeyFile,
+	}
 
 	files = append(files, sourceConfig.PluginSettings.SignaturePublicKeyFiles...)
 
 	for _, file := range files {
-		err = migrateFile(file, source, destination)
-
-		if err != nil {
+		if err := migrateFile(file, source, destination); err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
 
