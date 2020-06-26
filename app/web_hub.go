@@ -267,8 +267,8 @@ func (a *App) invalidateCacheForChannelMembersNotifyPropsSkipClusterSend(channel
 	a.Srv().Store.Channel().InvalidateCacheForChannelMembersNotifyProps(channelId)
 }
 
-func (a *App) invalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {
-	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {")
+func (a *App) InvalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) InvalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {")
 
 	if teamId == "" {
 		teamId = "dm"
