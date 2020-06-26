@@ -236,6 +236,7 @@ func (a *App) SyncPlugins() *model.AppError {
 			}
 		}(plugin.Manifest.Id)
 	}
+	wg.Wait()
 
 	// Install plugins from the file store.
 	pluginSignaturePathMap, appErr := a.getPluginsFromFolder()
@@ -269,7 +270,6 @@ func (a *App) SyncPlugins() *model.AppError {
 				mlog.Error("Failed to sync plugin from file store", mlog.String("bundle", plugin.path), mlog.Err(err))
 			}
 		}(plugin)
-
 	}
 
 	wg.Wait()
@@ -440,7 +440,7 @@ func (a *App) GetMarketplacePlugins(filter *model.MarketplacePluginFilter) ([]*m
 	plugins := map[string]*model.MarketplacePlugin{}
 
 	if *a.Config().PluginSettings.EnableRemoteMarketplace && !filter.LocalOnly {
-		p, appErr := a.getRemotePlugins(filter)
+		p, appErr := a.getRemotePlugins()
 		if appErr != nil {
 			return nil, appErr
 		}
@@ -511,8 +511,9 @@ func (a *App) getRemoteMarketplacePlugin(pluginId, version string) (*model.BaseM
 	return plugin, nil
 }
 
-func (a *App) getRemotePlugins(filter *model.MarketplacePluginFilter) (map[string]*model.MarketplacePlugin, *model.AppError) {
-	fmt.Println("------ app/plugin.go:: func (a *App) getRemotePlugins(filter *model.MarketplacePluginFilter) (map[string]*model.MarketplacePlugin, *model.AppError) {")
+func (a *App) getRemotePlugins() (map[string]*model.MarketplacePlugin, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) getRemotePlugins() (map[string]*model.MarketplacePlugin, *model.AppError) {")
+
 	result := map[string]*model.MarketplacePlugin{}
 
 	pluginsEnvironment := a.GetPluginsEnvironment()
@@ -529,10 +530,21 @@ func (a *App) getRemotePlugins(filter *model.MarketplacePluginFilter) (map[strin
 	}
 
 	// Fetch all plugins from marketplace.
-	marketplacePlugins, err := marketplaceClient.GetPlugins(&model.MarketplacePluginFilter{
+	filter := &model.MarketplacePluginFilter{
 		PerPage:       -1,
 		ServerVersion: model.CurrentVersion,
-	})
+	}
+
+	license := a.License()
+	if license != nil && *license.Features.EnterprisePlugins {
+		filter.EnterprisePlugins = true
+	}
+
+	if model.BuildEnterpriseReady == "true" {
+		filter.BuildEnterpriseReady = true
+	}
+
+	marketplacePlugins, err := marketplaceClient.GetPlugins(filter)
 	if err != nil {
 		return nil, model.NewAppError("getRemotePlugins", "app.plugin.marketplace_client.failed_to_fetch", nil, err.Error(), http.StatusInternalServerError)
 	}
@@ -890,8 +902,10 @@ func getIcon(iconPath string) (string, error) {
 	if err != nil {
 		return "", errors.Wrapf(err, "failed to open icon at path %s", iconPath)
 	}
+
 	if !svg.Is(icon) {
-		return "", errors.Wrapf(err, "icon is not svg %s", iconPath)
+		return "", errors.Errorf("icon is not svg %s", iconPath)
 	}
+
 	return fmt.Sprintf("data:image/svg+xml;base64,%s", base64.StdEncoding.EncodeToString(icon)), nil
 }

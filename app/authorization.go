@@ -16,6 +16,9 @@ func (a *App) MakePermissionError(permission *model.Permission) *model.AppError 
 }
 
 func (a *App) SessionHasPermissionTo(session model.Session, permission *model.Permission) bool {
+	if session.IsUnrestricted() {
+		return true
+	}
 	return a.RolesGrantPermission(session.GetUserRoles(), permission.Id)
 }
 
@@ -126,6 +129,11 @@ func (a *App) HasPermissionToTeam(askingUserId string, teamId string, permission
 
 	teamMember, err := a.GetTeamMember(teamId, askingUserId)
 	if err != nil {
+		return false
+	}
+
+	// If the team member has been deleted, they don't have permission.
+	if teamMember.DeleteAt != 0 {
 		return false
 	}
 

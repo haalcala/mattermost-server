@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mattermost/mattermost-server/v5/audit"
 	"github.com/mattermost/mattermost-server/v5/model"
 )
 
@@ -89,6 +90,9 @@ func updatePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec := c.MakeAuditRecord("updatePreferences", audit.Fail)
+	defer c.LogAuditRec(auditRec)
+
 	if !c.App.SessionHasPermissionToUser(*c.App.Session(), c.Params.UserId) {
 		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
 		return
@@ -124,6 +128,7 @@ func updatePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec.Success()
 	ReturnStatusOK(w)
 }
 
@@ -133,6 +138,9 @@ func deletePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
 	if c.Err != nil {
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("deletePreferences", audit.Fail)
+	defer c.LogAuditRec(auditRec)
 
 	if !c.App.SessionHasPermissionToUser(*c.App.Session(), c.Params.UserId) {
 		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
@@ -150,5 +158,6 @@ func deletePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec.Success()
 	ReturnStatusOK(w)
 }
