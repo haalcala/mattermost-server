@@ -785,7 +785,6 @@ type AppIface interface {
 	PostWithProxyRemovedFromImageURLs(post *model.Post) *model.Post
 	PreparePostForClient(originalPost *model.Post, isNewPost bool, isEditPost bool) *model.Post
 	PreparePostListForClient(originalList *model.PostList, optional ...interface{}) *model.PostList
-	ProcessSlackAttachments(attachments []*model.SlackAttachment) []*model.SlackAttachment
 	ProcessSlackText(text string) string
 	Publish(message *model.WebSocketEvent)
 	PublishSkipClusterSend(message *model.WebSocketEvent)
