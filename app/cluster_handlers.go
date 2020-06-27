@@ -63,7 +63,7 @@ func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMe
 
 func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) {
 	fmt.Println("------ app/cluster_handlers.go:: func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) { msg:", msg)
-	a.InvalidateCacheForUserSkipClusterSend(msg.Data)
+	a.invalidateCacheForUserSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterInvalidateCacheForUserTeamsHandler(msg *model.ClusterMessage) {
