@@ -218,7 +218,7 @@ func (a *App) invalidateCacheForChannel(channel *model.Channel) {
 	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForChannel(channel *model.Channel) {")
 
 	a.Srv().Store.Channel().InvalidateChannel(channel.Id)
-	a.invalidateCacheForChannelByNameSkipClusterSend(channel.TeamId, channel.Name)
+	a.InvalidateCacheForChannelByNameSkipClusterSend(channel.TeamId, channel.Name)
 
 	if a.Cluster() != nil {
 		nameMsg := &model.ClusterMessage{
