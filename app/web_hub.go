@@ -254,7 +254,7 @@ func (a *App) invalidateCacheForChannelMembersNotifyPropsSkipClusterSend(channel
 	a.Srv().Store.Channel().InvalidateCacheForChannelMembersNotifyProps(channelId)
 }
 
-func (a *App) InvalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {
+func (a *App) invalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {
 
 	if teamId == "" {
 		teamId = "dm"
