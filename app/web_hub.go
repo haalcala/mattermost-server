@@ -4,7 +4,6 @@
 package app
 
 import (
-	"fmt"
 	"hash/fnv"
 	"runtime"
 	"runtime/debug"
@@ -59,7 +58,6 @@ type Hub struct {
 
 // NewWebHub creates a new Hub.
 func (a *App) NewWebHub() *Hub {
-	fmt.Println("------ app/web_hub.go:: func (a *App) NewWebHub() *Hub {")
 	return &Hub{
 		app:             a,
 		register:        make(chan *WebConn),
@@ -75,14 +73,12 @@ func (a *App) NewWebHub() *Hub {
 }
 
 func (a *App) TotalWebsocketConnections() int {
-	fmt.Println("------ app/web_hub.go:: func (a *App) TotalWebsocketConnections() int {")
 
 	return a.Srv().TotalWebsocketConnections()
 }
 
 // HubStart starts all the hubs.
 func (a *App) HubStart() {
-	fmt.Println("------ app/web_hub.go:: func (a *App) HubStart() {")
 	// Total number of hubs is twice the number of CPUs.
 	numberOfHubs := runtime.NumCPU() * 2
 	mlog.Info("Starting websocket hubs", mlog.Int("number_of_hubs", numberOfHubs))
@@ -132,7 +128,6 @@ func (a *App) InvalidateWebConnSessionCacheForUser(userId string) {
 
 // HubStop stops all the hubs.
 func (a *App) HubStop() {
-	fmt.Println("------ app/web_hub.go:: func (a *App) HubStop() {")
 	mlog.Info("stopping websocket hub connections")
 
 	for _, hub := range a.Srv().GetHubs() {
@@ -144,7 +139,6 @@ func (a *App) HubStop() {
 
 // GetHubForUserId returns the hub for a given user id.
 func (a *App) GetHubForUserId(userId string) *Hub {
-	fmt.Println("------ app/web_hub.go:: func (a *App) GetHubForUserId(userId string) *Hub {")
 
 	if len(a.Srv().GetHubs()) == 0 {
 		return nil
