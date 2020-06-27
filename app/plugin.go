@@ -41,6 +41,7 @@ type pluginSignaturePath struct {
 // To get the plugins environment when the plugins are disabled, manually acquire the plugins
 // lock instead.
 func (a *App) GetPluginsEnvironment() *plugin.Environment {
+	fmt.Println("------ app/plugin.go:: func (a *App) GetPluginsEnvironment() *plugin.Environment {")
 	if !*a.Config().PluginSettings.Enable {
 		return nil
 	}
@@ -52,6 +53,7 @@ func (a *App) GetPluginsEnvironment() *plugin.Environment {
 }
 
 func (a *App) SetPluginsEnvironment(pluginsEnvironment *plugin.Environment) {
+	fmt.Println("------ app/plugin.go:: func (a *App) SetPluginsEnvironment(pluginsEnvironment *plugin.Environment) {")
 	a.Srv().PluginsLock.Lock()
 	defer a.Srv().PluginsLock.Unlock()
 
@@ -59,6 +61,7 @@ func (a *App) SetPluginsEnvironment(pluginsEnvironment *plugin.Environment) {
 }
 
 func (a *App) SyncPluginsActiveState() {
+	fmt.Println("------ app/plugin.go:: func (a *App) SyncPluginsActiveState() {")
 	// Acquiring lock manually, as plugins might be disabled. See GetPluginsEnvironment.
 	a.Srv().PluginsLock.RLock()
 	pluginsEnvironment := a.Srv().PluginsEnvironment
@@ -137,10 +140,12 @@ func (a *App) SyncPluginsActiveState() {
 }
 
 func (a *App) NewPluginAPI(manifest *model.Manifest) plugin.API {
+	fmt.Println("------ app/plugin.go:: func (a *App) NewPluginAPI(manifest *model.Manifest) plugin.API {")
 	return NewPluginAPI(a, manifest)
 }
 
 func (a *App) InitPlugins(pluginDir, webappPluginDir string) {
+	fmt.Println("------ app/plugin.go:: func (a *App) InitPlugins(pluginDir, webappPluginDir string) {")
 	// Acquiring lock manually, as plugins might be disabled. See GetPluginsEnvironment.
 	a.Srv().PluginsLock.RLock()
 	pluginsEnvironment := a.Srv().PluginsEnvironment
@@ -199,6 +204,7 @@ func (a *App) InitPlugins(pluginDir, webappPluginDir string) {
 // SyncPlugins synchronizes the plugins installed locally
 // with the plugin bundles available in the file store.
 func (a *App) SyncPlugins() *model.AppError {
+	fmt.Println("------ app/plugin.go:: func (a *App) SyncPlugins() *model.AppError {")
 	mlog.Info("Syncing plugins from the file store")
 
 	pluginsEnvironment := a.GetPluginsEnvironment()
@@ -271,6 +277,7 @@ func (a *App) SyncPlugins() *model.AppError {
 }
 
 func (a *App) ShutDownPlugins() {
+	fmt.Println("------ app/plugin.go:: func (a *App) ShutDownPlugins() {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return
@@ -294,6 +301,7 @@ func (a *App) ShutDownPlugins() {
 }
 
 func (a *App) GetActivePluginManifests() ([]*model.Manifest, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) GetActivePluginManifests() ([]*model.Manifest, *model.AppError) {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return nil, model.NewAppError("GetActivePluginManifests", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -313,6 +321,7 @@ func (a *App) GetActivePluginManifests() ([]*model.Manifest, *model.AppError) {
 // activation if inactive anywhere in the cluster.
 // Notifies cluster peers through config change.
 func (a *App) EnablePlugin(id string) *model.AppError {
+	fmt.Println("------ app/plugin.go:: func (a *App) EnablePlugin(id string) *model.AppError {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return model.NewAppError("EnablePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -355,6 +364,7 @@ func (a *App) EnablePlugin(id string) *model.AppError {
 // DisablePlugin will set the config for an installed plugin to disabled, triggering deactivation if active.
 // Notifies cluster peers through config change.
 func (a *App) DisablePlugin(id string) *model.AppError {
+	fmt.Println("------ app/plugin.go:: func (a *App) DisablePlugin(id string) *model.AppError {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return model.NewAppError("DisablePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -393,6 +403,7 @@ func (a *App) DisablePlugin(id string) *model.AppError {
 }
 
 func (a *App) GetPlugins() (*model.PluginsResponse, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) GetPlugins() (*model.PluginsResponse, *model.AppError) {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return nil, model.NewAppError("GetPlugins", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
@@ -425,6 +436,7 @@ func (a *App) GetPlugins() (*model.PluginsResponse, *model.AppError) {
 // GetMarketplacePlugins returns a list of plugins from the marketplace-server,
 // and plugins that are installed locally.
 func (a *App) GetMarketplacePlugins(filter *model.MarketplacePluginFilter) ([]*model.MarketplacePlugin, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) GetMarketplacePlugins(filter *model.MarketplacePluginFilter) ([]*model.MarketplacePlugin, *model.AppError) {")
 	plugins := map[string]*model.MarketplacePlugin{}
 
 	if *a.Config().PluginSettings.EnableRemoteMarketplace && !filter.LocalOnly {
@@ -463,6 +475,7 @@ func (a *App) GetMarketplacePlugins(filter *model.MarketplacePluginFilter) ([]*m
 
 // getPrepackagedPlugin returns a pre-packaged plugin.
 func (a *App) getPrepackagedPlugin(pluginId, version string) (*plugin.PrepackagedPlugin, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) getPrepackagedPlugin(pluginId, version string) (*plugin.PrepackagedPlugin, *model.AppError) {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return nil, model.NewAppError("getPrepackagedPlugin", "app.plugin.config.app_error", nil, "plugin environment is nil", http.StatusInternalServerError)
@@ -480,6 +493,7 @@ func (a *App) getPrepackagedPlugin(pluginId, version string) (*plugin.Prepackage
 
 // getRemoteMarketplacePlugin returns plugin from marketplace-server.
 func (a *App) getRemoteMarketplacePlugin(pluginId, version string) (*model.BaseMarketplacePlugin, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) getRemoteMarketplacePlugin(pluginId, version string) (*model.BaseMarketplacePlugin, *model.AppError) {")
 	marketplaceClient, err := marketplace.NewClient(
 		*a.Config().PluginSettings.MarketplaceUrl,
 		a.HTTPService(),
@@ -498,6 +512,7 @@ func (a *App) getRemoteMarketplacePlugin(pluginId, version string) (*model.BaseM
 }
 
 func (a *App) getRemotePlugins() (map[string]*model.MarketplacePlugin, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) getRemotePlugins() (map[string]*model.MarketplacePlugin, *model.AppError) {")
 
 	result := map[string]*model.MarketplacePlugin{}
 
@@ -547,6 +562,7 @@ func (a *App) getRemotePlugins() (map[string]*model.MarketplacePlugin, *model.Ap
 
 // mergePrepackagedPlugins merges pre-packaged plugins to remote marketplace plugins list.
 func (a *App) mergePrepackagedPlugins(remoteMarketplacePlugins map[string]*model.MarketplacePlugin) *model.AppError {
+	fmt.Println("------ app/plugin.go:: func (a *App) mergePrepackagedPlugins(remoteMarketplacePlugins map[string]*model.MarketplacePlugin) *model.AppError {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return model.NewAppError("mergePrepackagedPlugins", "app.plugin.config.app_error", nil, "", http.StatusInternalServerError)
@@ -594,6 +610,7 @@ func (a *App) mergePrepackagedPlugins(remoteMarketplacePlugins map[string]*model
 
 // mergeLocalPlugins merges locally installed plugins to remote marketplace plugins list.
 func (a *App) mergeLocalPlugins(remoteMarketplacePlugins map[string]*model.MarketplacePlugin) *model.AppError {
+	fmt.Println("------ app/plugin.go:: func (a *App) mergeLocalPlugins(remoteMarketplacePlugins map[string]*model.MarketplacePlugin) *model.AppError {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return model.NewAppError("GetMarketplacePlugins", "app.plugin.config.app_error", nil, "", http.StatusInternalServerError)
@@ -677,6 +694,7 @@ func pluginMatchesFilter(manifest *model.Manifest, filter string) bool {
 // There is a small chance that this never occurs, because the last server to finish installing dies before it can announce.
 // There is also a chance that multiple servers notify, but the webapp handles this idempotently.
 func (a *App) notifyPluginEnabled(manifest *model.Manifest) error {
+	fmt.Println("------ app/plugin.go:: func (a *App) notifyPluginEnabled(manifest *model.Manifest) error {")
 	pluginsEnvironment := a.GetPluginsEnvironment()
 	if pluginsEnvironment == nil {
 		return errors.New("pluginsEnvironment is nil")
@@ -721,6 +739,7 @@ func (a *App) notifyPluginEnabled(manifest *model.Manifest) error {
 }
 
 func (a *App) getPluginsFromFolder() (map[string]*pluginSignaturePath, *model.AppError) {
+	fmt.Println("------ app/plugin.go:: func (a *App) getPluginsFromFolder() (map[string]*pluginSignaturePath, *model.AppError) {")
 	fileStorePaths, appErr := a.ListDirectory(fileStorePluginFolder)
 	if appErr != nil {
 		return nil, model.NewAppError("getPluginsFromDir", "app.plugin.sync.list_filestore.app_error", nil, appErr.Error(), http.StatusInternalServerError)
@@ -757,6 +776,7 @@ func getPluginsFromFilePaths(fileStorePaths []string) map[string]*pluginSignatur
 }
 
 func (a *App) processPrepackagedPlugins(pluginsDir string) []*plugin.PrepackagedPlugin {
+	fmt.Println("------ app/plugin.go:: func (a *App) processPrepackagedPlugins(pluginsDir string) []*plugin.PrepackagedPlugin {")
 	prepackagedPluginsDir, found := fileutils.FindDir(pluginsDir)
 	if !found {
 		return nil
@@ -803,6 +823,7 @@ func (a *App) processPrepackagedPlugins(pluginsDir string) []*plugin.Prepackaged
 // processPrepackagedPlugin will return the prepackaged plugin metadata and will also
 // install the prepackaged plugin if it had been previously enabled and AutomaticPrepackagedPlugins is true.
 func (a *App) processPrepackagedPlugin(pluginPath *pluginSignaturePath) (*plugin.PrepackagedPlugin, error) {
+	fmt.Println("------ app/plugin.go:: func (a *App) processPrepackagedPlugin(pluginPath *pluginSignaturePath) (*plugin.PrepackagedPlugin, error) {")
 	mlog.Debug("Processing prepackaged plugin", mlog.String("path", pluginPath.path))
 
 	fileReader, err := os.Open(pluginPath.path)

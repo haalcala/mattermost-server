@@ -48,6 +48,7 @@ const (
 )
 
 func (a *App) CreateUserWithToken(user *model.User, token *model.Token) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateUserWithToken(user *model.User, token *model.Token) (*model.User, *model.AppError) {")
 	if err := a.IsUserSignUpAllowed(); err != nil {
 		return nil, err
 	}
@@ -109,6 +110,7 @@ func (a *App) CreateUserWithToken(user *model.User, token *model.Token) (*model.
 }
 
 func (a *App) CreateUserWithInviteId(user *model.User, inviteId string) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateUserWithInviteId(user *model.User, inviteId string) (*model.User, *model.AppError) {")
 	if err := a.IsUserSignUpAllowed(); err != nil {
 		return nil, err
 	}
@@ -147,6 +149,7 @@ func (a *App) CreateUserWithInviteId(user *model.User, inviteId string) (*model.
 }
 
 func (a *App) CreateUserAsAdmin(user *model.User) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateUserAsAdmin(user *model.User) (*model.User, *model.AppError) {")
 	ruser, err := a.CreateUser(user)
 	if err != nil {
 		return nil, err
@@ -160,6 +163,7 @@ func (a *App) CreateUserAsAdmin(user *model.User) (*model.User, *model.AppError)
 }
 
 func (a *App) CreateUserFromSignup(user *model.User) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateUserFromSignup(user *model.User) (*model.User, *model.AppError) {")
 	if err := a.IsUserSignUpAllowed(); err != nil {
 		return nil, err
 	}
@@ -184,6 +188,7 @@ func (a *App) CreateUserFromSignup(user *model.User) (*model.User, *model.AppErr
 }
 
 func (a *App) IsUserSignUpAllowed() *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) IsUserSignUpAllowed() *model.AppError {")
 	if !*a.Config().EmailSettings.EnableSignUpWithEmail || !*a.Config().TeamSettings.EnableUserCreation {
 		err := model.NewAppError("IsUserSignUpAllowed", "api.user.create_user.signup_email_disabled.app_error", nil, "", http.StatusNotImplemented)
 		return err
@@ -192,6 +197,7 @@ func (a *App) IsUserSignUpAllowed() *model.AppError {
 }
 
 func (a *App) IsFirstUserAccount() bool {
+	fmt.Println("------ app/user.go:: func (a *App) IsFirstUserAccount() bool {")
 	if a.SessionCacheLength() == 0 {
 		count, err := a.Srv().Store.User().Count(model.UserCountOptions{IncludeDeleted: true})
 		if err != nil {
@@ -209,16 +215,19 @@ func (a *App) IsFirstUserAccount() bool {
 // CreateUser creates a user and sets several fields of the returned User struct to
 // their zero values.
 func (a *App) CreateUser(user *model.User) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateUser(user *model.User) (*model.User, *model.AppError) {")
 	return a.createUserOrGuest(user, false)
 }
 
 // CreateGuest creates a guest and sets several fields of the returned User struct to
 // their zero values.
 func (a *App) CreateGuest(user *model.User) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateGuest(user *model.User) (*model.User, *model.AppError) {")
 	return a.createUserOrGuest(user, true)
 }
 
 func (a *App) createUserOrGuest(user *model.User, guest bool) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) createUserOrGuest(user *model.User, guest bool) (*model.User, *model.AppError) {")
 	user.Roles = model.SYSTEM_USER_ROLE_ID
 	if guest {
 		user.Roles = model.SYSTEM_GUEST_ROLE_ID
@@ -272,6 +281,7 @@ func (a *App) createUserOrGuest(user *model.User, guest bool) (*model.User, *mod
 }
 
 func (a *App) createUser(user *model.User) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) createUser(user *model.User) (*model.User, *model.AppError) {")
 	user.MakeNonNil()
 
 	if err := a.IsPasswordValid(user.Password); user.AuthService == "" && err != nil {
@@ -296,6 +306,8 @@ func (a *App) createUser(user *model.User) (*model.User, *model.AppError) {
 		use_military_time = true
 	}
 
+	fmt.Println("================== strconv.FormatBool(use_military_time):", strconv.FormatBool(use_military_time))
+
 	tutorial_pref := model.Preference{UserId: ruser.Id, Category: model.PREFERENCE_CATEGORY_TUTORIAL_STEPS, Name: ruser.Id, Value: "0"}
 
 	time_format_pref := model.Preference{UserId: ruser.Id, Category: model.PREFERENCE_CATEGORY_DISPLAY_SETTINGS, Name: model.PREFERENCE_NAME_USE_MILITARY_TIME, Value: "true"}
@@ -309,6 +321,7 @@ func (a *App) createUser(user *model.User) (*model.User, *model.AppError) {
 }
 
 func (a *App) CreateOAuthUser(service string, userData io.Reader, teamId string) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateOAuthUser(service string, userData io.Reader, teamId string) (*model.User, *model.AppError) {")
 	if !*a.Config().TeamSettings.EnableUserCreation {
 		return nil, model.NewAppError("CreateOAuthUser", "api.user.create_user.disabled.app_error", nil, "", http.StatusNotImplemented)
 	}
@@ -403,6 +416,7 @@ func CheckUserDomain(user *model.User, domains string) bool {
 
 // IsUsernameTaken checks if the username is already used by another user. Return false if the username is invalid.
 func (a *App) IsUsernameTaken(name string) bool {
+	fmt.Println("------ app/user.go:: func (a *App) IsUsernameTaken(name string) bool {")
 	if !model.IsValidUsername(name) {
 		return false
 	}
@@ -415,10 +429,12 @@ func (a *App) IsUsernameTaken(name string) bool {
 }
 
 func (a *App) GetUser(userId string) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUser(userId string) (*model.User, *model.AppError) {")
 	return a.Srv().Store.User().Get(userId)
 }
 
 func (a *App) GetUserByUsername(username string) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUserByUsername(username string) (*model.User, *model.AppError) {")
 	result, err := a.Srv().Store.User().GetByUsername(username)
 	if err != nil && err.Id == "store.sql_user.get_by_username.app_error" {
 		err.StatusCode = http.StatusNotFound
@@ -428,6 +444,7 @@ func (a *App) GetUserByUsername(username string) (*model.User, *model.AppError) 
 }
 
 func (a *App) GetUserByEmail(email string) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUserByEmail(email string) (*model.User, *model.AppError) {")
 	user, err := a.Srv().Store.User().GetByEmail(email)
 	if err != nil {
 		if err.Id == "store.sql_user.missing_account.const" {
@@ -441,14 +458,17 @@ func (a *App) GetUserByEmail(email string) (*model.User, *model.AppError) {
 }
 
 func (a *App) GetUserByAuth(authData *string, authService string) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUserByAuth(authData *string, authService string) (*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetByAuth(authData, authService)
 }
 
 func (a *App) GetUsers(options *model.UserGetOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsers(options *model.UserGetOptions) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetAllProfiles(options)
 }
 
 func (a *App) GetUsersPage(options *model.UserGetOptions, asAdmin bool) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersPage(options *model.UserGetOptions, asAdmin bool) ([]*model.User, *model.AppError) {")
 	users, err := a.GetUsers(options)
 	if err != nil {
 		return nil, err
@@ -458,18 +478,22 @@ func (a *App) GetUsersPage(options *model.UserGetOptions, asAdmin bool) ([]*mode
 }
 
 func (a *App) GetUsersEtag(restrictionsHash string) string {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersEtag(restrictionsHash string) string {")
 	return fmt.Sprintf("%v.%v.%v.%v", a.Srv().Store.User().GetEtagForAllProfiles(), a.Config().PrivacySettings.ShowFullName, a.Config().PrivacySettings.ShowEmailAddress, restrictionsHash)
 }
 
 func (a *App) GetUsersInTeam(options *model.UserGetOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInTeam(options *model.UserGetOptions) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetProfiles(options)
 }
 
 func (a *App) GetUsersNotInTeam(teamId string, groupConstrained bool, offset int, limit int, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersNotInTeam(teamId string, groupConstrained bool, offset int, limit int, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetProfilesNotInTeam(teamId, groupConstrained, offset, limit, viewRestrictions)
 }
 
 func (a *App) GetUsersInTeamPage(options *model.UserGetOptions, asAdmin bool) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInTeamPage(options *model.UserGetOptions, asAdmin bool) ([]*model.User, *model.AppError) {")
 	users, err := a.GetUsersInTeam(options)
 	if err != nil {
 		return nil, err
@@ -479,6 +503,7 @@ func (a *App) GetUsersInTeamPage(options *model.UserGetOptions, asAdmin bool) ([
 }
 
 func (a *App) GetUsersNotInTeamPage(teamId string, groupConstrained bool, page int, perPage int, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersNotInTeamPage(teamId string, groupConstrained bool, page int, perPage int, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {")
 	users, err := a.GetUsersNotInTeam(teamId, groupConstrained, page*perPage, perPage, viewRestrictions)
 	if err != nil {
 		return nil, err
@@ -488,22 +513,27 @@ func (a *App) GetUsersNotInTeamPage(teamId string, groupConstrained bool, page i
 }
 
 func (a *App) GetUsersInTeamEtag(teamId string, restrictionsHash string) string {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInTeamEtag(teamId string, restrictionsHash string) string {")
 	return fmt.Sprintf("%v.%v.%v.%v", a.Srv().Store.User().GetEtagForProfiles(teamId), a.Config().PrivacySettings.ShowFullName, a.Config().PrivacySettings.ShowEmailAddress, restrictionsHash)
 }
 
 func (a *App) GetUsersNotInTeamEtag(teamId string, restrictionsHash string) string {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersNotInTeamEtag(teamId string, restrictionsHash string) string {")
 	return fmt.Sprintf("%v.%v.%v.%v", a.Srv().Store.User().GetEtagForProfilesNotInTeam(teamId), a.Config().PrivacySettings.ShowFullName, a.Config().PrivacySettings.ShowEmailAddress, restrictionsHash)
 }
 
 func (a *App) GetUsersInChannel(channelId string, offset int, limit int) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInChannel(channelId string, offset int, limit int) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetProfilesInChannel(channelId, offset, limit)
 }
 
 func (a *App) GetUsersInChannelByStatus(channelId string, offset int, limit int) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInChannelByStatus(channelId string, offset int, limit int) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetProfilesInChannelByStatus(channelId, offset, limit)
 }
 
 func (a *App) GetUsersInChannelMap(channelId string, offset int, limit int, asAdmin bool) (map[string]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInChannelMap(channelId string, offset int, limit int, asAdmin bool) (map[string]*model.User, *model.AppError) {")
 	users, err := a.GetUsersInChannel(channelId, offset, limit)
 	if err != nil {
 		return nil, err
@@ -520,6 +550,7 @@ func (a *App) GetUsersInChannelMap(channelId string, offset int, limit int, asAd
 }
 
 func (a *App) GetUsersInChannelPage(channelId string, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInChannelPage(channelId string, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {")
 	users, err := a.GetUsersInChannel(channelId, page*perPage, perPage)
 	if err != nil {
 		return nil, err
@@ -528,6 +559,7 @@ func (a *App) GetUsersInChannelPage(channelId string, page int, perPage int, asA
 }
 
 func (a *App) GetUsersInChannelPageByStatus(channelId string, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersInChannelPageByStatus(channelId string, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {")
 	users, err := a.GetUsersInChannelByStatus(channelId, page*perPage, perPage)
 	if err != nil {
 		return nil, err
@@ -536,10 +568,12 @@ func (a *App) GetUsersInChannelPageByStatus(channelId string, page int, perPage 
 }
 
 func (a *App) GetUsersNotInChannel(teamId string, channelId string, groupConstrained bool, offset int, limit int, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersNotInChannel(teamId string, channelId string, groupConstrained bool, offset int, limit int, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetProfilesNotInChannel(teamId, channelId, groupConstrained, offset, limit, viewRestrictions)
 }
 
 func (a *App) GetUsersNotInChannelMap(teamId string, channelId string, groupConstrained bool, offset int, limit int, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) (map[string]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersNotInChannelMap(teamId string, channelId string, groupConstrained bool, offset int, limit int, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) (map[string]*model.User, *model.AppError) {")
 	users, err := a.GetUsersNotInChannel(teamId, channelId, groupConstrained, offset, limit, viewRestrictions)
 	if err != nil {
 		return nil, err
@@ -556,6 +590,7 @@ func (a *App) GetUsersNotInChannelMap(teamId string, channelId string, groupCons
 }
 
 func (a *App) GetUsersNotInChannelPage(teamId string, channelId string, groupConstrained bool, page int, perPage int, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersNotInChannelPage(teamId string, channelId string, groupConstrained bool, page int, perPage int, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {")
 	users, err := a.GetUsersNotInChannel(teamId, channelId, groupConstrained, page*perPage, perPage, viewRestrictions)
 	if err != nil {
 		return nil, err
@@ -565,6 +600,7 @@ func (a *App) GetUsersNotInChannelPage(teamId string, channelId string, groupCon
 }
 
 func (a *App) GetUsersWithoutTeamPage(options *model.UserGetOptions, asAdmin bool) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersWithoutTeamPage(options *model.UserGetOptions, asAdmin bool) ([]*model.User, *model.AppError) {")
 	users, err := a.GetUsersWithoutTeam(options)
 	if err != nil {
 		return nil, err
@@ -574,20 +610,24 @@ func (a *App) GetUsersWithoutTeamPage(options *model.UserGetOptions, asAdmin boo
 }
 
 func (a *App) GetUsersWithoutTeam(options *model.UserGetOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersWithoutTeam(options *model.UserGetOptions) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetProfilesWithoutTeam(options)
 }
 
 // GetTeamGroupUsers returns the users who are associated to the team via GroupTeams and GroupMembers.
 func (a *App) GetTeamGroupUsers(teamID string) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetTeamGroupUsers(teamID string) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetTeamGroupUsers(teamID)
 }
 
 // GetChannelGroupUsers returns the users who are associated to the channel via GroupChannels and GroupMembers.
 func (a *App) GetChannelGroupUsers(channelID string) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetChannelGroupUsers(channelID string) ([]*model.User, *model.AppError) {")
 	return a.Srv().Store.User().GetChannelGroupUsers(channelID)
 }
 
 func (a *App) GetUsersByIds(userIds []string, options *store.UserGetByIdsOpts) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersByIds(userIds []string, options *store.UserGetByIdsOpts) ([]*model.User, *model.AppError) {")
 	allowFromCache := options.ViewRestrictions == nil
 
 	users, err := a.Srv().Store.User().GetProfileByIds(userIds, options, allowFromCache)
@@ -599,6 +639,7 @@ func (a *App) GetUsersByIds(userIds []string, options *store.UserGetByIdsOpts) (
 }
 
 func (a *App) GetUsersByGroupChannelIds(channelIds []string, asAdmin bool) (map[string][]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersByGroupChannelIds(channelIds []string, asAdmin bool) (map[string][]*model.User, *model.AppError) {")
 	usersByChannelId, err := a.Srv().Store.User().GetProfileByGroupChannelIdsForUser(a.Session().UserId, channelIds)
 	if err != nil {
 		return nil, err
@@ -611,6 +652,7 @@ func (a *App) GetUsersByGroupChannelIds(channelIds []string, asAdmin bool) (map[
 }
 
 func (a *App) GetUsersByUsernames(usernames []string, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetUsersByUsernames(usernames []string, asAdmin bool, viewRestrictions *model.ViewUsersRestrictions) ([]*model.User, *model.AppError) {")
 	users, err := a.Srv().Store.User().GetProfilesByUsernames(usernames, viewRestrictions)
 	if err != nil {
 		return nil, err
@@ -619,6 +661,7 @@ func (a *App) GetUsersByUsernames(usernames []string, asAdmin bool, viewRestrict
 }
 
 func (a *App) sanitizeProfiles(users []*model.User, asAdmin bool) []*model.User {
+	fmt.Println("------ app/user.go:: func (a *App) sanitizeProfiles(users []*model.User, asAdmin bool) []*model.User {")
 	for _, u := range users {
 		a.SanitizeProfile(u, asAdmin)
 	}
@@ -627,6 +670,7 @@ func (a *App) sanitizeProfiles(users []*model.User, asAdmin bool) []*model.User 
 }
 
 func (a *App) GenerateMfaSecret(userId string) (*model.MfaSecret, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GenerateMfaSecret(userId string) (*model.MfaSecret, *model.AppError) {")
 	user, err := a.GetUser(userId)
 	if err != nil {
 		return nil, err
@@ -646,6 +690,7 @@ func (a *App) GenerateMfaSecret(userId string) (*model.MfaSecret, *model.AppErro
 }
 
 func (a *App) ActivateMfa(userId, token string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) ActivateMfa(userId, token string) *model.AppError {")
 	user, err := a.Srv().Store.User().Get(userId)
 	if err != nil {
 		return err
@@ -667,6 +712,7 @@ func (a *App) ActivateMfa(userId, token string) *model.AppError {
 }
 
 func (a *App) DeactivateMfa(userId string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) DeactivateMfa(userId string) *model.AppError {")
 	mfaService := mfa.New(a, a.Srv().Store)
 	if err := mfaService.Deactivate(userId); err != nil {
 		return err
@@ -762,6 +808,7 @@ func getFont(initialFont string) (*truetype.Font, error) {
 }
 
 func (a *App) GetProfileImage(user *model.User) ([]byte, bool, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetProfileImage(user *model.User) ([]byte, bool, *model.AppError) {")
 	if len(*a.Config().FileSettings.DriverName) == 0 {
 		img, appErr := a.GetDefaultProfileImage(user)
 		if appErr != nil {
@@ -791,6 +838,7 @@ func (a *App) GetProfileImage(user *model.User) ([]byte, bool, *model.AppError) 
 }
 
 func (a *App) GetDefaultProfileImage(user *model.User) ([]byte, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetDefaultProfileImage(user *model.User) ([]byte, *model.AppError) {")
 	var img []byte
 	var appErr *model.AppError
 
@@ -807,6 +855,7 @@ func (a *App) GetDefaultProfileImage(user *model.User) ([]byte, *model.AppError)
 }
 
 func (a *App) SetDefaultProfileImage(user *model.User) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) SetDefaultProfileImage(user *model.User) *model.AppError {")
 	img, appErr := a.GetDefaultProfileImage(user)
 	if appErr != nil {
 		return appErr
@@ -841,6 +890,7 @@ func (a *App) SetDefaultProfileImage(user *model.User) *model.AppError {
 }
 
 func (a *App) SetProfileImage(userId string, imageData *multipart.FileHeader) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) SetProfileImage(userId string, imageData *multipart.FileHeader) *model.AppError {")
 	file, err := imageData.Open()
 	if err != nil {
 		return model.NewAppError("SetProfileImage", "api.user.upload_profile_user.open.app_error", nil, err.Error(), http.StatusBadRequest)
@@ -850,6 +900,7 @@ func (a *App) SetProfileImage(userId string, imageData *multipart.FileHeader) *m
 }
 
 func (a *App) SetProfileImageFromMultiPartFile(userId string, file multipart.File) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) SetProfileImageFromMultiPartFile(userId string, file multipart.File) *model.AppError {")
 	// Decode image config first to check dimensions before loading the whole thing into memory later on
 	config, _, err := image.DecodeConfig(file)
 	if err != nil {
@@ -868,6 +919,7 @@ func (a *App) SetProfileImageFromMultiPartFile(userId string, file multipart.Fil
 }
 
 func (a *App) AdjustImage(file io.Reader) (*bytes.Buffer, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) AdjustImage(file io.Reader) (*bytes.Buffer, *model.AppError) {")
 
 	// Decode image into Image object
 	img, _, err := image.Decode(file)
@@ -891,6 +943,7 @@ func (a *App) AdjustImage(file io.Reader) (*bytes.Buffer, *model.AppError) {
 }
 
 func (a *App) SetProfileImageFromFile(userId string, file io.Reader) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) SetProfileImageFromFile(userId string, file io.Reader) *model.AppError {")
 
 	buf, err := a.AdjustImage(file)
 	if err != nil {
@@ -911,6 +964,7 @@ func (a *App) SetProfileImageFromFile(userId string, file io.Reader) *model.AppE
 }
 
 func (a *App) UpdatePasswordAsUser(userId, currentPassword, newPassword string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) UpdatePasswordAsUser(userId, currentPassword, newPassword string) *model.AppError {")
 	user, err := a.GetUser(userId)
 	if err != nil {
 		return err
@@ -939,6 +993,7 @@ func (a *App) UpdatePasswordAsUser(userId, currentPassword, newPassword string) 
 }
 
 func (a *App) userDeactivated(userId string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) userDeactivated(userId string) *model.AppError {")
 	if err := a.RevokeAllSessions(userId); err != nil {
 		return err
 	}
@@ -965,6 +1020,7 @@ func (a *App) userDeactivated(userId string) *model.AppError {
 }
 
 func (a *App) invalidateUserChannelMembersCaches(userId string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) invalidateUserChannelMembersCaches(userId string) *model.AppError {")
 	teamsForUser, err := a.GetTeamsForUser(userId)
 	if err != nil {
 		return err
@@ -985,6 +1041,7 @@ func (a *App) invalidateUserChannelMembersCaches(userId string) *model.AppError 
 }
 
 func (a *App) UpdateActive(user *model.User, active bool) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateActive(user *model.User, active bool) (*model.User, *model.AppError) {")
 	user.UpdateAt = model.GetMillis()
 	if active {
 		user.DeleteAt = 0
@@ -1013,6 +1070,7 @@ func (a *App) UpdateActive(user *model.User, active bool) (*model.User, *model.A
 }
 
 func (a *App) DeactivateGuests() *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) DeactivateGuests() *model.AppError {")
 	userIds, err := a.Srv().Store.User().DeactivateGuests()
 	if err != nil {
 		return err
@@ -1034,6 +1092,7 @@ func (a *App) DeactivateGuests() *model.AppError {
 }
 
 func (a *App) GetSanitizeOptions(asAdmin bool) map[string]bool {
+	fmt.Println("------ app/user.go:: func (a *App) GetSanitizeOptions(asAdmin bool) map[string]bool {")
 	options := a.Config().GetSanitizeOptions()
 	if asAdmin {
 		options["email"] = true
@@ -1044,12 +1103,14 @@ func (a *App) GetSanitizeOptions(asAdmin bool) map[string]bool {
 }
 
 func (a *App) SanitizeProfile(user *model.User, asAdmin bool) {
+	fmt.Println("------ app/user.go:: func (a *App) SanitizeProfile(user *model.User, asAdmin bool) {")
 	options := a.GetSanitizeOptions(asAdmin)
 
 	user.SanitizeProfile(options)
 }
 
 func (a *App) UpdateUserAsUser(user *model.User, asAdmin bool) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateUserAsUser(user *model.User, asAdmin bool) (*model.User, *model.AppError) {")
 	updatedUser, err := a.UpdateUser(user, true)
 	if err != nil {
 		return nil, err
@@ -1061,6 +1122,7 @@ func (a *App) UpdateUserAsUser(user *model.User, asAdmin bool) (*model.User, *mo
 }
 
 func (a *App) PatchUser(userId string, patch *model.UserPatch, asAdmin bool) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) PatchUser(userId string, patch *model.UserPatch, asAdmin bool) (*model.User, *model.AppError) {")
 	user, err := a.GetUser(userId)
 	if err != nil {
 		return nil, err
@@ -1079,6 +1141,7 @@ func (a *App) PatchUser(userId string, patch *model.UserPatch, asAdmin bool) (*m
 }
 
 func (a *App) UpdateUserAuth(userId string, userAuth *model.UserAuth) (*model.UserAuth, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateUserAuth(userId string, userAuth *model.UserAuth) (*model.UserAuth, *model.AppError) {")
 	if userAuth.AuthData == nil || *userAuth.AuthData == "" || userAuth.AuthService == "" {
 		userAuth.AuthData = nil
 		userAuth.AuthService = ""
@@ -1103,6 +1166,7 @@ func (a *App) UpdateUserAuth(userId string, userAuth *model.UserAuth) (*model.Us
 }
 
 func (a *App) sendUpdatedUserEvent(user model.User) {
+	fmt.Println("------ app/user.go:: func (a *App) sendUpdatedUserEvent(user model.User) {")
 	adminCopyOfUser := user.DeepCopy()
 	a.SanitizeProfile(adminCopyOfUser, true)
 	adminMessage := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_USER_UPDATED, "", "", "", nil)
@@ -1118,6 +1182,7 @@ func (a *App) sendUpdatedUserEvent(user model.User) {
 }
 
 func (a *App) UpdateUser(user *model.User, sendNotifications bool) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateUser(user *model.User, sendNotifications bool) (*model.User, *model.AppError) {")
 	prev, err := a.Srv().Store.User().Get(user.Id)
 	if err != nil {
 		return nil, err
@@ -1192,6 +1257,7 @@ func (a *App) UpdateUser(user *model.User, sendNotifications bool) (*model.User,
 }
 
 func (a *App) UpdateUserActive(userId string, active bool) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateUserActive(userId string, active bool) *model.AppError {")
 	user, err := a.GetUser(userId)
 
 	if err != nil {
@@ -1205,6 +1271,7 @@ func (a *App) UpdateUserActive(userId string, active bool) *model.AppError {
 }
 
 func (a *App) UpdateUserNotifyProps(userId string, props map[string]string) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateUserNotifyProps(userId string, props map[string]string) (*model.User, *model.AppError) {")
 	user, err := a.GetUser(userId)
 	if err != nil {
 		return nil, err
@@ -1221,6 +1288,7 @@ func (a *App) UpdateUserNotifyProps(userId string, props map[string]string) (*mo
 }
 
 func (a *App) UpdateMfa(activate bool, userId, token string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateMfa(activate bool, userId, token string) *model.AppError {")
 	if activate {
 		if err := a.ActivateMfa(userId, token); err != nil {
 			return err
@@ -1247,6 +1315,7 @@ func (a *App) UpdateMfa(activate bool, userId, token string) *model.AppError {
 }
 
 func (a *App) UpdatePasswordByUserIdSendEmail(userId, newPassword, method string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) UpdatePasswordByUserIdSendEmail(userId, newPassword, method string) *model.AppError {")
 	user, err := a.GetUser(userId)
 	if err != nil {
 		return err
@@ -1256,6 +1325,7 @@ func (a *App) UpdatePasswordByUserIdSendEmail(userId, newPassword, method string
 }
 
 func (a *App) UpdatePassword(user *model.User, newPassword string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) UpdatePassword(user *model.User, newPassword string) *model.AppError {")
 	if err := a.IsPasswordValid(newPassword); err != nil {
 		return err
 	}
@@ -1272,6 +1342,7 @@ func (a *App) UpdatePassword(user *model.User, newPassword string) *model.AppErr
 }
 
 func (a *App) UpdatePasswordSendEmail(user *model.User, newPassword, method string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) UpdatePasswordSendEmail(user *model.User, newPassword, method string) *model.AppError {")
 	if err := a.UpdatePassword(user, newPassword); err != nil {
 		return err
 	}
@@ -1286,6 +1357,7 @@ func (a *App) UpdatePasswordSendEmail(user *model.User, newPassword, method stri
 }
 
 func (a *App) ResetPasswordFromToken(userSuppliedTokenString, newPassword string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) ResetPasswordFromToken(userSuppliedTokenString, newPassword string) *model.AppError {")
 	token, err := a.GetPasswordRecoveryToken(userSuppliedTokenString)
 	if err != nil {
 		return err
@@ -1331,6 +1403,7 @@ func (a *App) ResetPasswordFromToken(userSuppliedTokenString, newPassword string
 }
 
 func (a *App) SendPasswordReset(email string, siteURL string) (bool, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) SendPasswordReset(email string, siteURL string) (bool, *model.AppError) {")
 	user, err := a.GetUserByEmail(email)
 	if err != nil {
 		return false, nil
@@ -1349,6 +1422,7 @@ func (a *App) SendPasswordReset(email string, siteURL string) (bool, *model.AppE
 }
 
 func (a *App) CreatePasswordRecoveryToken(userId, email string) (*model.Token, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreatePasswordRecoveryToken(userId, email string) (*model.Token, *model.AppError) {")
 
 	tokenExtra := struct {
 		UserId string
@@ -1373,6 +1447,7 @@ func (a *App) CreatePasswordRecoveryToken(userId, email string) (*model.Token, *
 }
 
 func (a *App) GetPasswordRecoveryToken(token string) (*model.Token, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetPasswordRecoveryToken(token string) (*model.Token, *model.AppError) {")
 	rtoken, err := a.Srv().Store.Token().GetByToken(token)
 	if err != nil {
 		return nil, model.NewAppError("GetPasswordRecoveryToken", "api.user.reset_password.invalid_link.app_error", nil, err.Error(), http.StatusBadRequest)
@@ -1384,10 +1459,12 @@ func (a *App) GetPasswordRecoveryToken(token string) (*model.Token, *model.AppEr
 }
 
 func (a *App) DeleteToken(token *model.Token) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) DeleteToken(token *model.Token) *model.AppError {")
 	return a.Srv().Store.Token().Delete(token.Token)
 }
 
 func (a *App) UpdateUserRoles(userId string, newRoles string, sendWebSocketEvent bool) (*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateUserRoles(userId string, newRoles string, sendWebSocketEvent bool) (*model.User, *model.AppError) {")
 	user, err := a.GetUser(userId)
 	if err != nil {
 		err.StatusCode = http.StatusBadRequest
@@ -1438,6 +1515,7 @@ func (a *App) UpdateUserRoles(userId string, newRoles string, sendWebSocketEvent
 }
 
 func (a *App) PermanentDeleteUser(user *model.User) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) PermanentDeleteUser(user *model.User) *model.AppError {")
 	mlog.Warn("Attempting to permanently delete account", mlog.String("user_id", user.Id), mlog.String("user_email", user.Email))
 	if user.IsInRole(model.SYSTEM_ADMIN_ROLE_ID) {
 		mlog.Warn("You are deleting a user that is a system administrator.  You may need to set another account as the system administrator using the command line tools.", mlog.String("user_email", user.Email))
@@ -1551,6 +1629,7 @@ func (a *App) PermanentDeleteUser(user *model.User) *model.AppError {
 }
 
 func (a *App) PermanentDeleteAllUsers() *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) PermanentDeleteAllUsers() *model.AppError {")
 	users, err := a.Srv().Store.User().GetAll()
 	if err != nil {
 		return err
@@ -1563,6 +1642,7 @@ func (a *App) PermanentDeleteAllUsers() *model.AppError {
 }
 
 func (a *App) SendEmailVerification(user *model.User, newEmail string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) SendEmailVerification(user *model.User, newEmail string) *model.AppError {")
 	token, err := a.CreateVerifyEmailToken(user.Id, newEmail)
 	if err != nil {
 		return err
@@ -1575,6 +1655,7 @@ func (a *App) SendEmailVerification(user *model.User, newEmail string) *model.Ap
 }
 
 func (a *App) VerifyEmailFromToken(userSuppliedTokenString string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) VerifyEmailFromToken(userSuppliedTokenString string) *model.AppError {")
 	token, err := a.GetVerifyEmailToken(userSuppliedTokenString)
 	if err != nil {
 		return err
@@ -1619,6 +1700,7 @@ func (a *App) VerifyEmailFromToken(userSuppliedTokenString string) *model.AppErr
 }
 
 func (a *App) CreateVerifyEmailToken(userId string, newEmail string) (*model.Token, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) CreateVerifyEmailToken(userId string, newEmail string) (*model.Token, *model.AppError) {")
 	tokenExtra := struct {
 		UserId string
 		Email  string
@@ -1642,6 +1724,7 @@ func (a *App) CreateVerifyEmailToken(userId string, newEmail string) (*model.Tok
 }
 
 func (a *App) GetVerifyEmailToken(token string) (*model.Token, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetVerifyEmailToken(token string) (*model.Token, *model.AppError) {")
 	rtoken, err := a.Srv().Store.Token().GetByToken(token)
 	if err != nil {
 		return nil, model.NewAppError("GetVerifyEmailToken", "api.user.verify_email.bad_link.app_error", nil, err.Error(), http.StatusBadRequest)
@@ -1654,6 +1737,7 @@ func (a *App) GetVerifyEmailToken(token string) (*model.Token, *model.AppError) 
 
 // GetTotalUsersStats is used for the DM list total
 func (a *App) GetTotalUsersStats(viewRestrictions *model.ViewUsersRestrictions) (*model.UsersStats, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetTotalUsersStats(viewRestrictions *model.ViewUsersRestrictions) (*model.UsersStats, *model.AppError) {")
 	count, err := a.Srv().Store.User().Count(model.UserCountOptions{
 		IncludeBotAccounts: true,
 		ViewRestrictions:   viewRestrictions,
@@ -1668,6 +1752,7 @@ func (a *App) GetTotalUsersStats(viewRestrictions *model.ViewUsersRestrictions) 
 }
 
 func (a *App) VerifyUserEmail(userId, email string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) VerifyUserEmail(userId, email string) *model.AppError {")
 
 	if _, err := a.Srv().Store.User().VerifyEmail(userId, email); err != nil {
 		return err
@@ -1687,6 +1772,7 @@ func (a *App) VerifyUserEmail(userId, email string) *model.AppError {
 }
 
 func (a *App) SearchUsers(props *model.UserSearch, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) SearchUsers(props *model.UserSearch, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {")
 	if props.WithoutTeam {
 		return a.SearchUsersWithoutTeam(props.Term, options)
 	}
@@ -1703,6 +1789,7 @@ func (a *App) SearchUsers(props *model.UserSearch, options *model.UserSearchOpti
 }
 
 func (a *App) SearchUsersInChannel(channelId string, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) SearchUsersInChannel(channelId string, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {")
 	term = strings.TrimSpace(term)
 	users, err := a.Srv().Store.User().SearchInChannel(channelId, term, options)
 	if err != nil {
@@ -1716,6 +1803,7 @@ func (a *App) SearchUsersInChannel(channelId string, term string, options *model
 }
 
 func (a *App) SearchUsersNotInChannel(teamId string, channelId string, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) SearchUsersNotInChannel(teamId string, channelId string, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {")
 	term = strings.TrimSpace(term)
 	users, err := a.Srv().Store.User().SearchNotInChannel(teamId, channelId, term, options)
 	if err != nil {
@@ -1730,6 +1818,7 @@ func (a *App) SearchUsersNotInChannel(teamId string, channelId string, term stri
 }
 
 func (a *App) SearchUsersInTeam(teamId, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) SearchUsersInTeam(teamId, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {")
 	var users []*model.User
 	var err *model.AppError
 	term = strings.TrimSpace(term)
@@ -1747,6 +1836,7 @@ func (a *App) SearchUsersInTeam(teamId, term string, options *model.UserSearchOp
 }
 
 func (a *App) SearchUsersNotInTeam(notInTeamId string, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) SearchUsersNotInTeam(notInTeamId string, term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {")
 	term = strings.TrimSpace(term)
 	users, err := a.Srv().Store.User().SearchNotInTeam(notInTeamId, term, options)
 	if err != nil {
@@ -1761,6 +1851,7 @@ func (a *App) SearchUsersNotInTeam(notInTeamId string, term string, options *mod
 }
 
 func (a *App) SearchUsersWithoutTeam(term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) SearchUsersWithoutTeam(term string, options *model.UserSearchOptions) ([]*model.User, *model.AppError) {")
 	term = strings.TrimSpace(term)
 	users, err := a.Srv().Store.User().SearchWithoutTeam(term, options)
 	if err != nil {
@@ -1813,6 +1904,7 @@ func (a *App) AutocompleteUsersInTeam(teamId string, term string, options *model
 }
 
 func (a *App) UpdateOAuthUserAttrs(userData io.Reader, user *model.User, provider einterfaces.OauthProvider, service string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) UpdateOAuthUserAttrs(userData io.Reader, user *model.User, provider einterfaces.OauthProvider, service string) *model.AppError {")
 	oauthUser := provider.GetUserFromJson(userData)
 	if oauthUser == nil {
 		return model.NewAppError("UpdateOAuthUserAttrs", "api.user.update_oauth_user_attrs.get_user.app_error", map[string]interface{}{"Service": service}, "", http.StatusBadRequest)
@@ -1860,6 +1952,7 @@ func (a *App) UpdateOAuthUserAttrs(userData io.Reader, user *model.User, provide
 }
 
 func (a *App) RestrictUsersGetByPermissions(userId string, options *model.UserGetOptions) (*model.UserGetOptions, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) RestrictUsersGetByPermissions(userId string, options *model.UserGetOptions) (*model.UserGetOptions, *model.AppError) {")
 	restrictions, err := a.GetViewUsersRestrictions(userId)
 	if err != nil {
 		return nil, err
@@ -1872,6 +1965,7 @@ func (a *App) RestrictUsersGetByPermissions(userId string, options *model.UserGe
 // FilterNonGroupTeamMembers returns the subset of the given user IDs of the users who are not members of groups
 // associated to the team excluding bots.
 func (a *App) FilterNonGroupTeamMembers(userIds []string, team *model.Team) ([]string, error) {
+	fmt.Println("------ app/user.go:: func (a *App) FilterNonGroupTeamMembers(userIds []string, team *model.Team) ([]string, error) {")
 	teamGroupUsers, err := a.GetTeamGroupUsers(team.Id)
 	if err != nil {
 		return nil, err
@@ -1882,6 +1976,7 @@ func (a *App) FilterNonGroupTeamMembers(userIds []string, team *model.Team) ([]s
 // FilterNonGroupChannelMembers returns the subset of the given user IDs of the users who are not members of groups
 // associated to the channel excluding bots
 func (a *App) FilterNonGroupChannelMembers(userIds []string, channel *model.Channel) ([]string, error) {
+	fmt.Println("------ app/user.go:: func (a *App) FilterNonGroupChannelMembers(userIds []string, channel *model.Channel) ([]string, error) {")
 	channelGroupUsers, err := a.GetChannelGroupUsers(channel.Id)
 	if err != nil {
 		return nil, err
@@ -1892,6 +1987,7 @@ func (a *App) FilterNonGroupChannelMembers(userIds []string, channel *model.Chan
 // filterNonGroupUsers is a helper function that takes a list of user ids and a list of users
 // and returns the list of normal users present in userIds but not in groupUsers.
 func (a *App) filterNonGroupUsers(userIds []string, groupUsers []*model.User) ([]string, error) {
+	fmt.Println("------ app/user.go:: func (a *App) filterNonGroupUsers(userIds []string, groupUsers []*model.User) ([]string, error) {")
 	nonMemberIds := []string{}
 	users, err := a.Srv().Store.User().GetProfileByIds(userIds, nil, false)
 	if err != nil {
@@ -1916,6 +2012,7 @@ func (a *App) filterNonGroupUsers(userIds []string, groupUsers []*model.User) ([
 }
 
 func (a *App) RestrictUsersSearchByPermissions(userId string, options *model.UserSearchOptions) (*model.UserSearchOptions, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) RestrictUsersSearchByPermissions(userId string, options *model.UserSearchOptions) (*model.UserSearchOptions, *model.AppError) {")
 	restrictions, err := a.GetViewUsersRestrictions(userId)
 	if err != nil {
 		return nil, err
@@ -1926,6 +2023,7 @@ func (a *App) RestrictUsersSearchByPermissions(userId string, options *model.Use
 }
 
 func (a *App) UserCanSeeOtherUser(userId string, otherUserId string) (bool, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) UserCanSeeOtherUser(userId string, otherUserId string) (bool, *model.AppError) {")
 	if userId == otherUserId {
 		return true, nil
 	}
@@ -1963,10 +2061,12 @@ func (a *App) UserCanSeeOtherUser(userId string, otherUserId string) (bool, *mod
 }
 
 func (a *App) userBelongsToChannels(userId string, channelIds []string) (bool, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) userBelongsToChannels(userId string, channelIds []string) (bool, *model.AppError) {")
 	return a.Srv().Store.Channel().UserBelongsToChannels(userId, channelIds)
 }
 
 func (a *App) GetViewUsersRestrictions(userId string) (*model.ViewUsersRestrictions, *model.AppError) {
+	fmt.Println("------ app/user.go:: func (a *App) GetViewUsersRestrictions(userId string) (*model.ViewUsersRestrictions, *model.AppError) {")
 	if a.HasPermissionTo(userId, model.PERMISSION_VIEW_MEMBERS) {
 		return nil, nil
 	}
@@ -1999,6 +2099,7 @@ func (a *App) GetViewUsersRestrictions(userId string) (*model.ViewUsersRestricti
 // PromoteGuestToUser Convert user's roles and all his mermbership's roles from
 // guest roles to regular user roles.
 func (a *App) PromoteGuestToUser(user *model.User, requestorId string) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) PromoteGuestToUser(user *model.User, requestorId string) *model.AppError {")
 	err := a.Srv().Store.User().PromoteGuestToUser(user.Id)
 	a.InvalidateCacheForUser(user.Id)
 	if err != nil {
@@ -2053,6 +2154,7 @@ func (a *App) PromoteGuestToUser(user *model.User, requestorId string) *model.Ap
 // DemoteUserToGuest Convert user's roles and all his mermbership's roles from
 // regular user roles to guest roles.
 func (a *App) DemoteUserToGuest(user *model.User) *model.AppError {
+	fmt.Println("------ app/user.go:: func (a *App) DemoteUserToGuest(user *model.User) *model.AppError {")
 
 	err := a.Srv().Store.User().DemoteUserToGuest(user.Id)
 	a.InvalidateCacheForUser(user.Id)
@@ -2097,6 +2199,7 @@ func (a *App) DemoteUserToGuest(user *model.User) *model.AppError {
 
 // invalidateUserCacheAndPublish Invalidates cache for a user and publishes user updated event
 func (a *App) invalidateUserCacheAndPublish(userId string) {
+	fmt.Println("------ app/user.go:: func (a *App) invalidateUserCacheAndPublish(userId string) {")
 
 	a.InvalidateCacheForUser(userId)
 
