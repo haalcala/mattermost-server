@@ -47,7 +47,7 @@ func (a *App) clusterInvalidateAllCachesHandler(msg *model.ClusterMessage) {
 }
 
 func (a *App) clusterInvalidateCacheForChannelMembersNotifyPropHandler(msg *model.ClusterMessage) {
-	a.InvalidateCacheForChannelMembersNotifyPropsSkipClusterSend(msg.Data)
+	a.invalidateCacheForChannelMembersNotifyPropsSkipClusterSend(msg.Data)
 }
 
 func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMessage) {
