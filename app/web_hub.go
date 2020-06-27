@@ -4,6 +4,7 @@
 package app
 
 import (
+	"fmt"
 	"hash/fnv"
 	"runtime"
 	"runtime/debug"
@@ -58,6 +59,7 @@ type Hub struct {
 
 // NewWebHub creates a new Hub.
 func (a *App) NewWebHub() *Hub {
+	fmt.Println("------ app/web_hub.go:: func (a *App) NewWebHub() *Hub {")
 	return &Hub{
 		app:             a,
 		register:        make(chan *WebConn),
@@ -73,12 +75,14 @@ func (a *App) NewWebHub() *Hub {
 }
 
 func (a *App) TotalWebsocketConnections() int {
+	fmt.Println("------ app/web_hub.go:: func (a *App) TotalWebsocketConnections() int {")
 
 	return a.Srv().TotalWebsocketConnections()
 }
 
 // HubStart starts all the hubs.
 func (a *App) HubStart() {
+	fmt.Println("------ app/web_hub.go:: func (a *App) HubStart() {")
 	// Total number of hubs is twice the number of CPUs.
 	numberOfHubs := runtime.NumCPU() * 2
 	mlog.Info("Starting websocket hubs", mlog.Int("number_of_hubs", numberOfHubs))
@@ -128,6 +132,7 @@ func (a *App) InvalidateWebConnSessionCacheForUser(userId string) {
 
 // HubStop stops all the hubs.
 func (a *App) HubStop() {
+	fmt.Println("------ app/web_hub.go:: func (a *App) HubStop() {")
 	mlog.Info("stopping websocket hub connections")
 
 	for _, hub := range a.Srv().GetHubs() {
@@ -139,6 +144,7 @@ func (a *App) HubStop() {
 
 // GetHubForUserId returns the hub for a given user id.
 func (a *App) GetHubForUserId(userId string) *Hub {
+	fmt.Println("------ app/web_hub.go:: func (a *App) GetHubForUserId(userId string) *Hub {")
 
 	if len(a.Srv().GetHubs()) == 0 {
 		return nil
@@ -157,6 +163,7 @@ func (a *App) GetHubForUserId(userId string) *Hub {
 
 // HubRegister registers a connection to a hub.
 func (a *App) HubRegister(webConn *WebConn) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) HubRegister(webConn *WebConn) {")
 	hub := a.GetHubForUserId(webConn.UserId)
 	if hub != nil {
 		if metrics := a.Metrics(); metrics != nil {
@@ -168,6 +175,7 @@ func (a *App) HubRegister(webConn *WebConn) {
 
 // HubUnregister unregisters a connection from a hub.
 func (a *App) HubUnregister(webConn *WebConn) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) HubUnregister(webConn *WebConn) {")
 	hub := a.GetHubForUserId(webConn.UserId)
 	if hub != nil {
 		if metrics := a.Metrics(); metrics != nil {
@@ -178,6 +186,7 @@ func (a *App) HubUnregister(webConn *WebConn) {
 }
 
 func (a *App) Publish(message *model.WebSocketEvent) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) Publish(message *model.WebSocketEvent) {")
 
 	if metrics := a.Metrics(); metrics != nil {
 		metrics.IncrementWebsocketEvent(message.EventType())
@@ -206,6 +215,7 @@ func (a *App) Publish(message *model.WebSocketEvent) {
 }
 
 func (a *App) invalidateCacheForChannel(channel *model.Channel) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForChannel(channel *model.Channel) {")
 
 	a.Srv().Store.Channel().InvalidateChannel(channel.Id)
 	a.invalidateCacheForChannelByNameSkipClusterSend(channel.TeamId, channel.Name)
@@ -229,6 +239,7 @@ func (a *App) invalidateCacheForChannel(channel *model.Channel) {
 }
 
 func (a *App) invalidateCacheForChannelMembers(channelId string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForChannelMembers(channelId string) {")
 
 	a.Srv().Store.User().InvalidateProfilesInChannelCache(channelId)
 	a.Srv().Store.Channel().InvalidateMemberCount(channelId)
@@ -236,6 +247,7 @@ func (a *App) invalidateCacheForChannelMembers(channelId string) {
 }
 
 func (a *App) invalidateCacheForChannelMembersNotifyProps(channelId string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForChannelMembersNotifyProps(channelId string) {")
 
 	a.invalidateCacheForChannelMembersNotifyPropsSkipClusterSend(channelId)
 
@@ -250,11 +262,13 @@ func (a *App) invalidateCacheForChannelMembersNotifyProps(channelId string) {
 }
 
 func (a *App) invalidateCacheForChannelMembersNotifyPropsSkipClusterSend(channelId string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForChannelMembersNotifyPropsSkipClusterSend(channelId string) {")
 
 	a.Srv().Store.Channel().InvalidateCacheForChannelMembersNotifyProps(channelId)
 }
 
 func (a *App) InvalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) InvalidateCacheForChannelByNameSkipClusterSend(teamId, name string) {")
 
 	if teamId == "" {
 		teamId = "dm"
@@ -264,12 +278,14 @@ func (a *App) InvalidateCacheForChannelByNameSkipClusterSend(teamId, name string
 }
 
 func (a *App) invalidateCacheForChannelPosts(channelId string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForChannelPosts(channelId string) {")
 
 	a.Srv().Store.Channel().InvalidatePinnedPostCount(channelId)
 	a.Srv().Store.Post().InvalidateLastPostTimeCache(channelId)
 }
 
 func (a *App) InvalidateCacheForUser(userId string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) InvalidateCacheForUser(userId string) {")
 
 	a.invalidateCacheForUserSkipClusterSend(userId)
 
@@ -287,6 +303,7 @@ func (a *App) InvalidateCacheForUser(userId string) {
 }
 
 func (a *App) invalidateCacheForUserTeams(userId string) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) invalidateCacheForUserTeams(userId string) {")
 
 	a.InvalidateWebConnSessionCacheForUser(userId)
 	a.Srv().Store.Team().InvalidateAllTeamIdsForUser(userId)
@@ -303,6 +320,7 @@ func (a *App) invalidateCacheForUserTeams(userId string) {
 
 // UpdateWebConnUserActivity sets the LastUserActivityAt of the hub for the given session.
 func (a *App) UpdateWebConnUserActivity(session model.Session, activityAt int64) {
+	fmt.Println("------ app/web_hub.go:: func (a *App) UpdateWebConnUserActivity(session model.Session, activityAt int64) {")
 
 	hub := a.GetHubForUserId(session.UserId)
 	if hub != nil {
@@ -312,6 +330,7 @@ func (a *App) UpdateWebConnUserActivity(session model.Session, activityAt int64)
 
 // SessionIsRegistered determines if a specific session has been registered
 func (a *App) SessionIsRegistered(session model.Session) bool {
+	fmt.Println("------ app/web_hub.go:: func (a *App) SessionIsRegistered(session model.Session, activityAt int64) {")
 
 	hub := a.GetHubForUserId(session.UserId)
 	if hub != nil {
@@ -322,6 +341,7 @@ func (a *App) SessionIsRegistered(session model.Session) bool {
 
 // Register registers a connection to the hub.
 func (h *Hub) Register(webConn *WebConn) {
+	fmt.Println("------ app/web_hub.go:: func (h *Hub) Register(webConn *WebConn) {")
 	select {
 	case h.register <- webConn:
 	case <-h.stop:
@@ -330,6 +350,7 @@ func (h *Hub) Register(webConn *WebConn) {
 
 // Unregister unregisters a connection from the hub.
 func (h *Hub) Unregister(webConn *WebConn) {
+	fmt.Println("------ app/web_hub.go:: func (h *Hub) Unregister(webConn *WebConn) {")
 	select {
 	case h.unregister <- webConn:
 	case <-h.stop:
@@ -353,6 +374,7 @@ func (h *Hub) IsRegistered(userId, sessionToken string) bool {
 
 // Broadcast broadcasts the message to all connections in the hub.
 func (h *Hub) Broadcast(message *model.WebSocketEvent) {
+	fmt.Println("------ app/web_hub.go:: func (h *Hub) Broadcast(message *model.WebSocketEvent) {")
 
 	// XXX: The hub nil check is because of the way we setup our tests. We call `app.NewServer()`
 	// which returns a server, but only after that, we call `wsapi.Init()` through our FakeApp adapter
@@ -373,6 +395,7 @@ func (h *Hub) Broadcast(message *model.WebSocketEvent) {
 
 // InvalidateUser invalidates the cache for the given user.
 func (h *Hub) InvalidateUser(userId string) {
+	fmt.Println("------ app/web_hub.go:: func (h *Hub) InvalidateUser(userId string) {")
 	select {
 	case h.invalidateUser <- userId:
 	case <-h.stop:
@@ -382,6 +405,7 @@ func (h *Hub) InvalidateUser(userId string) {
 // UpdateActivity sets the LastUserActivityAt field for the connection
 // of the user.
 func (h *Hub) UpdateActivity(userId, sessionToken string, activityAt int64) {
+	fmt.Println("------ app/web_hub.go:: func (h *Hub) UpdateActivity(userId, sessionToken string, activityAt int64) {")
 	select {
 	case h.activity <- &webConnActivityMessage{
 		userId:       userId,
@@ -405,12 +429,14 @@ func (h *Hub) SendMessage(conn *WebConn, msg model.WebSocketMessage) {
 
 // Stop stops the hub.
 func (h *Hub) Stop() {
+	fmt.Println("------ app/web_hub.go:: func (h *Hub) Stop() {")
 	close(h.stop)
 	<-h.didStop
 }
 
 // Start starts the hub.
 func (h *Hub) Start() {
+	fmt.Println("------ app/web_hub.go:: func (h *Hub) Start() {")
 	var doStart func()
 	var doRecoverableStart func()
 	var doRecover func()
