@@ -51,7 +51,7 @@ func (a *App) clusterInvalidateCacheForChannelMembersNotifyPropHandler(msg *mode
 }
 
 func (a *App) clusterInvalidateCacheForChannelByNameHandler(msg *model.ClusterMessage) {
-	a.InvalidateCacheForChannelByNameSkipClusterSend(msg.Props["id"], msg.Props["name"])
+	a.invalidateCacheForChannelByNameSkipClusterSend(msg.Props["id"], msg.Props["name"])
 }
 
 func (a *App) clusterInvalidateCacheForUserHandler(msg *model.ClusterMessage) {
