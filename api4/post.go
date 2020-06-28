@@ -234,7 +234,10 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	c.App.AddCursorIdsForPostList(list, afterPost, beforePost, since, page, perPage)
-	clientPostList := c.App.PreparePostListForClient(list, list2)
+
+	list.ReadStatuses = list2
+
+	clientPostList := c.App.PreparePostListForClient(list)
 
 	w.Write([]byte(clientPostList.ToJson()))
 }

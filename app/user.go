@@ -300,11 +300,11 @@ func (a *App) createUser(user *model.User) (*model.User, *model.AppError) {
 		}
 	}
 
-	use_military_time := false
+	// use_military_time := false
 
-	if a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime != nil && *a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime == true {
-		use_military_time = true
-	}
+	// if a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime != nil && *a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime == true {
+	// 	use_military_time = true
+	// }
 
 	fmt.Println("================== strconv.FormatBool(use_military_time):", strconv.FormatBool(use_military_time))
 
