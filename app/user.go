@@ -290,11 +290,11 @@ func (a *App) createUser(user *model.User) (*model.User, *model.AppError) {
 		}
 	}
 
-	use_military_time := false
+	// use_military_time := false
 
-	if a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime != nil && *a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime == true {
-		use_military_time = true
-	}
+	// if a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime != nil && *a.Config().ExperimentalSettings.UseUserDefaultMilitaryTime == true {
+	// 	use_military_time = true
+	// }
 
 	tutorial_pref := model.Preference{UserId: ruser.Id, Category: model.PREFERENCE_CATEGORY_TUTORIAL_STEPS, Name: ruser.Id, Value: "0"}
 
