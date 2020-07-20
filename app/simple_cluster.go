@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"os"
-	"reflect"
 	"strings"
 	"time"
 
@@ -29,7 +28,7 @@ type SimpleCluster struct {
 
 func (s *SimpleCluster) handleClusterMessage(msg *model.ClusterMessage) {
 
-	fmt.Println("Handle Cluster Message!!!!")
+	// fmt.Println("Handle Cluster Message!!!!")
 
 	if msg.Data == "" {
 		return
@@ -37,17 +36,17 @@ func (s *SimpleCluster) handleClusterMessage(msg *model.ClusterMessage) {
 
 	data_as_json := model.ClusterMessageFromJson(strings.NewReader(msg.Data))
 
-	fmt.Println("data_as_json:", data_as_json)
+	// fmt.Println("data_as_json:", data_as_json)
 
 	switch data_as_json.Event {
 	case model.CLUSTER_EVENT_CLUSTER_INFO:
-		fmt.Println("Processing ClusterInfo!!!! data_as_json.Data:", data_as_json.Data)
+		// fmt.Println("Processing ClusterInfo!!!! data_as_json.Data:", data_as_json.Data)
 
 		cluster_info := model.ClusterInfoFromJson(strings.NewReader(data_as_json.Data))
 
 		s.clusterInfos[cluster_info.Id] = cluster_info
 
-		fmt.Println("s.clusterInfos:", s.clusterInfos)
+		// fmt.Println("s.clusterInfos:", s.clusterInfos)
 	}
 }
 
@@ -57,7 +56,7 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 	c := s.Server().FakeApp().Config()
 
-	fmt.Println("c:", c, "os.Environ():", os.Environ())
+	// fmt.Println("c:", c, "os.Environ():", os.Environ())
 
 	hostname, err := os.Hostname()
 
@@ -122,23 +121,23 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 	s.server.Go(func() {
 		// Consume messages.
 		for msg := range ch {
-			fmt.Println("<<<<<<======------ app/simple_cluster.go:: msg.Channel:", msg.Channel, "msg.Payload:", msg.Payload)
+			// fmt.Println("<<<<<<======------ app/simple_cluster.go:: msg.Channel:", msg.Channel, "msg.Payload:", msg.Payload)
 
 			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
 
 			if payload.Origin == s.server.serverNodeId {
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				// fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				// fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				// fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 				continue
 			}
 
 			// fmt.Println("payload.Data:", payload.Data)
-			fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
+			// fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
 
 			data_as_json := model.ClusterMessageFromJson(strings.NewReader(payload.Data))
 
-			fmt.Println("**** data_as_json:", data_as_json)
+			// fmt.Println("**** data_as_json:", data_as_json)
 
 			if data_as_json != nil && data_as_json.Event == "config_changed" {
 				// server.FakeApp().regenerateClientConfig()
@@ -151,7 +150,7 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 			// *handler(payload)
 
-			fmt.Println("handler:", handler, "reflect.TypeOf(handler):", reflect.TypeOf(handler), "payload:", payload)
+			// fmt.Println("handler:", handler, "reflect.TypeOf(handler):", reflect.TypeOf(handler), "payload:", payload)
 
 			if handler != nil {
 				(*handler)(payload)
@@ -181,7 +180,7 @@ func (s *SimpleCluster) newClient() (*redis.Client, error) {
 		redisPass = *c.ClusterSettings.ClusterRedisPass
 	}
 
-	fmt.Printf("redisHost: %v, redisPort: %v, redisPass: %v\n", redisHost, redisPort, redisPass)
+	// fmt.Printf("redisHost: %v, redisPort: %v, redisPass: %v\n", redisHost, redisPort, redisPass)
 
 	return redis.NewClient(&redis.Options{
 		Addr:     redisHost + ":" + redisPort,
@@ -194,12 +193,12 @@ func (s *SimpleCluster) StartInterNodeCommunication() {
 
 	time.Sleep(time.Second * 5)
 
-	fmt.Println("StartInterNodeCommunication:: s.redisClient:", s.redisClient)
+	// fmt.Println("StartInterNodeCommunication:: s.redisClient:", s.redisClient)
 
 	// Notify cluster about this node
 	s.Server().FakeApp().notifyClusterEvent(model.CLUSTER_EVENT_CLUSTER_INFO, s.clusterInfo)
 
-	fmt.Println("-------------------******************************========================================== StartInterNodeCommunication. Exiting.")
+	// fmt.Println("-------------------******************************========================================== StartInterNodeCommunication. Exiting.")
 }
 
 func (s *SimpleCluster) StopInterNodeCommunication() {
@@ -208,7 +207,7 @@ func (s *SimpleCluster) StopInterNodeCommunication() {
 
 func (s *SimpleCluster) RegisterClusterMessageHandler(event string, crm einterfaces.ClusterMessageHandler) {
 
-	fmt.Printf("event: %v, crm: %v\n", event, crm)
+	// fmt.Printf("event: %v, crm: %v\n", event, crm)
 
 	s.messageHandlers[event] = &crm
 }
@@ -248,7 +247,7 @@ func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
 
 	msg.Origin = s.clusterInfo.Id
 
-	fmt.Println("------======>>>>>> msg:", msg.ToJson())
+	// fmt.Println("------======>>>>>> msg:", msg.ToJson())
 
 	s.redisClient.Publish(s.clusterDomain, msg.ToJson())
 }
