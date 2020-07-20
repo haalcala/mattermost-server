@@ -336,6 +336,7 @@ type ServiceSettings struct {
 	EnableLatex                                       *bool
 	EnableLocalMode                                   *bool
 	LocalModeSocketLocation                           *string
+	ClusterLogDebug                                   *bool
 }
 
 func (s *ServiceSettings) SetDefaults(isUpdate bool) {
@@ -736,6 +737,10 @@ func (s *ServiceSettings) SetDefaults(isUpdate bool) {
 
 	if s.LocalModeSocketLocation == nil {
 		s.LocalModeSocketLocation = NewString(LOCAL_MODE_SOCKET_PATH)
+	}
+
+	if s.ClusterLogDebug == nil {
+		s.ClusterLogDebug = NewBool(false)
 	}
 }
 
