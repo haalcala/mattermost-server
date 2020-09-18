@@ -28,7 +28,6 @@ type SimpleCluster struct {
 }
 
 func (s *SimpleCluster) handleClusterMessage(msg *model.ClusterMessage) {
-	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) handleClusterMessage(msg *model.ClusterMessage) {")
 
 	fmt.Println("Handle Cluster Message!!!!")
 
@@ -53,7 +52,6 @@ func (s *SimpleCluster) handleClusterMessage(msg *model.ClusterMessage) {
 }
 
 func NewSimpleCluster(server *Server) *SimpleCluster {
-	fmt.Println("------ app/simple_cluster.go:: func NewSimpleCluster(s *Server) *SimpleCluster {")
 
 	s := &SimpleCluster{server: server, messageHandlers: map[string]*einterfaces.ClusterMessageHandler{}}
 
@@ -193,7 +191,6 @@ func (s *SimpleCluster) newClient() (*redis.Client, error) {
 }
 
 func (s *SimpleCluster) StartInterNodeCommunication() {
-	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) StartInterNodeCommunication() { os.Getenv(\"MM_REDIS_CLUSTER_ROLE\"):", os.Getenv("MM_REDIS_CLUSTER_ROLE"))
 
 	time.Sleep(time.Second * 5)
 
@@ -217,6 +214,7 @@ func (s *SimpleCluster) RegisterClusterMessageHandler(event string, crm einterfa
 }
 
 func (s *SimpleCluster) GetClusterId() string {
+
 	hostname, err := os.Hostname()
 
 	if err != nil {
@@ -227,11 +225,11 @@ func (s *SimpleCluster) GetClusterId() string {
 }
 
 func (s *SimpleCluster) IsLeader() bool {
+
 	return os.Getenv("MM_REDIS_CLUSTER_ROLE") == "master"
 }
 
 func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {
-	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) GetMyClusterInfo() *model.ClusterInfo {")
 
 	return s.clusterInfo
 }
@@ -247,7 +245,6 @@ func (s *SimpleCluster) GetClusterInfos() []*model.ClusterInfo {
 }
 
 func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
-	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {")
 
 	msg.Origin = s.clusterInfo.Id
 
@@ -273,7 +270,6 @@ func (s *SimpleCluster) GetPluginStatuses() (model.PluginStatuses, *model.AppErr
 }
 
 func (s *SimpleCluster) ConfigChanged(previousConfig *model.Config, newConfig *model.Config, sendToOtherServer bool) *model.AppError {
-	fmt.Println("------ app/simple_cluster.go:: func (s *SimpleCluster) ConfigChanged(previousConfig *model.Config, newConfig *model.Config, sendToOtherServer bool) *model.AppError {")
 
 	message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CONFIG_CHANGED, "", "", "", nil)
 

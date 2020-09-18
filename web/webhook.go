@@ -5,6 +5,7 @@ package web
 
 import (
 	"io"
+	"mime"
 	"net/http"
 	"strings"
 
@@ -27,8 +28,23 @@ func incomingWebhook(c *Context, w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	var err *model.AppError
+	var mediaType string
 	incomingWebhookPayload := &model.IncomingWebhookRequest{}
 	contentType := r.Header.Get("Content-Type")
+	// Content-Type header is optional so could be empty
+	if contentType != "" {
+		var mimeErr error
+		mediaType, _, mimeErr = mime.ParseMediaType(contentType)
+		if mimeErr != nil && mimeErr != mime.ErrInvalidMediaParameter {
+			c.Err = model.NewAppError("incomingWebhook",
+				"api.webhook.incoming.error",
+				nil,
+				"webhook_id="+id+", error: "+mimeErr.Error(),
+				http.StatusBadRequest,
+			)
+			return
+		}
+	}
 
 	defer func() {
 		if *c.App.Config().LogSettings.EnableWebhookDebugging {
@@ -38,7 +54,7 @@ func incomingWebhook(c *Context, w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	if strings.Split(contentType, "; ")[0] == "application/x-www-form-urlencoded" {
+	if mediaType == "application/x-www-form-urlencoded" {
 		payload := strings.NewReader(r.FormValue("payload"))
 
 		incomingWebhookPayload, err = decodePayload(payload)
@@ -46,14 +62,19 @@ func incomingWebhook(c *Context, w http.ResponseWriter, r *http.Request) {
 			c.Err = err
 			return
 		}
-	} else if strings.HasPrefix(contentType, "multipart/form-data") {
+	} else if mediaType == "multipart/form-data" {
 		r.ParseMultipartForm(0)
 
 		decoder := schema.NewDecoder()
 		err := decoder.Decode(incomingWebhookPayload, r.PostForm)
 
 		if err != nil {
-			c.Err = model.NewAppError("incomingWebhook", "api.webhook.incoming.error", nil, err.Error(), http.StatusBadRequest)
+			c.Err = model.NewAppError("incomingWebhook",
+				"api.webhook.incoming.error",
+				nil,
+				"webhook_id="+id+", error: "+err.Error(),
+				http.StatusBadRequest,
+			)
 			return
 		}
 	} else {

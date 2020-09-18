@@ -18,7 +18,11 @@ import (
 )
 
 const (
-	CURRENT_SCHEMA_VERSION   = VERSION_5_20_0
+	CURRENT_SCHEMA_VERSION   = VERSION_5_24_0
+	VERSION_5_24_0           = "5.24.0"
+	VERSION_5_23_0           = "5.23.0"
+	VERSION_5_22_0           = "5.22.0"
+	VERSION_5_21_0           = "5.21.0"
 	VERSION_5_20_0           = "5.20.0"
 	VERSION_5_19_0           = "5.19.0"
 	VERSION_5_18_0           = "5.18.0"
@@ -171,7 +175,10 @@ func upgradeDatabase(sqlStore SqlStore, currentModelVersionString string) error 
 	upgradeDatabaseToVersion518(sqlStore)
 	upgradeDatabaseToVersion519(sqlStore)
 	upgradeDatabaseToVersion520(sqlStore)
-
+	upgradeDatabaseToVersion521(sqlStore)
+	upgradeDatabaseToVersion522(sqlStore)
+	upgradeDatabaseToVersion523(sqlStore)
+	upgradeDatabaseToVersion524(sqlStore)
 	return nil
 }
 
@@ -750,7 +757,6 @@ func upgradeDatabaseToVersion519(sqlStore SqlStore) {
 
 func upgradeDatabaseToVersion520(sqlStore SqlStore) {
 	if shouldPerformUpgrade(sqlStore, VERSION_5_19_0, VERSION_5_20_0) {
-
 		sqlStore.CreateColumnIfNotExistsNoDefault("Bots", "LastIconUpdate", "bigint", "bigint")
 
 		sqlStore.CreateColumnIfNotExists("GroupTeams", "SchemeAdmin", "boolean", "boolean", "0")
@@ -760,5 +766,40 @@ func upgradeDatabaseToVersion520(sqlStore SqlStore) {
 		sqlStore.CreateIndexIfNotExists("idx_groupchannels_schemeadmin", "GroupChannels", "SchemeAdmin")
 
 		saveSchemaVersion(sqlStore, VERSION_5_20_0)
+	}
+}
+
+func upgradeDatabaseToVersion521(sqlStore SqlStore) {
+	if shouldPerformUpgrade(sqlStore, VERSION_5_20_0, VERSION_5_21_0) {
+		saveSchemaVersion(sqlStore, VERSION_5_21_0)
+	}
+}
+
+func upgradeDatabaseToVersion522(sqlStore SqlStore) {
+	if shouldPerformUpgrade(sqlStore, VERSION_5_21_0, VERSION_5_22_0) {
+		sqlStore.CreateIndexIfNotExists("idx_teams_scheme_id", "Teams", "SchemeId")
+		sqlStore.CreateIndexIfNotExists("idx_channels_scheme_id", "Channels", "SchemeId")
+		sqlStore.CreateIndexIfNotExists("idx_channels_scheme_id", "Channels", "SchemeId")
+		sqlStore.CreateIndexIfNotExists("idx_schemes_channel_guest_role", "Schemes", "DefaultChannelGuestRole")
+		sqlStore.CreateIndexIfNotExists("idx_schemes_channel_user_role", "Schemes", "DefaultChannelUserRole")
+		sqlStore.CreateIndexIfNotExists("idx_schemes_channel_admin_role", "Schemes", "DefaultChannelAdminRole")
+
+		saveSchemaVersion(sqlStore, VERSION_5_22_0)
+	}
+}
+
+func upgradeDatabaseToVersion523(sqlStore SqlStore) {
+	if shouldPerformUpgrade(sqlStore, VERSION_5_22_0, VERSION_5_23_0) {
+		saveSchemaVersion(sqlStore, VERSION_5_23_0)
+	}
+}
+
+func upgradeDatabaseToVersion524(sqlStore SqlStore) {
+	if shouldPerformUpgrade(sqlStore, VERSION_5_23_0, VERSION_5_24_0) {
+		sqlStore.CreateColumnIfNotExists("UserGroups", "AllowReference", "boolean", "boolean", "0")
+		sqlStore.GetMaster().Exec("UPDATE UserGroups SET Name = null, AllowReference = false")
+		sqlStore.AlterPrimaryKey("Reactions", []string{"PostId", "UserId", "EmojiName"})
+
+		saveSchemaVersion(sqlStore, VERSION_5_24_0)
 	}
 }

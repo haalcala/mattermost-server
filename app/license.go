@@ -4,6 +4,7 @@
 package app
 
 import (
+	"bytes"
 	"net/http"
 	"strings"
 
@@ -12,16 +13,16 @@ import (
 	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
-func (a *App) LoadLicense() {
-	a.SetLicense(nil)
+const requestTrialURL = "https://customers.mattermost.com/api/v1/trials"
 
+func (a *App) LoadLicense() {
 	licenseId := ""
 	props, err := a.Srv().Store.System().Get()
 	if err == nil {
 		licenseId = props[model.SYSTEM_ACTIVE_LICENSE_ID]
 	}
 
-	if len(licenseId) != 26 {
+	if !model.IsValidId(licenseId) {
 		// Lets attempt to load the file from disk since it was missing from the DB
 		license, licenseBytes := utils.GetAndValidateLicenseFileFromDisk(*a.Config().ServiceSettings.LicenseFileLocation)
 
@@ -37,6 +38,7 @@ func (a *App) LoadLicense() {
 	record, err := a.Srv().Store.License().Get(licenseId)
 	if err != nil {
 		mlog.Info("License key from https://mattermost.com required to unlock enterprise features.")
+		a.SetLicense(nil)
 		return
 	}
 
@@ -108,9 +110,15 @@ func (a *App) License() *model.License {
 }
 
 func (a *App) SetLicense(license *model.License) bool {
+	oldLicense := a.Srv().licenseValue.Load()
+
 	defer func() {
 		for _, listener := range a.Srv().licenseListeners {
-			listener()
+			if oldLicense == nil {
+				listener(nil, license)
+			} else {
+				listener(oldLicense.(*model.License), license)
+			}
 		}
 	}()
 
@@ -153,6 +161,8 @@ func (a *App) RemoveLicense() *model.AppError {
 		return nil
 	}
 
+	mlog.Info("Remove license.", mlog.String("id", model.SYSTEM_ACTIVE_LICENSE_ID))
+
 	sysVar := &model.System{}
 	sysVar.Name = model.SYSTEM_ACTIVE_LICENSE_ID
 	sysVar.Value = ""
@@ -169,13 +179,13 @@ func (a *App) RemoveLicense() *model.AppError {
 	return nil
 }
 
-func (s *Server) AddLicenseListener(listener func()) string {
+func (s *Server) AddLicenseListener(listener func(oldLicense, newLicense *model.License)) string {
 	id := model.NewId()
 	s.licenseListeners[id] = listener
 	return id
 }
 
-func (a *App) AddLicenseListener(listener func()) string {
+func (a *App) AddLicenseListener(listener func(oldLicense, newLicense *model.License)) string {
 	id := model.NewId()
 	a.Srv().licenseListeners[id] = listener
 	return id
@@ -199,7 +209,6 @@ func (a *App) GetSanitizedClientLicense() map[string]string {
 	delete(sanitizedLicense, "Id")
 	delete(sanitizedLicense, "Name")
 	delete(sanitizedLicense, "Email")
-	delete(sanitizedLicense, "PhoneNumber")
 	delete(sanitizedLicense, "IssuedAt")
 	delete(sanitizedLicense, "StartsAt")
 	delete(sanitizedLicense, "ExpiresAt")
@@ -207,4 +216,23 @@ func (a *App) GetSanitizedClientLicense() map[string]string {
 	delete(sanitizedLicense, "SkuShortName")
 
 	return sanitizedLicense
+}
+
+// RequestTrialLicense request a trial license from the mattermost offical license server
+func (a *App) RequestTrialLicense(trialRequest *model.TrialLicenseRequest) *model.AppError {
+	resp, err := http.Post(requestTrialURL, "application/json", bytes.NewBuffer([]byte(trialRequest.ToJson())))
+	if err != nil {
+		return model.NewAppError("RequestTrialLicense", "api.license.request_trial_license.app_error", nil, err.Error(), http.StatusBadRequest)
+	}
+	defer resp.Body.Close()
+	licenseResponse := model.MapFromJson(resp.Body)
+
+	if _, err := a.SaveLicense([]byte(licenseResponse["license"])); err != nil {
+		return err
+	}
+
+	a.ReloadConfig()
+	a.InvalidateAllCaches()
+
+	return nil
 }

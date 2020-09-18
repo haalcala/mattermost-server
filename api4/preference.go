@@ -4,12 +4,15 @@
 package api4
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/mattermost/mattermost-server/v5/audit"
 	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 func (api *API) InitPreference() {
+	fmt.Println("------ api4/preference.go:: func (api *API) InitPreference() {")
 	api.BaseRoutes.Preferences.Handle("", api.ApiSessionRequired(getPreferences)).Methods("GET")
 	api.BaseRoutes.Preferences.Handle("", api.ApiSessionRequired(updatePreferences)).Methods("PUT")
 	api.BaseRoutes.Preferences.Handle("/delete", api.ApiSessionRequired(deletePreferences)).Methods("POST")
@@ -18,6 +21,7 @@ func (api *API) InitPreference() {
 }
 
 func getPreferences(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/preference.go:: func getPreferences(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
@@ -38,6 +42,7 @@ func getPreferences(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getPreferencesByCategory(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/preference.go:: func getPreferencesByCategory(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId().RequireCategory()
 	if c.Err != nil {
 		return
@@ -58,6 +63,7 @@ func getPreferencesByCategory(c *Context, w http.ResponseWriter, r *http.Request
 }
 
 func getPreferenceByCategoryAndName(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/preference.go:: func getPreferenceByCategoryAndName(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId().RequireCategory().RequirePreferenceName()
 	if c.Err != nil {
 		return
@@ -78,10 +84,14 @@ func getPreferenceByCategoryAndName(c *Context, w http.ResponseWriter, r *http.R
 }
 
 func updatePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/preference.go:: func updatePreferences(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("updatePreferences", audit.Fail)
+	defer c.LogAuditRec(auditRec)
 
 	if !c.App.SessionHasPermissionToUser(*c.App.Session(), c.Params.UserId) {
 		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
@@ -118,14 +128,19 @@ func updatePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec.Success()
 	ReturnStatusOK(w)
 }
 
 func deletePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/preference.go:: func deletePreferences(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequireUserId()
 	if c.Err != nil {
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("deletePreferences", audit.Fail)
+	defer c.LogAuditRec(auditRec)
 
 	if !c.App.SessionHasPermissionToUser(*c.App.Session(), c.Params.UserId) {
 		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
@@ -143,5 +158,6 @@ func deletePreferences(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec.Success()
 	ReturnStatusOK(w)
 }

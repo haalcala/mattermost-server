@@ -8,11 +8,13 @@ package api4
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"strconv"
 
+	"github.com/mattermost/mattermost-server/v5/audit"
 	"github.com/mattermost/mattermost-server/v5/mlog"
 	"github.com/mattermost/mattermost-server/v5/model"
 )
@@ -22,6 +24,7 @@ const (
 )
 
 func (api *API) InitPlugin() {
+	fmt.Println("------ api4/plugin.go:: func (api *API) InitPlugin() {")
 	mlog.Debug("EXPERIMENTAL: Initializing plugin api")
 
 	api.BaseRoutes.Plugins.Handle("", api.ApiSessionRequired(uploadPlugin)).Methods("POST")
@@ -40,11 +43,15 @@ func (api *API) InitPlugin() {
 }
 
 func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	config := c.App.Config()
 	if !*config.PluginSettings.Enable || !*config.PluginSettings.EnableUploads || *config.PluginSettings.RequirePluginSignature {
 		c.Err = model.NewAppError("uploadPlugin", "app.plugin.upload_disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("uploadPlugin", audit.Fail)
+	defer c.LogAuditRec(auditRec)
 
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
@@ -68,6 +75,9 @@ func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.Err = model.NewAppError("uploadPlugin", "api.plugin.upload.array.app_error", nil, "", http.StatusBadRequest)
 		return
 	}
+	auditRec.AddMeta("filename", pluginArray[0].Filename)
+
+	fmt.Println("------ api4/plugin.go:: uploadPlugin:: pluginArray:", pluginArray)
 
 	file, err := pluginArray[0].Open()
 	if err != nil {
@@ -82,15 +92,20 @@ func uploadPlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	installPlugin(c, w, file, force)
+	auditRec.Success()
 }
 
 func installPluginFromUrl(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func installPluginFromUrl(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable ||
 		*c.App.Config().PluginSettings.RequirePluginSignature ||
 		!*c.App.Config().PluginSettings.EnableUploads {
 		c.Err = model.NewAppError("installPluginFromUrl", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("installPluginFromUrl", audit.Fail)
+	defer c.LogAuditRec(auditRec)
 
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
@@ -99,6 +114,7 @@ func installPluginFromUrl(c *Context, w http.ResponseWriter, r *http.Request) {
 
 	force := r.URL.Query().Get("force") == "true"
 	downloadURL := r.URL.Query().Get("plugin_download_url")
+	auditRec.AddMeta("url", downloadURL)
 
 	pluginFileBytes, err := c.App.DownloadFromURL(downloadURL)
 	if err != nil {
@@ -107,9 +123,11 @@ func installPluginFromUrl(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	installPlugin(c, w, bytes.NewReader(pluginFileBytes), force)
+	auditRec.Success()
 }
 
 func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("installMarketplacePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -119,6 +137,9 @@ func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request
 		c.Err = model.NewAppError("installMarketplacePlugin", "app.plugin.marketplace_disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("installMarketplacePlugin", audit.Fail)
+	defer c.LogAuditRec(auditRec)
 
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
@@ -130,6 +151,7 @@ func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request
 		c.Err = model.NewAppError("installMarketplacePlugin", "app.plugin.marketplace_plugin_request.app_error", nil, err.Error(), http.StatusNotImplemented)
 		return
 	}
+	auditRec.AddMeta("plugin_id", pluginRequest.Id)
 
 	manifest, appErr := c.App.InstallMarketplacePlugin(pluginRequest)
 	if appErr != nil {
@@ -137,11 +159,16 @@ func installMarketplacePlugin(c *Context, w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	auditRec.Success()
+	auditRec.AddMeta("plugin_name", manifest.Name)
+	auditRec.AddMeta("plugin_desc", manifest.Description)
+
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(manifest.ToJson()))
 }
 
 func getPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getPlugins(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getPlugins", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -162,6 +189,7 @@ func getPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getPluginStatuses(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getPluginStatuses(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getPluginStatuses", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -182,6 +210,7 @@ func getPluginStatuses(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func removePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func removePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequirePluginId()
 	if c.Err != nil {
 		return
@@ -191,6 +220,10 @@ func removePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.Err = model.NewAppError("removePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("removePlugin", audit.Fail)
+	defer c.LogAuditRec(auditRec)
+	auditRec.AddMeta("plugin_id", c.Params.PluginId)
 
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
@@ -203,10 +236,12 @@ func removePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec.Success()
 	ReturnStatusOK(w)
 }
 
 func getWebappPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getWebappPlugins(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getWebappPlugins", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -233,6 +268,7 @@ func getWebappPlugins(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getMarketplacePlugins(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func getMarketplacePlugins(c *Context, w http.ResponseWriter, r *http.Request) {")
 	if !*c.App.Config().PluginSettings.Enable {
 		c.Err = model.NewAppError("getMarketplacePlugins", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
@@ -270,6 +306,7 @@ func getMarketplacePlugins(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func enablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func enablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequirePluginId()
 	if c.Err != nil {
 		return
@@ -279,6 +316,10 @@ func enablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.Err = model.NewAppError("activatePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("enablePlugin", audit.Fail)
+	defer c.LogAuditRec(auditRec)
+	auditRec.AddMeta("plugin_id", c.Params.PluginId)
 
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
@@ -290,10 +331,12 @@ func enablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec.Success()
 	ReturnStatusOK(w)
 }
 
 func disablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ api4/plugin.go:: func disablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {")
 	c.RequirePluginId()
 	if c.Err != nil {
 		return
@@ -303,6 +346,10 @@ func disablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.Err = model.NewAppError("deactivatePlugin", "app.plugin.disabled.app_error", nil, "", http.StatusNotImplemented)
 		return
 	}
+
+	auditRec := c.MakeAuditRecord("disablePlugin", audit.Fail)
+	defer c.LogAuditRec(auditRec)
+	auditRec.AddMeta("plugin_id", c.Params.PluginId)
 
 	if !c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		c.SetPermissionError(model.PERMISSION_MANAGE_SYSTEM)
@@ -314,10 +361,12 @@ func disablePlugin(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	auditRec.Success()
 	ReturnStatusOK(w)
 }
 
 func parseMarketplacePluginFilter(u *url.URL) (*model.MarketplacePluginFilter, error) {
+	fmt.Println("------ api4/plugin.go:: func parseMarketplacePluginFilter(u *url.URL) (*model.MarketplacePluginFilter, error) {")
 	page, err := parseInt(u, "page", 0)
 	if err != nil {
 		return nil, err
@@ -345,6 +394,7 @@ func parseMarketplacePluginFilter(u *url.URL) (*model.MarketplacePluginFilter, e
 }
 
 func installPlugin(c *Context, w http.ResponseWriter, plugin io.ReadSeeker, force bool) {
+	fmt.Println("------ api4/plugin.go:: func installPlugin(c *Context, w http.ResponseWriter, plugin io.ReadSeeker, force bool) {")
 	manifest, appErr := c.App.InstallPlugin(plugin, force)
 	if appErr != nil {
 		c.Err = appErr

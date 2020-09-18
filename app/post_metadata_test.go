@@ -307,10 +307,10 @@ func TestPreparePostForClient(t *testing.T) {
 		t.Run("does not override icon URL", func(t *testing.T) {
 			clientPost := prepare(false, url, emoji)
 
-			s, ok := clientPost.Props[model.POST_PROPS_OVERRIDE_ICON_URL]
+			s, ok := clientPost.GetProps()[model.POST_PROPS_OVERRIDE_ICON_URL]
 			assert.True(t, ok)
 			assert.EqualValues(t, url, s)
-			s, ok = clientPost.Props[model.POST_PROPS_OVERRIDE_ICON_EMOJI]
+			s, ok = clientPost.GetProps()[model.POST_PROPS_OVERRIDE_ICON_EMOJI]
 			assert.True(t, ok)
 			assert.EqualValues(t, emoji, s)
 		})
@@ -318,10 +318,10 @@ func TestPreparePostForClient(t *testing.T) {
 		t.Run("overrides icon URL", func(t *testing.T) {
 			clientPost := prepare(true, url, emoji)
 
-			s, ok := clientPost.Props[model.POST_PROPS_OVERRIDE_ICON_URL]
+			s, ok := clientPost.GetProps()[model.POST_PROPS_OVERRIDE_ICON_URL]
 			assert.True(t, ok)
 			assert.EqualValues(t, overridenUrl, s)
-			s, ok = clientPost.Props[model.POST_PROPS_OVERRIDE_ICON_EMOJI]
+			s, ok = clientPost.GetProps()[model.POST_PROPS_OVERRIDE_ICON_EMOJI]
 			assert.True(t, ok)
 			assert.EqualValues(t, emoji, s)
 		})
@@ -508,6 +508,7 @@ func TestPreparePostForClient(t *testing.T) {
 		clientPost := th.App.PreparePostForClient(post, false, false)
 
 		assert.NotEqual(t, nil, clientPost.Metadata, "should've populated Metadata“")
+		assert.Equal(t, "", clientPost.Message, "should've cleaned post content")
 		assert.Nil(t, clientPost.Metadata.Reactions, "should not have populated Reactions")
 		assert.Nil(t, clientPost.Metadata.Files, "should not have populated Files")
 	})

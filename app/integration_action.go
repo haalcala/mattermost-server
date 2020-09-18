@@ -138,14 +138,14 @@ func (a *App) DoPostActionWithCookie(postId, actionId, userId, selectedOption st
 		// Save the original values that may need to be preserved (including selected
 		// Props, i.e. override_username, override_icon_url)
 		for _, key := range model.PostActionRetainPropKeys {
-			value, ok := post.Props[key]
+			value, ok := post.GetProps()[key]
 			if ok {
 				retain[key] = value
 			} else {
 				remove = append(remove, key)
 			}
 		}
-		originalProps = post.Props
+		originalProps = post.GetProps()
 		originalIsPinned = post.IsPinned
 		originalHasReactions = post.HasReactions
 
@@ -219,14 +219,14 @@ func (a *App) DoPostActionWithCookie(postId, actionId, userId, selectedOption st
 		response.Update.Id = postId
 
 		// Restore the post attributes and Props that need to be preserved
-		if response.Update.Props == nil {
-			response.Update.Props = originalProps
+		if response.Update.GetProps() == nil {
+			response.Update.SetProps(originalProps)
 		} else {
 			for key, value := range retain {
 				response.Update.AddProp(key, value)
 			}
 			for _, key := range remove {
-				delete(response.Update.Props, key)
+				response.Update.DelProp(key)
 			}
 		}
 		response.Update.IsPinned = originalIsPinned
@@ -239,11 +239,16 @@ func (a *App) DoPostActionWithCookie(postId, actionId, userId, selectedOption st
 
 	if response.EphemeralText != "" {
 		ephemeralPost := &model.Post{
-			Message:   model.ParseSlackLinksToMarkdown(response.EphemeralText),
+			Message:   response.EphemeralText,
 			ChannelId: upstreamRequest.ChannelId,
 			RootId:    rootPostId,
 			UserId:    userId,
 		}
+
+		if !response.SkipSlackParsing {
+			ephemeralPost.Message = model.ParseSlackLinksToMarkdown(response.EphemeralText)
+		}
+
 		for key, value := range retain {
 			ephemeralPost.AddProp(key, value)
 		}
@@ -320,33 +325,41 @@ func (w *LocalResponseWriter) WriteHeader(statusCode int) {
 	w.status = statusCode
 }
 
-func (a *App) DoLocalRequest(rawURL string, body []byte) (*http.Response, *model.AppError) {
+func (a *App) doPluginRequest(method, rawURL string, values url.Values, body []byte) (*http.Response, *model.AppError) {
 	rawURL = strings.TrimPrefix(rawURL, "/")
 	inURL, err := url.Parse(rawURL)
 	if err != nil {
-		return nil, model.NewAppError("DoActionRequest", "api.post.do_action.action_integration.app_error", nil, "err="+err.Error(), http.StatusBadRequest)
+		return nil, model.NewAppError("doPluginRequest", "api.post.do_action.action_integration.app_error", nil, "err="+err.Error(), http.StatusBadRequest)
 	}
 	result := strings.Split(inURL.Path, "/")
 	if len(result) < 2 {
-		return nil, model.NewAppError("DoActionRequest", "api.post.do_action.action_integration.app_error", nil, "err=Unable to find pluginId", http.StatusBadRequest)
+		return nil, model.NewAppError("doPluginRequest", "api.post.do_action.action_integration.app_error", nil, "err=Unable to find pluginId", http.StatusBadRequest)
 	}
 	if result[0] != "plugins" {
-		return nil, model.NewAppError("DoActionRequest", "api.post.do_action.action_integration.app_error", nil, "err=plugins not in path", http.StatusBadRequest)
+		return nil, model.NewAppError("doPluginRequest", "api.post.do_action.action_integration.app_error", nil, "err=plugins not in path", http.StatusBadRequest)
 	}
 	pluginId := result[1]
 
 	path := strings.TrimPrefix(inURL.Path, "plugins/"+pluginId)
 
-	w := &LocalResponseWriter{}
-	r, err := http.NewRequest("POST", path, bytes.NewReader(body))
+	base, err := url.Parse(path)
 	if err != nil {
-		return nil, model.NewAppError("DoActionRequest", "api.post.do_action.action_integration.app_error", nil, "err="+err.Error(), http.StatusBadRequest)
+		return nil, model.NewAppError("doPluginRequest", "api.post.do_action.action_integration.app_error", nil, "err="+err.Error(), http.StatusBadRequest)
+	}
+	if values != nil {
+		base.RawQuery = values.Encode()
+	}
+	w := &LocalResponseWriter{}
+	r, err := http.NewRequest(method, base.String(), bytes.NewReader(body))
+	if err != nil {
+		return nil, model.NewAppError("doPluginRequest", "api.post.do_action.action_integration.app_error", nil, "err="+err.Error(), http.StatusBadRequest)
 	}
 	r.Header.Set("Mattermost-User-Id", a.Session().UserId)
 	r.Header.Set(model.HEADER_AUTH, "Bearer "+a.Session().Token)
 	params := make(map[string]string)
 	params["plugin_id"] = pluginId
 	r = mux.SetURLVars(r, params)
+	r.URL.RawQuery = inURL.Query().Encode()
 
 	a.ServePluginRequest(w, r)
 
@@ -363,6 +376,10 @@ func (a *App) DoLocalRequest(rawURL string, body []byte) (*http.Response, *model
 	}
 
 	return resp, nil
+}
+
+func (a *App) DoLocalRequest(rawURL string, body []byte) (*http.Response, *model.AppError) {
+	return a.doPluginRequest("POST", rawURL, nil, body)
 }
 
 func (a *App) OpenInteractiveDialog(request model.OpenDialogRequest) *model.AppError {

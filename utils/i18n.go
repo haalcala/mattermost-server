@@ -44,15 +44,21 @@ func InitTranslations(localizationSettings model.LocalizationSettings) error {
 }
 
 func InitTranslationsWithDir(dir string) error {
-	i18nDirectory, found := fileutils.FindDir(dir)
+	fmt.Println("---------- InitTranslationsWithDir dir:", dir)
+
+	i18nDirectory, found := fileutils.FindDirRelBinary(dir)
+
 	if !found {
 		return fmt.Errorf("Unable to find i18n directory")
 	}
 
 	files, _ := ioutil.ReadDir(i18nDirectory)
+
 	for _, f := range files {
+		fmt.Println("----- f:", f)
 		if filepath.Ext(f.Name()) == ".json" {
 			filename := f.Name()
+
 			locales[strings.Split(filename, ".")[0]] = filepath.Join(i18nDirectory, filename)
 
 			if err := i18n.LoadTranslationFile(filepath.Join(i18nDirectory, filename)); err != nil {

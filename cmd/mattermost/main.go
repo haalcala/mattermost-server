@@ -4,7 +4,9 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"time"
 
 	"github.com/mattermost/mattermost-server/v5/cmd/mattermost/commands"
 
@@ -28,7 +30,16 @@ import (
 )
 
 func main() {
-	if err := commands.Run(os.Args[1:]); err != nil {
+	timestamp := time.Now()
+
+	workdir, err := os.Getwd()
+
+	fmt.Println("------------------  cmd.mattermost.commands.main.go:: 1111 os.Args", os.Args, "timestamp:", timestamp, "os.Environ():", os.Environ(), "os.Getwd():", workdir, err)
+	if err = commands.Run(os.Args[1:]); err != nil {
+		fmt.Println("------------------  cmd.mattermost.commands.main.go:: 2222 os.Args", os.Args, "timestamp:", timestamp, time.Now().Sub(timestamp))
+
 		os.Exit(1)
 	}
+
+	fmt.Println("------------------  cmd.mattermost.commands.main.go:: 3333 os.Args", os.Args, "timestamp:", timestamp, time.Now().Sub(timestamp))
 }
