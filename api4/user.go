@@ -747,6 +747,9 @@ func getKnownUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("------  api4/user.go:: func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {")
 	props := model.UserSearchFromJson(r.Body)
+
+	fmt.Println("props:", props)
+
 	if props == nil {
 		c.SetInvalidParam("")
 		return
@@ -757,30 +760,42 @@ func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("------  api4/user.go:: func searchUsers 1111")
+
 	if props.TeamId == "" && props.NotInChannelId != "" {
 		c.SetInvalidParam("team_id")
 		return
 	}
+
+	fmt.Println("------  api4/user.go:: func searchUsers 2222")
 
 	if props.InChannelId != "" && !c.App.SessionHasPermissionToChannel(*c.App.Session(), props.InChannelId, model.PERMISSION_READ_CHANNEL) {
 		c.SetPermissionError(model.PERMISSION_READ_CHANNEL)
 		return
 	}
 
+	fmt.Println("------  api4/user.go:: func searchUsers 3333")
+
 	if props.NotInChannelId != "" && !c.App.SessionHasPermissionToChannel(*c.App.Session(), props.NotInChannelId, model.PERMISSION_READ_CHANNEL) {
 		c.SetPermissionError(model.PERMISSION_READ_CHANNEL)
 		return
 	}
+
+	fmt.Println("------  api4/user.go:: func searchUsers 4444")
 
 	if props.TeamId != "" && !c.App.SessionHasPermissionToTeam(*c.App.Session(), props.TeamId, model.PERMISSION_VIEW_TEAM) {
 		c.SetPermissionError(model.PERMISSION_VIEW_TEAM)
 		return
 	}
 
+	fmt.Println("------  api4/user.go:: func searchUsers 5555")
+
 	if props.NotInTeamId != "" && !c.App.SessionHasPermissionToTeam(*c.App.Session(), props.NotInTeamId, model.PERMISSION_VIEW_TEAM) {
 		c.SetPermissionError(model.PERMISSION_VIEW_TEAM)
 		return
 	}
+
+	fmt.Println("------  api4/user.go:: func searchUsers 6666")
 
 	if props.Limit <= 0 || props.Limit > model.USER_SEARCH_MAX_LIMIT {
 		c.SetInvalidParam("limit")
@@ -794,6 +809,8 @@ func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 		Limit:            props.Limit,
 		Role:             props.Role,
 	}
+
+	fmt.Println("------  api4/user.go:: func searchUsers 7777")
 
 	if c.App.SessionHasPermissionTo(*c.App.Session(), model.PERMISSION_MANAGE_SYSTEM) {
 		options.AllowEmails = true
@@ -814,6 +831,8 @@ func searchUsers(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.Err = err
 		return
 	}
+
+	fmt.Println("------  api4/user.go:: func searchUsers 8888: model.UserListToJson(profiles)", model.UserListToJson(profiles))
 
 	w.Write([]byte(model.UserListToJson(profiles)))
 }
