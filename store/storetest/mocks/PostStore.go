@@ -287,6 +287,27 @@ func (_m *PostStore) GetOldestEntityCreationTime() (int64, error) {
 	return r0, r1
 }
 
+// GetUserReadTimes provides a mock function with given fields:
+func (_m *PostStore) GetUserReadTimes(channelId string, allowFromCache bool) ([]*model.ChannelUserUnread, error) {
+	ret := _m.Called()
+
+	var r0 []*model.ChannelUserUnread
+	if rf, ok := ret.Get(0).(func() []*model.ChannelUserUnread); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).([]*model.ChannelUserUnread)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetParentsForExportAfter provides a mock function with given fields: limit, afterId
 func (_m *PostStore) GetParentsForExportAfter(limit int, afterId string) ([]*model.PostForExport, error) {
 	ret := _m.Called(limit, afterId)

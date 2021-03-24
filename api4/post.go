@@ -205,9 +205,7 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var list2 []*model.ChannelUserUnread
-
-	list2, err = c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
+	list2, err := c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
 	if err != nil {
 		c.Err = err
 		return
