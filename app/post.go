@@ -718,7 +718,7 @@ func (a *App) GetPosts(channelId string, offset int, limit int) (*model.PostList
 	return postList, nil
 }
 
-func (a *App) GetUserReadTimes(options model.GetPostsOptions) ([]*model.ChannelUserUnread, *model.AppError) {
+func (a *App) GetUserReadTimes(options model.GetPostsOptions) ([]*model.ChannelUserUnread, error) {
 	return a.Srv().Store.Post().GetUserReadTimes(options.ChannelId, false)
 }
 
