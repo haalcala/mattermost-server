@@ -205,11 +205,20 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var list2 []*model.ChannelUserUnread
+
+	list2, err = c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
+	if err != nil {
+		c.Err = err
+		return
+	}
+
 	if len(etag) > 0 {
 		w.Header().Set(model.HEADER_ETAG_SERVER, etag)
 	}
 
 	c.App.AddCursorIdsForPostList(list, afterPost, beforePost, since, page, perPage)
+	list.ReadStatuses = list2
 	clientPostList := c.App.PreparePostListForClient(list)
 
 	w.Write([]byte(clientPostList.ToJson()))
