@@ -36,7 +36,7 @@ const (
 )
 
 type CustomSamlAdapter struct {
-	app        *App
+	app        AppIface
 	Middleware *samlsp.Middleware
 	randomId   int64
 }
@@ -45,7 +45,7 @@ func init() {
 	fmt.Println("------ app/CustomSamlAdapter.go:: init()")
 
 	RegisterNewSamlInterface(func(app *App) einterfaces.SamlInterface {
-		provider := app.NewCustomSamlAdapter()
+		provider := NewCustomSamlAdapter(app)
 
 		provider.ConfigureSP()
 
@@ -240,12 +240,12 @@ func (m *CustomSamlAdapter) DoLogin(encodedXML string, relayState map[string]str
 
 	teamId := relayState["team_id"]
 
-	user, aerr := m.app.CompleteSaml(model.USER_AUTH_SERVICE_SAML, ioutil.NopCloser(bytes.NewReader([]byte(_user.ToJson()))), teamId, relayState)
+	user, aerr := m.CompleteSaml(model.USER_AUTH_SERVICE_SAML, ioutil.NopCloser(bytes.NewReader([]byte(_user.ToJson()))), teamId, relayState)
 
 	return user, aerr
 }
 
-func (a *App) CompleteSaml(service string, body io.ReadCloser, teamId string, props map[string]string) (*model.User, *model.AppError) {
+func (m *CustomSamlAdapter) CompleteSaml(service string, body io.ReadCloser, teamId string, props map[string]string) (*model.User, *model.AppError) {
 	fmt.Println("------ app/custom_saml_adapter.so:: CompleteSaml(service string, body io.ReadCloser, teamId string, props map[string]string) (*model.User, *model.AppError)")
 
 	defer body.Close()
@@ -254,15 +254,15 @@ func (a *App) CompleteSaml(service string, body io.ReadCloser, teamId string, pr
 
 	switch action {
 	case SAML_ACTION_SIGNUP:
-		return a.CreateOAuthUser(service, body, teamId)
+		return m.app.CreateOAuthUser(service, body, teamId)
 	case SAML_ACTION_LOGIN:
-		return a.LoginByOAuth(service, body, teamId)
+		return m.app.LoginByOAuth(service, body, teamId)
 	case SAML_ACTION_EMAIL_TO_SSO:
-		return a.CompleteSwitchWithOAuth(service, body, props["email"])
+		return m.app.CompleteSwitchWithOAuth(service, body, props["email"])
 	case SAML_ACTION_SSO_TO_EMAIL:
-		return a.LoginByOAuth(service, body, teamId)
+		return m.app.LoginByOAuth(service, body, teamId)
 	default:
-		return a.LoginByOAuth(service, body, teamId)
+		return m.app.LoginByOAuth(service, body, teamId)
 	}
 }
 
@@ -276,7 +276,7 @@ func (m *CustomSamlAdapter) GetUserFromAssertion(encodedXML string) (*model.User
 	return nil, nil
 }
 
-func (a *App) NewCustomSamlAdapter() *CustomSamlAdapter {
+func NewCustomSamlAdapter(app AppIface) *CustomSamlAdapter {
 	fmt.Println("------ app/CustomSamlAdapter.go:: func (a *App) NewCustomSamlAdapter() (*CustomSamlAdapter, error) {")
 
 	lock.Lock()
@@ -284,7 +284,7 @@ func (a *App) NewCustomSamlAdapter() *CustomSamlAdapter {
 
 	if csaml == nil {
 		csaml = &CustomSamlAdapter{
-			app:      a,
+			app:      app,
 			randomId: time.Now().UnixNano(),
 		}
 	}
