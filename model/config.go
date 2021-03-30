@@ -816,6 +816,7 @@ type ClusterSettings struct {
 	MaxIdleConns                       *int    `access:"environment,write_restrictable,cloud_restrictable"`
 	MaxIdleConnsPerHost                *int    `access:"environment,write_restrictable,cloud_restrictable"`
 	IdleConnTimeoutMilliseconds        *int    `access:"environment,write_restrictable,cloud_restrictable"`
+	ClusterDriver                      *string `access:"environment,write_restrictable,cloud_restrictable"`
 	ClusterRedisHost                   *string `access:"environment,write_restrictable,cloud_restrictable"`
 	ClusterRedisPort                   *string `access:"environment,write_restrictable,cloud_restrictable"`
 	ClusterRedisPass                   *string `access:"environment,write_restrictable,cloud_restrictable"`
@@ -881,6 +882,23 @@ func (s *ClusterSettings) SetDefaults() {
 	if s.IdleConnTimeoutMilliseconds == nil {
 		s.IdleConnTimeoutMilliseconds = NewInt(90000)
 	}
+
+	if s.ClusterDriver == nil {
+		s.ClusterDriver = NewString("")
+	}
+
+	if s.ClusterRedisHost == nil {
+		s.ClusterRedisHost = NewString("redis-svc")
+	}
+
+	if s.ClusterRedisPort == nil {
+		s.ClusterRedisPort = NewString("6379")
+	}
+
+	if s.ClusterRedisPass == nil {
+		s.ClusterRedisPass = NewString("")
+	}
+
 }
 
 type MetricsSettings struct {
