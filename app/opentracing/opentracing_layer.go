@@ -15961,3 +15961,6 @@ func (a *OpenTracingAppLayer) SetServer(srv *app.Server) {
 func (a *OpenTracingAppLayer) GetT() i18n.TranslateFunc {
 	return a.t
 }
+func (a *OpenTracingAppLayer) GetUserReadTimes(model.GetPostsOptions) ([]*model.ChannelUserUnread, *model.AppError) {
+	return []*model.ChannelUserUnread{}, nil
+}

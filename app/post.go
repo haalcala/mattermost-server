@@ -718,6 +718,16 @@ func (a *App) GetPosts(channelId string, offset int, limit int) (*model.PostList
 	return postList, nil
 }
 
+func (a *App) GetUserReadTimes(options model.GetPostsOptions) ([]*model.ChannelUserUnread, *model.AppError) {
+	ret, err := a.Srv().Store.Post().GetUserReadTimes(options.ChannelId, false)
+
+	if err != nil {
+		return nil, model.NewAppError("GetUserReadTimes", "app.post.get_user_read_times.app_error", nil, err.Error(), http.StatusInternalServerError)
+	}
+
+	return ret, nil
+}
+
 func (a *App) GetPostsEtag(channelId string) string {
 	return a.Srv().Store.Post().GetEtag(channelId, true)
 }
