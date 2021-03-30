@@ -22,6 +22,7 @@ type SamlAuthRequest struct {
 	Base64AuthRequest string
 	URL               string
 	RelayState        string
+	ID                string
 }
 
 type SamlCertificateStatus struct {
