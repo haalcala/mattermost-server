@@ -212,6 +212,10 @@ func (s *SimpleCluster) newClient() (*redis.Client, error) {
 
 	c := s.Server().Config()
 
+	if c.ClusterSettings.ClusterDriver != nil && *c.ClusterSettings.ClusterDriver == "" {
+		panic("Cluster driver must be set to 'redis' in order to use redis as the clustering back-end")
+	}
+
 	if c.ClusterSettings.ClusterRedisHost != nil {
 		redisHost = *c.ClusterSettings.ClusterRedisHost
 	}
@@ -223,6 +227,14 @@ func (s *SimpleCluster) newClient() (*redis.Client, error) {
 	}
 
 	fmt.Printf("redisHost: %v, redisPort: %v, redisPass: %v\n", redisHost, redisPort, redisPass)
+
+	if redisHost == "" {
+		panic("Cluster redis host config cannot be empty")
+	}
+
+	if redisHost == "" {
+		panic("Cluster redis port config cannot be empty")
+	}
 
 	return redis.NewClient(&redis.Options{
 		Addr:     redisHost + ":" + redisPort,
