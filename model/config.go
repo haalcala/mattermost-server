@@ -816,6 +816,9 @@ type ClusterSettings struct {
 	MaxIdleConns                       *int    `access:"environment,write_restrictable,cloud_restrictable"`
 	MaxIdleConnsPerHost                *int    `access:"environment,write_restrictable,cloud_restrictable"`
 	IdleConnTimeoutMilliseconds        *int    `access:"environment,write_restrictable,cloud_restrictable"`
+	ClusterRedisHost                   *string `access:"environment,write_restrictable,cloud_restrictable"`
+	ClusterRedisPort                   *string `access:"environment,write_restrictable,cloud_restrictable"`
+	ClusterRedisPass                   *string `access:"environment,write_restrictable,cloud_restrictable"`
 }
 
 func (s *ClusterSettings) SetDefaults() {
