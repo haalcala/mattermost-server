@@ -160,7 +160,7 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 	// s.RegisterClusterMessageHandler(model.CLUSTER_EVENT_CLUSTER_MESSAGE, s.handleClusterMessage)
 
-	s.server.Go(func() {
+	go func() {
 		// Consume messages.
 		for msg := range ch {
 			fmt.Println("<<<<<<======------ app/simple_cluster.go:: msg.Channel:", msg.Channel, "msg.Payload:", msg.Payload)
@@ -198,7 +198,7 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 				(*handler)(payload)
 			}
 		}
-	})
+	}()
 
 	return s
 }
@@ -260,6 +260,10 @@ func (s *SimpleCluster) GetClusterId() string {
 
 	if err != nil {
 		panic(err)
+	}
+
+	if s.Server().Config().ClusterSettings.OverrideHostname != nil && *s.Server().Config().ClusterSettings.OverrideHostname != "" {
+		hostname = *s.Server().Config().ClusterSettings.OverrideHostname
 	}
 
 	return hostname
