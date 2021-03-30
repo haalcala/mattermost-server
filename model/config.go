@@ -884,7 +884,7 @@ func (s *ClusterSettings) SetDefaults() {
 	}
 
 	if s.ClusterDriver == nil {
-		s.ClusterDriver = NewString("")
+		s.ClusterDriver = NewString(os.Getenv("MM_REDIS_CLUSTER_DRIVER"))
 	}
 
 	if s.ClusterRedisHost == nil {

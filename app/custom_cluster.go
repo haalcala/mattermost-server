@@ -208,11 +208,17 @@ func (s *SimpleCluster) Server() *Server {
 }
 
 func (s *SimpleCluster) newClient() (*redis.Client, error) {
-	redisHost, redisPort, redisPass := "", "", ""
+	redisHost, redisPort, redisPass, clusterDriver := "", "", "", ""
 
 	c := s.Server().Config()
 
-	if c.ClusterSettings.ClusterDriver != nil && *c.ClusterSettings.ClusterDriver == "" {
+	if c.ClusterSettings.ClusterDriver != nil {
+		clusterDriver = *c.ClusterSettings.ClusterDriver
+	}
+	if clusterDriver == "" {
+		clusterDriver = os.Getenv("MM_REDIS_CLUSTER_DRIVER")
+	}
+	if clusterDriver != "redis" {
 		panic("Cluster driver must be set to 'redis' in order to use redis as the clustering back-end")
 	}
 
