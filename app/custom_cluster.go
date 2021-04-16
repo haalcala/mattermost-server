@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"os"
@@ -11,7 +12,7 @@ import (
 	"github.com/mattermost/mattermost-server/v5/einterfaces"
 	"github.com/mattermost/mattermost-server/v5/model"
 
-	redis "github.com/go-redis/redis/v7"
+	redis "github.com/go-redis/redis/v8"
 )
 
 func init() {
@@ -138,7 +139,7 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 		panic(err)
 	}
 
-	pong, err := redisClient.Ping().Result()
+	pong, err := redisClient.Ping(context.TODO()).Result()
 
 	fmt.Println(pong, err)
 	// Output: PONG <nil>
@@ -147,9 +148,9 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 		panic(err)
 	}
 
-	pubsub := redisClient.Subscribe(s.clusterDomain)
+	pubsub := redisClient.Subscribe(context.TODO(), s.clusterDomain)
 
-	_, err = pubsub.Receive()
+	_, err = pubsub.Receive(context.TODO())
 
 	if err != nil {
 		panic(err)
@@ -314,7 +315,7 @@ func (s *SimpleCluster) SendClusterMessage(msg *model.ClusterMessage) {
 
 	fmt.Println("------======>>>>>> msg:", msg.ToJson())
 
-	s.redisClient.Publish(s.clusterDomain, msg.ToJson())
+	s.redisClient.Publish(context.TODO(), s.clusterDomain, msg.ToJson())
 }
 
 func (s *SimpleCluster) NotifyMsg(buf []byte) {
