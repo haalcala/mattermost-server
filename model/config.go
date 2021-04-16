@@ -48,6 +48,7 @@ const (
 	SERVICE_GOOGLE    = "google"
 	SERVICE_OFFICE365 = "office365"
 	SERVICE_OPENID    = "openid"
+	SERVICE_SAML      = "saml"
 
 	GENERIC_NO_CHANNEL_NOTIFICATION = "generic_no_channel"
 	GENERIC_NOTIFICATION            = "generic"
@@ -3134,6 +3135,8 @@ func (o *Config) GetSSOService(service string) *SSOSettings {
 		return o.Office365Settings.SSOSettings()
 	case SERVICE_OPENID:
 		return &o.OpenIdSettings
+	case SERVICE_SAML:
+		return &o.SamlSettings
 	}
 
 	return nil

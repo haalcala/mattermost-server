@@ -55,7 +55,23 @@ func init() {
 	})
 }
 
-func (m *CustomSamlAdapter) GetUserFromJson(data io.Reader) (*model.User, error) {
+func (m *CustomSamlAdapter) GetUserFromIdToken(idToken string) (*model.User, error) {
+	fmt.Println("------ app/CustomSamlAdapter.go:: GetUserFromIdToken(idToken string) (*model.User, error)")
+
+	fmt.Println("idToken:", idToken)
+
+	return nil, nil
+}
+
+func (m *CustomSamlAdapter) GetSSOSettings(config *model.Config, service string) (*model.SSOSettings, error) {
+	return config.GetSSOService(model.SERVICE_SAML), nil
+}
+
+func (m *CustomSamlAdapter) GetUserFromJson(data io.Reader, tokenUser *model.User) (*model.User, error) {
+	fmt.Println("------ app/CustomSamlAdapter.go:: GetUserFromJson(data io.Reader, tokenUser *model.User) (*model.User, error)")
+
+	fmt.Println("tokenUser:", &tokenUser)
+
 	return model.UserFromJson(data), nil
 }
 
@@ -240,13 +256,13 @@ func (m *CustomSamlAdapter) DoLogin(encodedXML string, relayState map[string]str
 
 	teamId := relayState["team_id"]
 
-	user, aerr := m.CompleteSaml(model.USER_AUTH_SERVICE_SAML, ioutil.NopCloser(bytes.NewReader([]byte(_user.ToJson()))), teamId, relayState)
+	user, aerr := m.CompleteSaml(model.USER_AUTH_SERVICE_SAML, ioutil.NopCloser(bytes.NewReader([]byte(_user.ToJson()))), teamId, relayState, _user)
 
 	return user, aerr
 }
 
-func (m *CustomSamlAdapter) CompleteSaml(service string, body io.ReadCloser, teamId string, props map[string]string) (*model.User, *model.AppError) {
-	fmt.Println("------ app/custom_saml_adapter.so:: CompleteSaml(service string, body io.ReadCloser, teamId string, props map[string]string) (*model.User, *model.AppError)")
+func (m *CustomSamlAdapter) CompleteSaml(service string, body io.ReadCloser, teamId string, props map[string]string, tokenUser *model.User) (*model.User, *model.AppError) {
+	fmt.Println("------ app/custom_saml_adapter.so:: CompleteSaml(service string, body io.ReadCloser, teamId string, props map[string]string, tokenUser *model.User) (*model.User, *model.AppError)")
 
 	defer body.Close()
 
@@ -254,15 +270,15 @@ func (m *CustomSamlAdapter) CompleteSaml(service string, body io.ReadCloser, tea
 
 	switch action {
 	case SAML_ACTION_SIGNUP:
-		return m.app.CreateOAuthUser(service, body, teamId)
+		return m.app.CreateOAuthUser(service, body, teamId, tokenUser)
 	case SAML_ACTION_LOGIN:
-		return m.app.LoginByOAuth(service, body, teamId)
+		return m.app.LoginByOAuth(service, body, teamId, tokenUser)
 	case SAML_ACTION_EMAIL_TO_SSO:
-		return m.app.CompleteSwitchWithOAuth(service, body, props["email"])
+		return m.app.CompleteSwitchWithOAuth(service, body, props["email"], tokenUser)
 	case SAML_ACTION_SSO_TO_EMAIL:
-		return m.app.LoginByOAuth(service, body, teamId)
+		return m.app.LoginByOAuth(service, body, teamId, tokenUser)
 	default:
-		return m.app.LoginByOAuth(service, body, teamId)
+		return m.app.LoginByOAuth(service, body, teamId, tokenUser)
 	}
 }
 
