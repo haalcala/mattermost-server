@@ -254,6 +254,30 @@ var (
 		Subsystem: "process",
 		Name:      "max_fds",
 	})
+
+	jobActive = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Namespace: "mattermost",
+		Subsystem: "jobs",
+		Name:      "active",
+	}, []string{"jobType"})
+
+	fileIndexCounter = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: "mattermost",
+		Subsystem: "file",
+		Name:      "index_count",
+	})
+
+	fileSearchCounter = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: "mattermost",
+		Subsystem: "file",
+		Name:      "search_count",
+	})
+
+	fileSearchDuration = prometheus.NewHistogram(prometheus.HistogramOpts{
+		Namespace: "mattermost",
+		Subsystem: "file",
+		Name:      "search_duration",
+	})
 )
 
 type CustomMetricsAdapter struct {
@@ -356,6 +380,9 @@ func (m *CustomMetricsAdapter) StartServer() {
 		residentMemoryBytes,
 		openFileDescriptors,
 		maxFileDescriptors,
+		jobActive,
+		fileSearchCounter,
+		fileSearchDuration,
 	)
 
 	totalClusterEventTypesCounter.WithLabelValues("my_test").Inc()
@@ -586,6 +613,26 @@ func (m *CustomMetricsAdapter) ObservePluginMultiHookDuration(elapsed float64) {
 	totalPluginMultiHookDuration.Observe(elapsed)
 }
 
+func (m *CustomMetricsAdapter) ObserveFilesSearchDuration(elapsed float64) {
+	fileSearchDuration.Observe(elapsed)
+}
+
 func (m *CustomMetricsAdapter) ObservePluginApiDuration(pluginID, apiName string, success bool, elapsed float64) {
 	totalPluginApiDuration.WithLabelValues(pluginID, apiName, fmt.Sprintf("%v", success)).Observe(elapsed)
+}
+
+func (m *CustomMetricsAdapter) IncrementJobActive(jobType string) {
+	jobActive.WithLabelValues(jobType).Add(1)
+}
+
+func (m *CustomMetricsAdapter) DecrementJobActive(jobType string) {
+	jobActive.WithLabelValues(jobType).Sub(1)
+}
+
+func (m *CustomMetricsAdapter) IncrementFileIndexCounter() {
+	fileIndexCounter.Add(1)
+}
+
+func (m *CustomMetricsAdapter) IncrementFilesSearchCounter() {
+	fileSearchCounter.Add(1)
 }
