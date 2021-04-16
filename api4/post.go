@@ -206,17 +206,13 @@ func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-<<<<<<< HEAD
-	if etag != "" {
-=======
 	list2, err := c.App.GetUserReadTimes(model.GetPostsOptions{ChannelId: channelId, Page: page, PerPage: perPage, SkipFetchThreads: skipFetchThreads})
 	if err != nil {
 		c.Err = err
 		return
 	}
 
-	if len(etag) > 0 {
->>>>>>> vcube-release-5.31
+	if etag != "" {
 		w.Header().Set(model.HEADER_ETAG_SERVER, etag)
 	}
 
