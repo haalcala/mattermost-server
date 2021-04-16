@@ -50,10 +50,11 @@ func (a *App) InitPostMetadata() {
 
 func (a *App) PreparePostListForClient(originalList *model.PostList) *model.PostList {
 	list := &model.PostList{
-		Posts:      make(map[string]*model.Post, len(originalList.Posts)),
-		Order:      originalList.Order,
-		NextPostId: originalList.NextPostId,
-		PrevPostId: originalList.PrevPostId,
+		Posts:        make(map[string]*model.Post, len(originalList.Posts)),
+		Order:        originalList.Order,
+		NextPostId:   originalList.NextPostId,
+		PrevPostId:   originalList.PrevPostId,
+		ReadStatuses: originalList.ReadStatuses,
 	}
 
 	for id, originalPost := range originalList.Posts {

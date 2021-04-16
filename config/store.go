@@ -20,6 +20,12 @@ var (
 	ErrReadOnlyStore = errors.New("configuration store is read-only")
 )
 
+var (
+	// ErrReadOnlyStore is returned when an attempt to modify a read-only
+	// configuration store is made.
+	ErrReadOnlyStore = errors.New("configuration store is read-only")
+)
+
 // Listener is a callback function invoked when the configuration changes.
 type Listener func(oldConfig *model.Config, newConfig *model.Config)
 

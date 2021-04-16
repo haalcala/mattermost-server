@@ -2344,8 +2344,11 @@ func (a *App) UpdateChannelLastViewedAt(channelIds []string, userID string) *mod
 
 	if *a.Config().ServiceSettings.EnableChannelViewedMessages {
 		for _, channelId := range channelIds {
-			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", "", userID, nil)
+			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", channelId, "", nil)
+
 			message.Add("channel_id", channelId)
+			message.Add("user_id", userID)
+
 			a.Publish(message)
 		}
 	}
@@ -2572,8 +2575,9 @@ func (a *App) MarkChannelsAsViewed(channelIds []string, userID string, currentSe
 
 	if *a.Config().ServiceSettings.EnableChannelViewedMessages {
 		for _, channelId := range channelIds {
-			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", "", userID, nil)
+			message := model.NewWebSocketEvent(model.WEBSOCKET_EVENT_CHANNEL_VIEWED, "", channelId, "", nil)
 			message.Add("channel_id", channelId)
+			message.Add("user_id", userID)
 			a.Publish(message)
 		}
 	}

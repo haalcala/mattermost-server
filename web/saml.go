@@ -5,10 +5,13 @@ package web
 
 import (
 	b64 "encoding/base64"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 
+	"github.com/haalcala/saml/samlsp"
+	"github.com/mattermost/mattermost-server/v5/app"
 	"github.com/mattermost/mattermost-server/v5/audit"
 	"github.com/mattermost/mattermost-server/v5/mlog"
 	"github.com/mattermost/mattermost-server/v5/model"
@@ -16,8 +19,43 @@ import (
 )
 
 func (w *Web) InitSaml() {
-	w.MainRouter.Handle("/login/sso/saml", w.ApiHandler(loginWithSaml)).Methods("GET")
-	w.MainRouter.Handle("/login/sso/saml", w.ApiHandlerTrustRequester(completeSaml)).Methods("POST")
+	// w.MainRouter.Handle("/login/sso/saml", w.ApiHandler(loginWithSaml)).Methods("GET")
+	// w.MainRouter.Handle("/login/sso/saml", w.ApiHandlerTrustRequester(completeSaml)).Methods("POST")
+
+	w.MainRouter.Handle("/login/sso/saml", w.ApiHandler(func(c *Context, w2 http.ResponseWriter, r *http.Request) {
+		login2(c, w2, r)
+	})).Methods("GET")
+
+	w.MainRouter.Handle("/saml/acs", w.ApiHandlerTrustRequester(func(c *Context, w http.ResponseWriter, r *http.Request) {
+		s := samlsp.SessionFromContext(r.Context())
+
+		sa, ok := s.(samlsp.SessionWithAttributes)
+
+		fmt.Println("sa:", sa, "ok:", ok)
+
+		if sa != nil {
+			fmt.Println(fmt.Sprintf("Token contents, %+v!", sa.GetAttributes()))
+		}
+
+		completeSaml(c, w, r)
+	})).Methods("POST")
+}
+
+func login2(c *Context, w http.ResponseWriter, r *http.Request) {
+	fmt.Println("------ web/saml.go:: func login2(c *Context, w http.ResponseWriter, r *http.Request)")
+
+	samlSP := app.NewCustomSamlAdapter(c.App)
+
+	if samlSP.Middleware == nil {
+		fmt.Println("Custom SAML Adapter haven't configured yet.")
+		return
+	}
+
+	samlSP.Middleware.RequireAccount(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("------ web/saml.go:: func login2(samlSP.Middleware.RequireAccount)")
+
+		loginWithSaml(c, w, r)
+	})).ServeHTTP(w, r)
 }
 
 func loginWithSaml(c *Context, w http.ResponseWriter, r *http.Request) {

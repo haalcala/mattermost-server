@@ -188,6 +188,8 @@ type Server struct {
 	featureFlagStop              chan struct{}
 	featureFlagStopped           chan struct{}
 	featureFlagSynchronizerMutex sync.Mutex
+
+	serverNodeId string
 }
 
 func NewServer(options ...Option) (*Server, error) {

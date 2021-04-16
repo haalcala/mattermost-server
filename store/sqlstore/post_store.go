@@ -803,6 +803,25 @@ func (s *SqlPostStore) GetPosts(options model.GetPostsOptions, _ bool) (*model.P
 	return list, nil
 }
 
+func (s *SqlPostStore) GetUserReadTimes(channelId string, allowFromCache bool) ([]*model.ChannelUserUnread, error) {
+	var data []*model.ChannelUserUnread
+
+	_, err := s.GetReplica().Select(&data,
+		`SELECT
+			UserId, LastViewedAt
+		FROM
+			ChannelMembers
+		WHERE
+			ChannelId = :ChannelId`,
+		map[string]interface{}{"ChannelId": channelId})
+
+	if err != nil {
+		return nil, errors.Wrapf(err, "SqlTeamStore.GetUserReadTimes: channelId=%v", channelId)
+	}
+
+	return data, nil
+}
+
 func (s *SqlPostStore) getPostsSinceCollapsedThreads(options model.GetPostsSinceOptions) (*model.PostList, error) {
 	var columns []string
 	for _, c := range postSliceColumns() {
