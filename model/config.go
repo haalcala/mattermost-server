@@ -3100,6 +3100,14 @@ type Config struct {
 	ExportSettings            ExportSettings
 }
 
+func (s *SamlSettings) SSOSettings() *SSOSettings {
+	settings := &SSOSettings{
+		Enable: s.Enable,
+	}
+
+	return settings
+}
+
 func (o *Config) Clone() *Config {
 	var ret Config
 	if err := json.Unmarshal([]byte(o.ToJson()), &ret); err != nil {
@@ -3136,7 +3144,7 @@ func (o *Config) GetSSOService(service string) *SSOSettings {
 	case SERVICE_OPENID:
 		return &o.OpenIdSettings
 	case SERVICE_SAML:
-		return &o.SamlSettings
+		return o.SamlSettings.SSOSettings()
 	}
 
 	return nil
