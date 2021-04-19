@@ -3102,7 +3102,16 @@ type Config struct {
 
 func (s *SamlSettings) SSOSettings() *SSOSettings {
 	settings := &SSOSettings{
-		Enable: s.Enable,
+		Enable:            NewBool(true),
+		Scope:             NewString(""),
+		Secret:            NewString(""),
+		Id:                NewString(""),
+		AuthEndpoint:      NewString(""),
+		TokenEndpoint:     NewString(""),
+		UserApiEndpoint:   NewString(""),
+		DiscoveryEndpoint: NewString(""),
+		ButtonText:        NewString(""),
+		ButtonColor:       NewString(""),
 	}
 
 	return settings
