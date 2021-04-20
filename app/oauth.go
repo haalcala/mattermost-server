@@ -668,7 +668,7 @@ func (a *App) CompleteSwitchWithOAuth(service string, userData io.Reader, email 
 		var invErr *store.ErrInvalidInput
 		switch {
 		case errors.As(nErr, &invErr):
-			return nil, model.NewAppError("importUser", "app.user.update_auth_data.email_exists.app_error", nil, invErr.Error(), http.StatusBadRequest)
+			return nil, model.NewAppError("importUser", "app.user.update_auth_data.email_exists.app_error", map[string]interface{}{"Service": service, "Email": email}, invErr.Error(), http.StatusBadRequest)
 		default:
 			return nil, model.NewAppError("importUser", "app.user.update_auth_data.app_error", nil, nErr.Error(), http.StatusInternalServerError)
 		}
