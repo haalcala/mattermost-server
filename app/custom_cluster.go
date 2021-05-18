@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"reflect"
 	"strings"
 	"time"
 
@@ -168,19 +167,19 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 			payload := model.ClusterMessageFromJson(strings.NewReader(msg.Payload))
 
-			if payload.Origin == s.server.serverNodeId {
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			if payload.Origin == s.clusterInfo.Id {
+				// fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				// fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+				// fmt.Println("------------------------------------   Ignoning own message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 				continue
 			}
 
 			// fmt.Println("payload.Data:", payload.Data)
-			fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
+			// fmt.Println("reflect.TypeOf(payload.Data):", reflect.TypeOf(payload.Data))
 
 			data_as_json := model.ClusterMessageFromJson(strings.NewReader(payload.Data))
 
-			fmt.Println("**** data_as_json:", data_as_json)
+			// fmt.Println("**** data_as_json:", data_as_json)
 
 			if data_as_json != nil && data_as_json.Event == "config_changed" {
 				// server.regenerateClientConfig()
@@ -193,7 +192,7 @@ func NewSimpleCluster(server *Server) *SimpleCluster {
 
 			// *handler(payload)
 
-			fmt.Println("handler:", handler, "reflect.TypeOf(handler):", reflect.TypeOf(handler), "payload:", payload)
+			// fmt.Println("handler:", handler, "reflect.TypeOf(handler):", reflect.TypeOf(handler), "payload:", payload)
 
 			if handler != nil {
 				(*handler)(payload)
