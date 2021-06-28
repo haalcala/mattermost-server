@@ -1,4 +1,4 @@
-module github.com/mattermost/mattermost-server/v5
+module bitbucket.org/v-cube/mattermost-server/v5
 
 go 1.15
 
