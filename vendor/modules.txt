@@ -157,6 +157,8 @@ github.com/couchbase/vellum
 github.com/couchbase/vellum/levenshtein
 github.com/couchbase/vellum/regexp
 github.com/couchbase/vellum/utf8
+# github.com/crewjam/httperr v0.0.0-20190612203328-a946449404da
+github.com/crewjam/httperr
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -266,6 +268,12 @@ github.com/gregjones/httpcache
 # github.com/h2non/go-is-svg v0.0.0-20160927212452-35e8c4b0612c
 ## explicit
 github.com/h2non/go-is-svg
+# github.com/haalcala/saml v0.4.4
+## explicit
+github.com/haalcala/saml
+github.com/haalcala/saml/logger
+github.com/haalcala/saml/samlsp
+github.com/haalcala/saml/xmlenc
 # github.com/hako/durafmt v0.0.0-20200710122514-c0fb7b4da026
 ## explicit
 github.com/hako/durafmt
@@ -336,8 +344,6 @@ github.com/klauspost/cpuid
 # github.com/klauspost/pgzip v1.2.5
 ## explicit
 github.com/klauspost/pgzip
-# github.com/kr/pretty v0.2.0
-## explicit
 # github.com/kr/text v0.2.0
 ## explicit
 # github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
@@ -714,6 +720,7 @@ golang.org/x/crypto/openpgp/elgamal
 golang.org/x/crypto/openpgp/errors
 golang.org/x/crypto/openpgp/packet
 golang.org/x/crypto/openpgp/s2k
+golang.org/x/crypto/ripemd160
 # golang.org/x/image v0.0.0-20201208152932-35266b937fa6
 ## explicit
 golang.org/x/image/bmp

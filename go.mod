@@ -32,7 +32,7 @@ require (
 	github.com/getsentry/sentry-go v0.9.0
 	github.com/glycerine/go-unsnap-stream v0.0.0-20190901134440-81cf024a9e0a // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.3 // indirect
-	github.com/go-redis/redis/v8 v8.4.9 // indirect
+	github.com/go-redis/redis/v8 v8.4.9
 	github.com/go-resty/resty/v2 v2.4.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
@@ -45,6 +45,7 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
 	github.com/h2non/go-is-svg v0.0.0-20160927212452-35e8c4b0612c
+	github.com/haalcala/saml v0.4.4
 	github.com/hako/durafmt v0.0.0-20200710122514-c0fb7b4da026
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-hclog v0.15.0
@@ -59,10 +60,9 @@ require (
 	github.com/icrowley/fake v0.0.0-20180203215853-4178557ae428
 	github.com/jaytaylor/html2text v0.0.0-20200412013138-3577fbdbcff7
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/jonboulle/clockwork v0.2.2
+	github.com/jonboulle/clockwork v0.2.2 // indirect
 	github.com/klauspost/compress v1.11.7 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
-	github.com/kr/pretty v0.2.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/ledongthuc/pdf v0.0.0-20200323191019-23c5852adbd2
 	github.com/lib/pq v1.9.0
@@ -91,13 +91,13 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.3 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.9.0
-	github.com/prometheus/client_model v0.2.0
+	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/procfs v0.3.0 // indirect
 	github.com/reflog/dateconstraints v0.2.1
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rs/cors v1.7.0
 	github.com/rudderlabs/analytics-go v3.2.1+incompatible
-	github.com/russellhaering/goxmldsig v1.1.0
+	github.com/russellhaering/goxmldsig v1.1.0 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd
 	github.com/segmentio/backo-go v0.0.0-20200129164019-23eae7c10bd3 // indirect
 	github.com/sirupsen/logrus v1.7.0
