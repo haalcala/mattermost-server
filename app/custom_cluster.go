@@ -362,4 +362,10 @@ func (a *App) notifyClusterEvent(event string, data *model.ClusterInfo) {
 	}
 }
 
-// just another commit
+// just another commit 111
+type TestStruct struct {
+}
+
+func NewTestStruct() *TestStruct {
+	return &TestStruct{}
+}
