@@ -14,10 +14,10 @@ import (
 	"sync"
 	"time"
 
+	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 	"github.com/haalcala/saml"
 	"github.com/haalcala/saml/samlsp"
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/model"
 
 	"crypto/rsa"
 	"crypto/tls"

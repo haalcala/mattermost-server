@@ -9,9 +9,9 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/store"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils"
 )
 
 func (a *App) GetRole(id string) (*model.Role, *model.AppError) {

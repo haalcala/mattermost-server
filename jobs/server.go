@@ -4,12 +4,12 @@
 package jobs
 
 import (
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	ejobs "github.com/mattermost/mattermost-server/v5/einterfaces/jobs"
-	tjobs "github.com/mattermost/mattermost-server/v5/jobs/interfaces"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/configservice"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
+	ejobs "bitbucket.org/v-cube/mattermost-server/v5/einterfaces/jobs"
+	tjobs "bitbucket.org/v-cube/mattermost-server/v5/jobs/interfaces"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/configservice"
+	"bitbucket.org/v-cube/mattermost-server/v5/store"
 )
 
 type JobServer struct {

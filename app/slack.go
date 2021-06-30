@@ -11,9 +11,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/slackimport"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/slackimport"
+	"bitbucket.org/v-cube/mattermost-server/v5/store"
 )
 
 func (a *App) SlackImport(fileData multipart.File, fileSize int64, teamID string) (*model.AppError, *bytes.Buffer) {

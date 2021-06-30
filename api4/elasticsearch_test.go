@@ -6,7 +6,7 @@ package api4
 import (
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 func TestElasticsearchTest(t *testing.T) {

@@ -9,13 +9,13 @@ import (
 
 	"github.com/stretchr/testify/mock"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/cache"
-	cachemocks "github.com/mattermost/mattermost-server/v5/services/cache/mocks"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
-	"github.com/mattermost/mattermost-server/v5/testlib"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/cache"
+	cachemocks "bitbucket.org/v-cube/mattermost-server/v5/services/cache/mocks"
+	"bitbucket.org/v-cube/mattermost-server/v5/store"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
+	"bitbucket.org/v-cube/mattermost-server/v5/testlib"
 )
 
 var mainHelper *testlib.MainHelper

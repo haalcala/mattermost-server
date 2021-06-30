@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 type AdvancedPermissionsPhase2Progress struct {

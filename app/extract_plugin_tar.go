@@ -13,7 +13,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
 )
 
 // extractTarGz takes in an io.Reader containing the bytes for a .tar.gz file and

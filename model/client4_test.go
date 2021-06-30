@@ -25,7 +25,7 @@ func TestClient4TrimTrailingSlash(t *testing.T) {
 	}
 }
 
-// https://github.com/mattermost/mattermost-server/v5/issues/8205
+// https://bitbucket.org/v-cube/mattermost-server/v5/issues/8205
 func TestClient4CreatePost(t *testing.T) {
 	post := &Post{
 		Props: map[string]interface{}{

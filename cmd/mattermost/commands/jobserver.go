@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mattermost/mattermost-server/v5/audit"
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/audit"
+	"bitbucket.org/v-cube/mattermost-server/v5/config"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
 )
 
 var JobserverCmd = &cobra.Command{

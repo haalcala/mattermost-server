@@ -21,7 +21,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/text/language"
 
-	"github.com/mattermost/mattermost-server/v5/services/timezones"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/timezones"
 )
 
 const (

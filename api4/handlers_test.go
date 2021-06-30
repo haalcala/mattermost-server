@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 func handlerForGzip(c *Context, w http.ResponseWriter, r *http.Request) {

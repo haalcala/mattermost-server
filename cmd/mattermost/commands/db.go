@@ -9,8 +9,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/store/sqlstore"
+	"bitbucket.org/v-cube/mattermost-server/v5/config"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/sqlstore"
 )
 
 var DbCmd = &cobra.Command{

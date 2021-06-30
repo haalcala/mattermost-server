@@ -6,8 +6,8 @@ package slashcommands
 import (
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/testlib"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/testlib"
 )
 
 var mainHelper *testlib.MainHelper

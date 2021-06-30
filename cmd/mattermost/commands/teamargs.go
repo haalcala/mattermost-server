@@ -4,8 +4,8 @@
 package commands
 
 import (
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/app"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 func getTeamsFromTeamArgs(a *app.App, teamArgs []string) []*model.Team {

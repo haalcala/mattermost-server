@@ -23,8 +23,8 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/openpgp"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 const mattermostBuildPublicKey = `-----BEGIN PGP PUBLIC KEY BLOCK-----

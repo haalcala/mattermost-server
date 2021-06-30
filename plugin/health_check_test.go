@@ -12,9 +12,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils"
 )
 
 func TestPluginHealthCheck(t *testing.T) {
@@ -36,7 +36,7 @@ func testPluginHealthCheckSuccess(t *testing.T) {
 		package main
 
 		import (
-			"github.com/mattermost/mattermost-server/v5/plugin"
+			"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 		)
 
 		type MyPlugin struct {
@@ -78,8 +78,8 @@ func testPluginHealthCheckPanic(t *testing.T) {
 		package main
 
 		import (
-			"github.com/mattermost/mattermost-server/v5/model"
-			"github.com/mattermost/mattermost-server/v5/plugin"
+			"bitbucket.org/v-cube/mattermost-server/v5/model"
+			"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 		)
 
 		type MyPlugin struct {

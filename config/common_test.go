@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/config"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 var emptyConfig, readOnlyConfig, minimalConfig, minimalConfigNoFF, invalidConfig, fixesRequiredConfig, ldapConfig, testConfig, customConfigDefaults *model.Config

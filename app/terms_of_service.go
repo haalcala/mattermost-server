@@ -7,8 +7,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/store"
 )
 
 func (a *App) CreateTermsOfService(text, userID string) (*model.TermsOfService, *model.AppError) {

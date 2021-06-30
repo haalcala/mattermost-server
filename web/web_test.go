@@ -16,14 +16,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
-	"github.com/mattermost/mattermost-server/v5/store/localcachelayer"
-	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"bitbucket.org/v-cube/mattermost-server/v5/app"
+	"bitbucket.org/v-cube/mattermost-server/v5/config"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/localcachelayer"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils"
 )
 
 var ApiClient *model.Client4
@@ -185,7 +185,7 @@ func TestStaticFilesRequest(t *testing.T) {
 	package main
 
 	import (
-		"github.com/mattermost/mattermost-server/v5/plugin"
+		"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 	)
 
 	type MyPlugin struct {
@@ -272,7 +272,7 @@ func TestPublicFilesRequest(t *testing.T) {
 	package main
 
 	import (
-		"github.com/mattermost/mattermost-server/v5/plugin"
+		"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 	)
 
 	type MyPlugin struct {

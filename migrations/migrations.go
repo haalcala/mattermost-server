@@ -6,10 +6,10 @@ package migrations
 import (
 	"net/http"
 
-	"github.com/mattermost/mattermost-server/v5/app"
-	tjobs "github.com/mattermost/mattermost-server/v5/jobs/interfaces"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"bitbucket.org/v-cube/mattermost-server/v5/app"
+	tjobs "bitbucket.org/v-cube/mattermost-server/v5/jobs/interfaces"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/store"
 )
 
 const (

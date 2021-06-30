@@ -4,7 +4,7 @@
 package app
 
 import (
-	"github.com/mattermost/mattermost-server/v5/plugin"
+	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 )
 
 func (a *App) PluginContext() *plugin.Context {

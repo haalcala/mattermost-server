@@ -12,8 +12,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/jobs"
+	"bitbucket.org/v-cube/mattermost-server/v5/config"
+	"bitbucket.org/v-cube/mattermost-server/v5/jobs"
 )
 
 const (

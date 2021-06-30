@@ -6,7 +6,7 @@ package sqlstore
 import (
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/store/storetest"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest"
 )
 
 func TestReactionStore(t *testing.T) {

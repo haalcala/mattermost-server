@@ -6,8 +6,8 @@ package api4
 import (
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/testlib"
+	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"bitbucket.org/v-cube/mattermost-server/v5/testlib"
 )
 
 func TestMain(m *testing.M) {

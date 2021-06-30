@@ -5,8 +5,8 @@
 package plugintest
 
 import (
-	model "github.com/mattermost/mattermost-server/v5/model"
-	plugin "github.com/mattermost/mattermost-server/v5/plugin"
+	model "bitbucket.org/v-cube/mattermost-server/v5/model"
+	plugin "bitbucket.org/v-cube/mattermost-server/v5/plugin"
 	mock "github.com/stretchr/testify/mock"
 )
 

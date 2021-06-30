@@ -12,7 +12,7 @@ import (
 	"github.com/blang/semver"
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 // InstallPluginFromURL implements Helpers.InstallPluginFromURL.

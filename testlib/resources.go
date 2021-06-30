@@ -12,10 +12,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/filesstore"
-	"github.com/mattermost/mattermost-server/v5/utils"
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/filesstore"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils/fileutils"
 )
 
 const (

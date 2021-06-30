@@ -11,8 +11,8 @@ import (
 	"net/http"
 	timePkg "time"
 
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
 )
 
 type hooksTimerLayer struct {

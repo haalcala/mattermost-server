@@ -15,10 +15,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/timezones"
-	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/timezones"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils"
 )
 
 func TestGetDirectMessageNotificationEmailSubject(t *testing.T) {

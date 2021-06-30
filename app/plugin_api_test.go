@@ -25,12 +25,12 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
+	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces/mocks"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils/fileutils"
 	goi18n "github.com/mattermost/go-i18n/i18n"
-	"github.com/mattermost/mattermost-server/v5/einterfaces/mocks"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
-	"github.com/mattermost/mattermost-server/v5/utils"
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
 )
 
 func getDefaultPluginSettingsSchema() string {
@@ -130,7 +130,7 @@ func TestPublicFilesPathConfiguration(t *testing.T) {
 		package main
 
 		import (
-			"github.com/mattermost/mattermost-server/v5/plugin"
+			"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 		)
 
 		type MyPlugin struct {
@@ -742,7 +742,7 @@ func TestPluginAPIGetPlugins(t *testing.T) {
     package main
 
     import (
-      "github.com/mattermost/mattermost-server/v5/plugin"
+      "bitbucket.org/v-cube/mattermost-server/v5/plugin"
     )
 
     type MyPlugin struct {
@@ -890,7 +890,7 @@ func TestInstallPlugin(t *testing.T) {
 
 			"github.com/pkg/errors"
 
-			"github.com/mattermost/mattermost-server/v5/plugin"
+			"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 		)
 
 		type configuration struct {
@@ -1386,7 +1386,7 @@ func TestInterpluginPluginHTTP(t *testing.T) {
 		package main
 
 		import (
-			"github.com/mattermost/mattermost-server/v5/plugin"
+			"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 			"bytes"
 			"net/http"
 		)
@@ -1419,8 +1419,8 @@ func TestInterpluginPluginHTTP(t *testing.T) {
 		package main
 
 		import (
-			"github.com/mattermost/mattermost-server/v5/plugin"
-			"github.com/mattermost/mattermost-server/v5/model"
+			"bitbucket.org/v-cube/mattermost-server/v5/plugin"
+			"bitbucket.org/v-cube/mattermost-server/v5/model"
 			"bytes"
 			"net/http"
 			"io/ioutil"
@@ -1503,8 +1503,8 @@ func TestApiMetrics(t *testing.T) {
 	package main
 
 	import (
-		"github.com/mattermost/mattermost-server/v5/model"
-		"github.com/mattermost/mattermost-server/v5/plugin"
+		"bitbucket.org/v-cube/mattermost-server/v5/model"
+		"bitbucket.org/v-cube/mattermost-server/v5/plugin"
 	)
 
 	type MyPlugin struct {

@@ -8,12 +8,12 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/searchengine"
-	"github.com/mattermost/mattermost-server/v5/store/searchlayer"
-	"github.com/mattermost/mattermost-server/v5/store/sqlstore"
-	"github.com/mattermost/mattermost-server/v5/store/storetest"
-	"github.com/mattermost/mattermost-server/v5/testlib"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/searchengine"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/searchlayer"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/sqlstore"
+	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest"
+	"bitbucket.org/v-cube/mattermost-server/v5/testlib"
 )
 
 // Test to verify race condition on UpdateConfig. The test must run with -race flag in order to verify

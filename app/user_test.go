@@ -16,11 +16,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/model"
-	oauthgitlab "github.com/mattermost/mattermost-server/v5/model/gitlab"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/utils/testutils"
+	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
+	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	oauthgitlab "bitbucket.org/v-cube/mattermost-server/v5/model/gitlab"
+	"bitbucket.org/v-cube/mattermost-server/v5/store"
+	"bitbucket.org/v-cube/mattermost-server/v5/utils/testutils"
 )
 
 func TestIsUsernameTaken(t *testing.T) {

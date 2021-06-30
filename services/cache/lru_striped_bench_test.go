@@ -11,7 +11,7 @@ import (
 
 	"github.com/cespare/xxhash/v2"
 
-	"github.com/mattermost/mattermost-server/v5/services/cache"
+	"bitbucket.org/v-cube/mattermost-server/v5/services/cache"
 )
 
 const (

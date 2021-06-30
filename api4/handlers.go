@@ -8,7 +8,7 @@ import (
 
 	"github.com/NYTimes/gziphandler"
 
-	"github.com/mattermost/mattermost-server/v5/web"
+	"bitbucket.org/v-cube/mattermost-server/v5/web"
 )
 
 type Context = web.Context

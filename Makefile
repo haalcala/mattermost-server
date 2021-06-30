@@ -65,11 +65,11 @@ GOFLAGS ?= $(GOFLAGS:)
 export GOBIN ?= $(PWD)/bin
 GO=go
 DELVE=dlv
-LDFLAGS += -X "github.com/mattermost/mattermost-server/v5/model.BuildNumber=$(BUILD_NUMBER)"
-LDFLAGS += -X "github.com/mattermost/mattermost-server/v5/model.BuildDate=$(BUILD_DATE)"
-LDFLAGS += -X "github.com/mattermost/mattermost-server/v5/model.BuildHash=$(BUILD_HASH)"
-LDFLAGS += -X "github.com/mattermost/mattermost-server/v5/model.BuildHashEnterprise=$(BUILD_HASH_ENTERPRISE)"
-LDFLAGS += -X "github.com/mattermost/mattermost-server/v5/model.BuildEnterpriseReady=$(BUILD_ENTERPRISE_READY)"
+LDFLAGS += -X "bitbucket.org/v-cube/mattermost-server/v5/model.BuildNumber=$(BUILD_NUMBER)"
+LDFLAGS += -X "bitbucket.org/v-cube/mattermost-server/v5/model.BuildDate=$(BUILD_DATE)"
+LDFLAGS += -X "bitbucket.org/v-cube/mattermost-server/v5/model.BuildHash=$(BUILD_HASH)"
+LDFLAGS += -X "bitbucket.org/v-cube/mattermost-server/v5/model.BuildHashEnterprise=$(BUILD_HASH_ENTERPRISE)"
+LDFLAGS += -X "bitbucket.org/v-cube/mattermost-server/v5/model.BuildEnterpriseReady=$(BUILD_ENTERPRISE_READY)"
 
 GO_MAJOR_VERSION = $(shell $(GO) version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f1)
 GO_MINOR_VERSION = $(shell $(GO) version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f2)
@@ -212,13 +212,13 @@ endif
 
 golangci-lint: ## Run golangci-lint on codebase
 # https://stackoverflow.com/a/677212/1027058 (check if a command exists or not)
-	@if ! [ -x "$$(command -v golangci-lint)" ]; then \
-		echo "golangci-lint is not installed. Please see https://github.com/golangci/golangci-lint#install for installation instructions."; \
-		exit 1; \
-	fi; \
+	# @if ! [ -x "$$(command -v golangci-lint)" ]; then \
+	# 	echo "golangci-lint is not installed. Please see https://github.com/golangci/golangci-lint#install for installation instructions."; \
+	# 	exit 1; \
+	# fi; \
 
-	@echo Running golangci-lint
-	golangci-lint run ./...
+	# @echo Running golangci-lint
+	# golangci-lint run ./...
 ifeq ($(BUILD_ENTERPRISE_READY),true)
 ifneq ($(MM_NO_ENTERPRISE_LINT),true)
 	golangci-lint run ./enterprise/...
@@ -425,20 +425,20 @@ run-server: prepackaged-binaries validate-go-version start-docker ## Starts the 
 debug-server: start-docker ## Compile and start server using delve.
 	mkdir -p $(BUILD_WEBAPP_DIR)/dist/files
 	$(DELVE) debug $(PLATFORM_FILES) --build-flags="-ldflags '\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildNumber=$(BUILD_NUMBER)\
-		-X \"github.com/mattermost/mattermost-server/v5/model.BuildDate=$(BUILD_DATE)\"\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildHash=$(BUILD_HASH)\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildHashEnterprise=$(BUILD_HASH_ENTERPRISE)\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildEnterpriseReady=$(BUILD_ENTERPRISE_READY)'"
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildNumber=$(BUILD_NUMBER)\
+		-X \"bitbucket.org/v-cube/mattermost-server/v5/model.BuildDate=$(BUILD_DATE)\"\
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildHash=$(BUILD_HASH)\
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildHashEnterprise=$(BUILD_HASH_ENTERPRISE)\
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildEnterpriseReady=$(BUILD_ENTERPRISE_READY)'"
 
 debug-server-headless: start-docker ## Debug server from within an IDE like VSCode or IntelliJ.
 	mkdir -p $(BUILD_WEBAPP_DIR)/dist/files
 	$(DELVE) debug --headless --listen=:2345 --api-version=2 --accept-multiclient $(PLATFORM_FILES) --build-flags="-ldflags '\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildNumber=$(BUILD_NUMBER)\
-		-X \"github.com/mattermost/mattermost-server/v5/model.BuildDate=$(BUILD_DATE)\"\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildHash=$(BUILD_HASH)\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildHashEnterprise=$(BUILD_HASH_ENTERPRISE)\
-		-X github.com/mattermost/mattermost-server/v5/model.BuildEnterpriseReady=$(BUILD_ENTERPRISE_READY)'"
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildNumber=$(BUILD_NUMBER)\
+		-X \"bitbucket.org/v-cube/mattermost-server/v5/model.BuildDate=$(BUILD_DATE)\"\
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildHash=$(BUILD_HASH)\
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildHashEnterprise=$(BUILD_HASH_ENTERPRISE)\
+		-X bitbucket.org/v-cube/mattermost-server/v5/model.BuildEnterpriseReady=$(BUILD_ENTERPRISE_READY)'"
 
 run-cli: start-docker ## Runs CLI.
 	@echo Running mattermost for development
