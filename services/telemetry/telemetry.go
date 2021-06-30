@@ -706,6 +706,10 @@ func (ts *TelemetryService) trackConfig() {
 		"enable_experimental_gossip_encryption": *cfg.ClusterSettings.EnableExperimentalGossipEncryption,
 		"enable_gossip_compression":             *cfg.ClusterSettings.EnableGossipCompression,
 		"read_only_config":                      *cfg.ClusterSettings.ReadOnlyConfig,
+		"cluster_redis_driver":                  *cfg.ClusterSettings.ClusterDriver,
+		"cluster_redis_host":                    *cfg.ClusterSettings.ClusterRedisHost,
+		"cluster_redis_port":                    *cfg.ClusterSettings.ClusterRedisPort,
+		"cluster_redis_pass":                    *cfg.ClusterSettings.ClusterRedisPass,
 	})
 
 	ts.sendTelemetry(TrackConfigMetrics, map[string]interface{}{

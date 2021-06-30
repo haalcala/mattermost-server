@@ -1,3 +1,6 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
+
 package app
 
 import (
@@ -141,7 +144,7 @@ func (m *CustomSamlAdapter) ConfigureSP() error {
 				"random": fmt.Sprintf("%v", time.Now().UnixNano()),
 			}
 
-			if len(action) != 0 {
+			if action != "" {
 				relayProps["team_id"] = teamId
 				relayProps["action"] = action
 				if action == model.OAUTH_ACTION_EMAIL_TO_SSO {
@@ -149,7 +152,7 @@ func (m *CustomSamlAdapter) ConfigureSP() error {
 				}
 			}
 
-			if len(redirectTo) != 0 {
+			if redirectTo != "" {
 				relayProps["redirect_to"] = redirectTo
 			} else if action == "mobile" {
 				relayProps["redirect_to"] = "/login/sso/saml" + r.URL.RawQuery // this will produce an uknown url, don't fix it!
