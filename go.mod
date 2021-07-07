@@ -142,5 +142,3 @@ require (
 replace github.com/NYTimes/gziphandler v1.1.1 => github.com/agnivade/gziphandler v1.1.2-0.20200815170021-7481835cb745
 
 replace github.com/dyatlov/go-opengraph => github.com/agnivade/go-opengraph v0.0.0-20201221052033-34e69ee2a627
-
-replace github.com/mattermost/mattermost-server/v5 => bitbucket.org/v-cube/mattermost-server/v5 v5.33.3
