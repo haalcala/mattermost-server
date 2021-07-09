@@ -11,10 +11,10 @@ import (
 
 	"github.com/NYTimes/gziphandler"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils/fileutils"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
 )
 
 var robotsTxt = []byte("User-agent: *\nDisallow: /\n")

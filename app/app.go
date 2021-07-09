@@ -15,15 +15,15 @@ import (
 	"github.com/mattermost/go-i18n/i18n"
 	goi18n "github.com/mattermost/go-i18n/i18n"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/httpservice"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/imageproxy"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/mailservice"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/searchengine"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/timezones"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/einterfaces"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/services/httpservice"
+	"github.com/mattermost/mattermost-server/v5/services/imageproxy"
+	"github.com/mattermost/mattermost-server/v5/services/mailservice"
+	"github.com/mattermost/mattermost-server/v5/services/searchengine"
+	"github.com/mattermost/mattermost-server/v5/services/timezones"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 type App struct {

@@ -20,11 +20,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
-	"bitbucket.org/v-cube/mattermost-server/v5/testlib"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils/fileutils"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v5/testlib"
+	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
 )
 
 func getHashedKey(key string) string {
@@ -696,8 +696,8 @@ func TestPluginPanicLogs(t *testing.T) {
 		package main
 
 		import (
-			"bitbucket.org/v-cube/mattermost-server/v5/plugin"
-			"bitbucket.org/v-cube/mattermost-server/v5/model"
+			"github.com/mattermost/mattermost-server/v5/plugin"
+			"github.com/mattermost/mattermost-server/v5/model"
 		)
 
 		type MyPlugin struct {

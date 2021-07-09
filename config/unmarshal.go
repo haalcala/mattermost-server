@@ -6,7 +6,7 @@ package config
 import (
 	"encoding/json"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 // marshalConfig converts the given configuration into JSON bytes for persistence.

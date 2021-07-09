@@ -9,10 +9,10 @@ import (
 	"github.com/gorilla/mux"
 	_ "github.com/mattermost/go-i18n/i18n"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/app"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/configservice"
-	"bitbucket.org/v-cube/mattermost-server/v5/web"
+	"github.com/mattermost/mattermost-server/v5/app"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/services/configservice"
+	"github.com/mattermost/mattermost-server/v5/web"
 )
 
 type Routes struct {

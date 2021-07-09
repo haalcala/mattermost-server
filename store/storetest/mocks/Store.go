@@ -7,10 +7,10 @@ package mocks
 import (
 	context "context"
 
-	model "bitbucket.org/v-cube/mattermost-server/v5/model"
+	model "github.com/mattermost/mattermost-server/v5/model"
 	mock "github.com/stretchr/testify/mock"
 
-	store "bitbucket.org/v-cube/mattermost-server/v5/store"
+	store "github.com/mattermost/mattermost-server/v5/store"
 
 	time "time"
 )

@@ -10,7 +10,7 @@ import (
 	"time"
 	"unicode"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/services/configservice"
+	"github.com/mattermost/mattermost-server/v5/services/configservice"
 )
 
 // HTTPService wraps the functionality for making http requests to provide some improvements to the default client

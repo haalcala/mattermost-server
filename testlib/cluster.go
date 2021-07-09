@@ -6,8 +6,8 @@ package testlib
 import (
 	"sync"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/einterfaces"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 type FakeClusterInterface struct {

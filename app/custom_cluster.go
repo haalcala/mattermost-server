@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/einterfaces"
+	"github.com/mattermost/mattermost-server/v5/model"
 
 	redis "github.com/go-redis/redis/v8"
 )

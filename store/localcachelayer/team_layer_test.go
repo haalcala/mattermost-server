@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
+	"github.com/mattermost/mattermost-server/v5/store/storetest"
+	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
 )
 
 func TestTeamStore(t *testing.T) {

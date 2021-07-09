@@ -24,7 +24,7 @@ func TestPluginShutdownTest(t *testing.T) {
 			package main
 
 			import (
-				"bitbucket.org/v-cube/mattermost-server/v5/plugin"
+				"github.com/mattermost/mattermost-server/v5/plugin"
 			)
 
 			type MyPlugin struct {
@@ -39,7 +39,7 @@ func TestPluginShutdownTest(t *testing.T) {
 			package main
 
 			import (
-				"bitbucket.org/v-cube/mattermost-server/v5/plugin"
+				"github.com/mattermost/mattermost-server/v5/plugin"
 			)
 
 			type MyPlugin struct {

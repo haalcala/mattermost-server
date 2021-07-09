@@ -4,8 +4,8 @@
 package searchlayer
 
 import (
-	model "bitbucket.org/v-cube/mattermost-server/v5/model"
-	store "bitbucket.org/v-cube/mattermost-server/v5/store"
+	model "github.com/mattermost/mattermost-server/v5/model"
+	store "github.com/mattermost/mattermost-server/v5/store"
 )
 
 type SearchTeamStore struct {

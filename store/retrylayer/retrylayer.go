@@ -9,10 +9,10 @@ package retrylayer
 import (
 	"context"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/store"
 	"github.com/go-sql-driver/mysql"
 	"github.com/lib/pq"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/store"
 	"github.com/pkg/errors"
 )
 

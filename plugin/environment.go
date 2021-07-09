@@ -14,10 +14,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/einterfaces"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 var ErrNotFound = errors.New("Item not found")

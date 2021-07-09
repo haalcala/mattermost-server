@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 const (

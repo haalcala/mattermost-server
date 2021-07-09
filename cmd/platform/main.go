@@ -8,7 +8,7 @@ import (
 	"os"
 	"syscall"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/utils/fileutils"
+	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
 )
 
 func main() {

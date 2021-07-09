@@ -72,6 +72,7 @@ require (
 	github.com/mattermost/gosaml2 v0.3.3
 	github.com/mattermost/ldap v0.0.0-20201202150706-ee0e6284187d
 	github.com/mattermost/logr v1.0.13
+	github.com/mattermost/mattermost-server/v5 v5.0.0-00010101000000-000000000000
 	github.com/mattermost/rsc v0.0.0-20160330161541-bbaefb05eaa0
 	github.com/mattn/go-runewidth v0.0.10 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
@@ -142,3 +143,5 @@ require (
 replace github.com/NYTimes/gziphandler v1.1.1 => github.com/agnivade/gziphandler v1.1.2-0.20200815170021-7481835cb745
 
 replace github.com/dyatlov/go-opengraph => github.com/agnivade/go-opengraph v0.0.0-20201221052033-34e69ee2a627
+
+replace github.com/mattermost/mattermost-server/v5 => bitbucket.org/v-cube/mattermost-server/v5 v5.33.0

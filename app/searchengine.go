@@ -6,8 +6,8 @@ package app
 import (
 	"net/http"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/searchengine"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/services/searchengine"
 )
 
 func (a *App) TestElasticsearch(cfg *model.Config) *model.AppError {

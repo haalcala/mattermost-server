@@ -13,10 +13,10 @@ import (
 	"runtime/debug"
 	"time"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/mailservice"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/services/mailservice"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 func (s *Server) GetLogs(page, perPage int) ([]string, *model.AppError) {

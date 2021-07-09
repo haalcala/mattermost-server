@@ -20,8 +20,8 @@ import (
 
 	"github.com/mattermost/ldap"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/filesstore"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/services/filesstore"
 )
 
 const (

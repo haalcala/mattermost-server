@@ -11,7 +11,7 @@ import (
 
 	"github.com/mattermost/gorp"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/mlog"
 )
 
 var escapeLikeSearchChar = []string{

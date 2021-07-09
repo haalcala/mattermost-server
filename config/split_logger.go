@@ -6,7 +6,7 @@ package config
 import (
 	"fmt"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/mlog"
 )
 
 type splitLogger struct {

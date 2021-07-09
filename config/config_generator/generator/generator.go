@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 // GenerateDefaultConfig writes default config to outputFile.

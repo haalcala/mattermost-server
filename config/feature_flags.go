@@ -13,8 +13,8 @@ import (
 	"github.com/splitio/go-client/v6/splitio/client"
 	"github.com/splitio/go-client/v6/splitio/conf"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 type FeatureFlagSyncParams struct {

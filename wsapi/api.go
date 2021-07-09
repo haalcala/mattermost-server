@@ -4,7 +4,7 @@
 package wsapi
 
 import (
-	"bitbucket.org/v-cube/mattermost-server/v5/app"
+	"github.com/mattermost/mattermost-server/v5/app"
 )
 
 type API struct {

@@ -11,8 +11,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/config/config_generator/generator"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/config/config_generator/generator"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 func TestDefaultsGenerator(t *testing.T) {

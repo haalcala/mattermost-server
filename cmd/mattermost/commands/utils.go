@@ -14,8 +14,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 const CustomDefaultsEnvVar = "MM_CUSTOM_DEFAULTS_PATH"

@@ -6,8 +6,8 @@ package import_delete
 import (
 	"time"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/app"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/app"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 const (

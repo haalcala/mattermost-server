@@ -8,9 +8,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin/plugintest"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v5/plugin/plugintest"
 )
 
 func TestCheckRequiredServerConfiguration(t *testing.T) {

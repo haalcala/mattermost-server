@@ -8,9 +8,9 @@ import (
 	"sort"
 	"sync"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/store"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/sqlstore"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/mattermost/mattermost-server/v5/store/sqlstore"
 )
 
 type LocalCacheUserStore struct {

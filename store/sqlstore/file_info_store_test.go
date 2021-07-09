@@ -6,8 +6,8 @@ package sqlstore
 import (
 	"testing"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/store/searchtest"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest"
+	"github.com/mattermost/mattermost-server/v5/store/searchtest"
+	"github.com/mattermost/mattermost-server/v5/store/storetest"
 )
 
 func TestFileInfoStore(t *testing.T) {

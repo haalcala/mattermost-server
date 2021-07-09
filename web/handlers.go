@@ -19,13 +19,13 @@ import (
 	"github.com/opentracing/opentracing-go/ext"
 	spanlog "github.com/opentracing/opentracing-go/log"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/app"
-	app_opentracing "bitbucket.org/v-cube/mattermost-server/v5/app/opentracing"
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/tracing"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/opentracinglayer"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/app"
+	app_opentracing "github.com/mattermost/mattermost-server/v5/app/opentracing"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/services/tracing"
+	"github.com/mattermost/mattermost-server/v5/store/opentracinglayer"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 func GetHandlerName(h func(*Context, http.ResponseWriter, *http.Request)) string {

@@ -15,14 +15,14 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/api4"
-	"bitbucket.org/v-cube/mattermost-server/v5/app"
-	"bitbucket.org/v-cube/mattermost-server/v5/config"
-	"bitbucket.org/v-cube/mattermost-server/v5/manualtesting"
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
-	"bitbucket.org/v-cube/mattermost-server/v5/web"
-	"bitbucket.org/v-cube/mattermost-server/v5/wsapi"
+	"github.com/mattermost/mattermost-server/v5/api4"
+	"github.com/mattermost/mattermost-server/v5/app"
+	"github.com/mattermost/mattermost-server/v5/config"
+	"github.com/mattermost/mattermost-server/v5/manualtesting"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/web"
+	"github.com/mattermost/mattermost-server/v5/wsapi"
 )
 
 var serverCmd = &cobra.Command{

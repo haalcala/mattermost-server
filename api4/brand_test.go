@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/utils/testutils"
+	"github.com/mattermost/mattermost-server/v5/utils/testutils"
 )
 
 func TestGetBrandImage(t *testing.T) {

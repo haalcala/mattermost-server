@@ -13,10 +13,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/api4"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
-	"bitbucket.org/v-cube/mattermost-server/v5/wsapi"
+	"github.com/mattermost/mattermost-server/v5/api4"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/wsapi"
 )
 
 var TestCmd = &cobra.Command{

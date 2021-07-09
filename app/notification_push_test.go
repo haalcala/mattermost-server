@@ -15,11 +15,11 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/config"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
-	"bitbucket.org/v-cube/mattermost-server/v5/testlib"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/config"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
+	"github.com/mattermost/mattermost-server/v5/testlib"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 func TestDoesNotifyPropsAllowPushNotification(t *testing.T) {

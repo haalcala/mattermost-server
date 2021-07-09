@@ -12,9 +12,9 @@ import (
 	"github.com/dgryski/dgoogauth"
 	"github.com/mattermost/rsc/qr"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/configservice"
-	"bitbucket.org/v-cube/mattermost-server/v5/store"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/services/configservice"
+	"github.com/mattermost/mattermost-server/v5/store"
 )
 
 const (

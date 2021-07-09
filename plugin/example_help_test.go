@@ -9,8 +9,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
 // configuration represents the configuration for this plugin as exposed via the Mattermost

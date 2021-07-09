@@ -7,7 +7,7 @@ import (
 	"errors"
 	"net/http"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 func (a *App) GetPreferencesForUser(userID string) (model.Preferences, *model.AppError) {

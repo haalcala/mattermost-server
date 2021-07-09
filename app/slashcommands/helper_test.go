@@ -13,13 +13,13 @@ import (
 	"testing"
 	"time"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/app"
-	"bitbucket.org/v-cube/mattermost-server/v5/config"
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/store"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/localcachelayer"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/app"
+	"github.com/mattermost/mattermost-server/v5/config"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/mattermost/mattermost-server/v5/store/localcachelayer"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 type TestHelper struct {

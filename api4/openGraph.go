@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/cache"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/services/cache"
 )
 
 const OpenGraphMetadataCacheSize = 10000

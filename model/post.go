@@ -14,7 +14,7 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/utils/markdown"
+	"github.com/mattermost/mattermost-server/v5/utils/markdown"
 )
 
 const (

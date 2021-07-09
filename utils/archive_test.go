@@ -13,7 +13,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/utils/fileutils"
+	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
 )
 
 func TestSanitizePath(t *testing.T) {

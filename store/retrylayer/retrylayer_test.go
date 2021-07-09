@@ -10,8 +10,8 @@ import (
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
 )
 
 func genStore() *mocks.Store {

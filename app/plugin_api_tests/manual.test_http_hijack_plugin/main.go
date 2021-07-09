@@ -6,7 +6,7 @@ package main
 import (
 	"net/http"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
 type Plugin struct {

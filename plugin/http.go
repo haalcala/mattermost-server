@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"net/rpc"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/mlog"
 )
 
 type hijackedResponse struct {

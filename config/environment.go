@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 func GetEnvironment() map[string]string {

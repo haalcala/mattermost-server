@@ -388,6 +388,82 @@ github.com/mattermost/ldap
 github.com/mattermost/logr
 github.com/mattermost/logr/format
 github.com/mattermost/logr/target
+# github.com/mattermost/mattermost-server/v5 v5.0.0-00010101000000-000000000000 => bitbucket.org/v-cube/mattermost-server/v5 v5.33.0
+## explicit
+github.com/mattermost/mattermost-server/v5/api4
+github.com/mattermost/mattermost-server/v5/app
+github.com/mattermost/mattermost-server/v5/app/opentracing
+github.com/mattermost/mattermost-server/v5/app/plugin_api_tests
+github.com/mattermost/mattermost-server/v5/app/slashcommands
+github.com/mattermost/mattermost-server/v5/audit
+github.com/mattermost/mattermost-server/v5/cmd/mattermost/commands
+github.com/mattermost/mattermost-server/v5/config
+github.com/mattermost/mattermost-server/v5/config/config_generator/generator
+github.com/mattermost/mattermost-server/v5/einterfaces
+github.com/mattermost/mattermost-server/v5/einterfaces/jobs
+github.com/mattermost/mattermost-server/v5/einterfaces/mocks
+github.com/mattermost/mattermost-server/v5/imports
+github.com/mattermost/mattermost-server/v5/jobs
+github.com/mattermost/mattermost-server/v5/jobs/active_users
+github.com/mattermost/mattermost-server/v5/jobs/expirynotify
+github.com/mattermost/mattermost-server/v5/jobs/export_delete
+github.com/mattermost/mattermost-server/v5/jobs/export_process
+github.com/mattermost/mattermost-server/v5/jobs/import_delete
+github.com/mattermost/mattermost-server/v5/jobs/import_process
+github.com/mattermost/mattermost-server/v5/jobs/interfaces
+github.com/mattermost/mattermost-server/v5/jobs/product_notices
+github.com/mattermost/mattermost-server/v5/manualtesting
+github.com/mattermost/mattermost-server/v5/migrations
+github.com/mattermost/mattermost-server/v5/mlog
+github.com/mattermost/mattermost-server/v5/mlog/human
+github.com/mattermost/mattermost-server/v5/model
+github.com/mattermost/mattermost-server/v5/model/gitlab
+github.com/mattermost/mattermost-server/v5/plugin
+github.com/mattermost/mattermost-server/v5/plugin/checker/internal/asthelpers
+github.com/mattermost/mattermost-server/v5/plugin/checker/internal/version
+github.com/mattermost/mattermost-server/v5/plugin/plugintest
+github.com/mattermost/mattermost-server/v5/plugin/plugintest/mock
+github.com/mattermost/mattermost-server/v5/plugin/scheduler
+github.com/mattermost/mattermost-server/v5/services/awsmeter
+github.com/mattermost/mattermost-server/v5/services/cache
+github.com/mattermost/mattermost-server/v5/services/cache/mocks
+github.com/mattermost/mattermost-server/v5/services/configservice
+github.com/mattermost/mattermost-server/v5/services/filesstore
+github.com/mattermost/mattermost-server/v5/services/filesstore/mocks
+github.com/mattermost/mattermost-server/v5/services/httpservice
+github.com/mattermost/mattermost-server/v5/services/imageproxy
+github.com/mattermost/mattermost-server/v5/services/mailservice
+github.com/mattermost/mattermost-server/v5/services/marketplace
+github.com/mattermost/mattermost-server/v5/services/mfa
+github.com/mattermost/mattermost-server/v5/services/searchengine
+github.com/mattermost/mattermost-server/v5/services/searchengine/bleveengine
+github.com/mattermost/mattermost-server/v5/services/searchengine/bleveengine/indexer
+github.com/mattermost/mattermost-server/v5/services/searchengine/mocks
+github.com/mattermost/mattermost-server/v5/services/slackimport
+github.com/mattermost/mattermost-server/v5/services/telemetry
+github.com/mattermost/mattermost-server/v5/services/telemetry/mocks
+github.com/mattermost/mattermost-server/v5/services/timezones
+github.com/mattermost/mattermost-server/v5/services/tracing
+github.com/mattermost/mattermost-server/v5/services/upgrader
+github.com/mattermost/mattermost-server/v5/store
+github.com/mattermost/mattermost-server/v5/store/localcachelayer
+github.com/mattermost/mattermost-server/v5/store/opentracinglayer
+github.com/mattermost/mattermost-server/v5/store/retrylayer
+github.com/mattermost/mattermost-server/v5/store/searchlayer
+github.com/mattermost/mattermost-server/v5/store/searchtest
+github.com/mattermost/mattermost-server/v5/store/sqlstore
+github.com/mattermost/mattermost-server/v5/store/storetest
+github.com/mattermost/mattermost-server/v5/store/storetest/mocks
+github.com/mattermost/mattermost-server/v5/store/timerlayer
+github.com/mattermost/mattermost-server/v5/testlib
+github.com/mattermost/mattermost-server/v5/utils
+github.com/mattermost/mattermost-server/v5/utils/fileutils
+github.com/mattermost/mattermost-server/v5/utils/imgutils
+github.com/mattermost/mattermost-server/v5/utils/jsonutils
+github.com/mattermost/mattermost-server/v5/utils/markdown
+github.com/mattermost/mattermost-server/v5/utils/testutils
+github.com/mattermost/mattermost-server/v5/web
+github.com/mattermost/mattermost-server/v5/wsapi
 # github.com/mattermost/rsc v0.0.0-20160330161541-bbaefb05eaa0
 ## explicit
 github.com/mattermost/rsc/gf256
@@ -924,3 +1000,4 @@ willnorris.com/go/gifresize
 willnorris.com/go/imageproxy
 willnorris.com/go/imageproxy/third_party/http
 # github.com/dyatlov/go-opengraph => github.com/agnivade/go-opengraph v0.0.0-20201221052033-34e69ee2a627
+# github.com/mattermost/mattermost-server/v5 => bitbucket.org/v-cube/mattermost-server/v5 v5.33.0

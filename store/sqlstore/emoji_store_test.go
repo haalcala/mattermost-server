@@ -6,7 +6,7 @@ package sqlstore
 import (
 	"testing"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest"
+	"github.com/mattermost/mattermost-server/v5/store/storetest"
 )
 
 func TestEmojiStore(t *testing.T) {

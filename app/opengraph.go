@@ -11,7 +11,7 @@ import (
 	"github.com/dyatlov/go-opengraph/opengraph"
 	"golang.org/x/net/html/charset"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/mlog"
 )
 
 const MaxOpenGraphResponseSize = 1024 * 1024 * 50

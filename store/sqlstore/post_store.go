@@ -16,12 +16,12 @@ import (
 	"github.com/mattermost/gorp"
 	"github.com/pkg/errors"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/einterfaces"
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/store"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/searchlayer"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/einterfaces"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/mattermost/mattermost-server/v5/store/searchlayer"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 type SqlPostStore struct {

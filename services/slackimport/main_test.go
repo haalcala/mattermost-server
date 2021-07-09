@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/mlog"
 )
 
 func TestMain(m *testing.M) {

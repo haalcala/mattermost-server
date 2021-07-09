@@ -6,7 +6,7 @@ package app
 import (
 	"testing"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 func TestProcessSlackText(t *testing.T) {

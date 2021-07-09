@@ -4,7 +4,7 @@
 package app
 
 import (
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 // Registers a given function to be called when the cluster leader may have changed. Returns a unique ID for the

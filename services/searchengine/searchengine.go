@@ -4,8 +4,8 @@
 package searchengine
 
 import (
-	"bitbucket.org/v-cube/mattermost-server/v5/jobs"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/jobs"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 func NewBroker(cfg *model.Config, jobServer *jobs.JobServer) *Broker {

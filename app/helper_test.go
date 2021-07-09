@@ -15,15 +15,15 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/config"
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/store"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/localcachelayer"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/sqlstore"
-	"bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
-	"bitbucket.org/v-cube/mattermost-server/v5/testlib"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils"
+	"github.com/mattermost/mattermost-server/v5/config"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/mattermost/mattermost-server/v5/store/localcachelayer"
+	"github.com/mattermost/mattermost-server/v5/store/sqlstore"
+	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
+	"github.com/mattermost/mattermost-server/v5/testlib"
+	"github.com/mattermost/mattermost-server/v5/utils"
 )
 
 type TestHelper struct {

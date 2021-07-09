@@ -18,14 +18,14 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/mlog"
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin"
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin/plugintest"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/httpservice"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/searchengine"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/telemetry/mocks"
-	storeMocks "bitbucket.org/v-cube/mattermost-server/v5/store/storetest/mocks"
+	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v5/plugin/plugintest"
+	"github.com/mattermost/mattermost-server/v5/services/httpservice"
+	"github.com/mattermost/mattermost-server/v5/services/searchengine"
+	"github.com/mattermost/mattermost-server/v5/services/telemetry/mocks"
+	storeMocks "github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
 )
 
 type FakeConfigService struct {

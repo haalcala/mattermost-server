@@ -15,10 +15,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
-	"bitbucket.org/v-cube/mattermost-server/v5/plugin/plugintest/mock"
-	"bitbucket.org/v-cube/mattermost-server/v5/services/filesstore/mocks"
-	"bitbucket.org/v-cube/mattermost-server/v5/utils/fileutils"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin/plugintest/mock"
+	"github.com/mattermost/mattermost-server/v5/services/filesstore/mocks"
+	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
 )
 
 func TestGeneratePublicLinkHash(t *testing.T) {

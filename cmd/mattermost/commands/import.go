@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/audit"
+	"github.com/mattermost/mattermost-server/v5/audit"
 )
 
 var ImportCmd = &cobra.Command{

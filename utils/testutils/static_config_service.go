@@ -6,7 +6,7 @@ package testutils
 import (
 	"crypto/ecdsa"
 
-	"bitbucket.org/v-cube/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/model"
 )
 
 type StaticConfigService struct {
